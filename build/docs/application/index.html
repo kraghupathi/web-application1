@@ -1,0 +1,475 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>The Application Server</title>
+<!-- 2016-06-02 Thu 17:26 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="VLEAD" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="../style/css/worg-style.css" />
+<link rel="stylesheet" type="text/css" href="../style/css/override.css" />
+<link rel="icon" type="image/png" href="../style/img/favicon/popl.png" />
+<script type="text/javascript" src="../style/js/org-info.js">
+/**
+ *
+ * @source: ../style/js/org-info.js
+ *
+ * @licstart  The following is the entire license notice for the
+ *  JavaScript code in ../style/js/org-info.js.
+ *
+ * Copyright (C) 2012-2013 Free Software Foundation, Inc.
+ *
+ *
+ * The JavaScript code in this tag is free software: you can
+ * redistribute it and/or modify it under the terms of the GNU
+ * General Public License (GNU GPL) as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option)
+ * any later version.  The code is distributed WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+ *
+ * As additional permission under GNU GPL version 3 section 7, you
+ * may distribute non-source (e.g., minimized or compacted) forms of
+ * that code without the copy of the GNU GPL normally required by
+ * section 4, provided you include this license notice and a URL
+ * through which recipients can access the Corresponding Source.
+ *
+ * @licend  The above is the entire license notice
+ * for the JavaScript code in ../style/js/org-info.js.
+ *
+ */
+</script>
+
+<script type="text/javascript">
+
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+
+<!--/*--><![CDATA[/*><!--*/
+org_html_manager.set("TOC_DEPTH", "1");
+org_html_manager.set("LINK_HOME", "../index.html");
+org_html_manager.set("LINK_UP", "index.html");
+org_html_manager.set("LOCAL_TOC", "1");
+org_html_manager.set("VIEW_BUTTONS", "0");
+org_html_manager.set("MOUSE_HINT", "underline");
+org_html_manager.set("FIXED_TOC", "0");
+org_html_manager.set("TOC", "1");
+org_html_manager.set("VIEW", "info");
+org_html_manager.setup();  // activate after the parameters are set
+/*]]>*///-->
+</script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="index.html"> UP </a>
+ |
+ <a accesskey="H" href="../index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">The Application Server</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1. Initialization</a>
+<ul>
+<li><a href="#sec-1-1">1.1. Some initialization and boilerplate code</a>
+<ul>
+<li><a href="#sec-1-1-1">1.1.1. <span class="underline"><span class="underline">init</span></span></a></li>
+<li><a href="#sec-1-1-2">1.1.2. <span class="underline"><span class="underline">init</span></span> for Tests</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#sec-2">2. Configuration</a></li>
+<li><a href="#sec-3">3. The web application</a></li>
+</ul>
+</div>
+</div>
+<p>
+This document illustrates building of the application server.
+</p>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> Initialization</h2>
+<div class="outline-text-2" id="text-1">
+</div><div id="outline-container-sec-1-1" class="outline-3">
+<h3 id="sec-1-1"><span class="section-number-3">1.1</span> Some initialization and boilerplate code</h3>
+<div class="outline-text-3" id="text-1-1">
+</div><div id="outline-container-sec-1-1-1" class="outline-4">
+<h4 id="sec-1-1-1"><span class="section-number-4">1.1.1</span> <span class="underline"><span class="underline">init</span></span></h4>
+<div class="outline-text-4" id="text-1-1-1">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold;">print</span> <span style="font-style: italic;">"src package"</span>
+<span style="font-weight: bold;">import</span> db
+<span style="font-weight: bold;">import</span> app
+<span style="font-weight: bold;">import</span> config
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-1-1-2" class="outline-4">
+<h4 id="sec-1-1-2"><span class="section-number-4">1.1.2</span> <span class="underline"><span class="underline">init</span></span> for Tests</h4>
+<div class="outline-text-4" id="text-1-1-2">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test package"</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> Configuration</h2>
+<div class="outline-text-2" id="text-2">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">DB URI</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">example DB URI:</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">mysql+oursql://scott:tiger@localhost/mydatabase</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">postgresql+psycopg2://scott:tiger@localhost/mydatabase</span>
+<span style="font-weight: bold; font-style: italic;">SQLALCHEMY_DATABASE_URI</span> = <span style="font-style: italic;">'mysql+oursql://&lt;userid&gt;:&lt;password&gt;@&lt;servername&gt;/&lt;db_name&gt;'</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">example</span>
+<span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">SQLALCHEMY_DATABASE_URI = 'mysql+oursql://root:mysql@localhost/userdirectory'</span>
+
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Debug from SQLAlchemy</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Turn this to False on production</span>
+<span style="font-weight: bold; font-style: italic;">SQLALCHEMY_ECHO</span> = <span style="font-weight: bold; text-decoration: underline;">False</span>
+<span style="font-weight: bold; font-style: italic;">SQLALCHEMY_TRACK_MODIFICATIONS</span> = <span style="font-weight: bold; text-decoration: underline;">True</span>
+
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">List of allowed origins for CORS</span>
+<span style="font-weight: bold; font-style: italic;">ALLOWED_ORIGINS</span> = <span style="font-style: italic;">"['*']"</span>
+
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">List of allowed IPs</span>
+<span style="font-weight: bold; font-style: italic;">WHITELIST_IPS</span> = [<span style="font-style: italic;">"127.0.0.1"</span>]
+
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Configure your log paths</span>
+<span style="font-weight: bold; font-style: italic;">LOG_FILE_DIRECTORY</span> = <span style="font-style: italic;">'logs'</span>
+<span style="font-weight: bold; font-style: italic;">LOG_FILE</span> = <span style="font-style: italic;">'user-directory.log'</span>
+
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Log level for the application</span>
+<span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">10=DEBUG, 20=INFO, 30=WARNING, 40=ERROR, 50=CRITICAL",</span>
+<span style="font-weight: bold; font-style: italic;">LOG_LEVEL</span> = 10
+
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">APP_URL</span>
+<span style="font-weight: bold; font-style: italic;">APP_URL</span> = <span style="font-style: italic;">"http://localhost:5000"</span>
+
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Persona Verifier URL</span>
+<span style="font-weight: bold; font-style: italic;">PERSONA_VERIFIER_URL</span> = <span style="font-style: italic;">"https://verifier.login.persona.org/verify"</span>
+</pre>
+</div>
+</div>
+</div>
+
+
+
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> The web application</h2>
+<div class="outline-text-2" id="text-3">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">-*- coding: utf-8 -*-</span>
+<span style="font-weight: bold;">import</span> os
+
+<span style="font-weight: bold;">from</span> flask <span style="font-weight: bold;">import</span> Flask, jsonify, make_response
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">from flask.ext.cors import CORS</span>
+
+<span style="font-weight: bold;">from</span> db <span style="font-weight: bold;">import</span> db
+<span style="font-weight: bold;">from</span> api <span style="font-weight: bold;">import</span> api
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">import config file</span>
+<span style="font-weight: bold;">import</span> config
+<span style="font-weight: bold;">from</span> config <span style="font-weight: bold;">import</span> LOG_FILE_DIRECTORY
+<span style="font-weight: bold;">from</span> config <span style="font-weight: bold;">import</span> LOG_FILE
+<span style="font-weight: bold;">from</span> config <span style="font-weight: bold;">import</span> LOG_LEVEL
+
+
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">create_app</span>(config):
+    <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">init our app</span>
+    <span style="font-weight: bold; font-style: italic;">app</span> = Flask(<span style="font-weight: bold;">__name__</span>)
+    <span style="font-weight: bold; font-style: italic;">app.secret_key</span> = <span style="font-style: italic;">'djfjsdkjXXS7979dfdfd'</span>
+    <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">load config values from the config file</span>
+    app.config.from_object(config)
+
+    <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">init sqlalchemy db instance</span>
+    db.init_app(app)
+    <span style="font-weight: bold; font-style: italic;">db.app</span> = app
+    <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">register blueprints</span>
+    app.register_blueprint(api)
+    configure_logging(app)
+    configure_errorhandlers(app)
+    <span style="font-weight: bold; font-style: italic;">#  </span><span style="font-weight: bold; font-style: italic;">configure_cors(app)</span>
+    <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">all set; return app object</span>
+<span style="font-weight: bold; font-style: italic;">#   </span><span style="font-weight: bold; font-style: italic;">app.system = System()</span>
+    <span style="font-weight: bold;">return</span> app
+
+
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">custom error handlers to return JSON errors with appropiate status codes</span>
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">configure_errorhandlers</span>(app):
+
+    <span style="font-weight: bold; text-decoration: underline;">@app.errorhandler</span>(500)
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">server_error</span>(err):
+        app.logger.error(<span style="font-style: italic;">"error code = %s"</span> % <span style="font-style: italic;">"500"</span>)
+        <span style="font-weight: bold; font-style: italic;">resp</span> = <span style="font-weight: bold; text-decoration: underline;">None</span>
+        <span style="font-weight: bold;">try</span>:
+            app.logger.error(<span style="font-style: italic;">"error desc = %s"</span> % err.description)
+            <span style="font-weight: bold; font-style: italic;">resp</span> = make_response(jsonify(error=err.description), 500)
+        <span style="font-weight: bold;">except</span> <span style="font-weight: bold; text-decoration: underline;">Exception</span>:
+            <span style="font-weight: bold;">try</span>:
+                app.logger.error(<span style="font-style: italic;">"error mesg = %s"</span> % err.message)
+                <span style="font-weight: bold; font-style: italic;">resp</span> = make_response(jsonify(error=err.message), 500)
+            <span style="font-weight: bold;">except</span> <span style="font-weight: bold; text-decoration: underline;">Exception</span>:
+                <span style="font-weight: bold; font-style: italic;">resp</span> = make_response(jsonify(error=<span style="font-weight: bold;">str</span>(err)), 500)
+                app.logger.error(<span style="font-style: italic;">"error = %s"</span> % <span style="font-weight: bold;">str</span>(err))
+        <span style="font-weight: bold;">return</span> resp
+
+    <span style="font-weight: bold; text-decoration: underline;">@app.errorhandler</span>(405)
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">method_not_allowed</span>(err):
+        app.logger.error(<span style="font-style: italic;">"error code = %s"</span> % <span style="font-style: italic;">"405"</span>)
+        <span style="font-weight: bold; font-style: italic;">resp</span> = <span style="font-weight: bold; text-decoration: underline;">None</span>
+        <span style="font-weight: bold;">try</span>:
+            app.logger.error(<span style="font-style: italic;">"error desc = %s"</span> % err.description)
+            <span style="font-weight: bold; font-style: italic;">resp</span> = make_response(jsonify(error=err.description), 405)
+        <span style="font-weight: bold;">except</span> <span style="font-weight: bold; text-decoration: underline;">Exception</span>:
+            <span style="font-weight: bold;">try</span>:
+                app.logger.error(<span style="font-style: italic;">"error mesg = %s"</span> % err.message)
+                <span style="font-weight: bold; font-style: italic;">resp</span> = make_response(jsonify(error=err.message), 405)
+            <span style="font-weight: bold;">except</span> <span style="font-weight: bold; text-decoration: underline;">Exception</span>:
+                <span style="font-weight: bold; font-style: italic;">resp</span> = make_response(jsonify(error=<span style="font-weight: bold;">str</span>(err)), 405)
+                app.logger.error(<span style="font-style: italic;">"error = %s"</span> % <span style="font-weight: bold;">str</span>(err))
+        <span style="font-weight: bold;">return</span> resp
+
+    <span style="font-weight: bold; text-decoration: underline;">@app.errorhandler</span>(404)
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">not_found</span>(err):
+        app.logger.error(<span style="font-style: italic;">"error code = %s"</span> % <span style="font-style: italic;">"404"</span>)
+        <span style="font-weight: bold; font-style: italic;">resp</span> = <span style="font-weight: bold; text-decoration: underline;">None</span>
+        <span style="font-weight: bold;">try</span>:
+            app.logger.error(<span style="font-style: italic;">"error desc = %s"</span> % err.description)
+            <span style="font-weight: bold; font-style: italic;">resp</span> = make_response(jsonify(error=err.description), 404)
+        <span style="font-weight: bold;">except</span> <span style="font-weight: bold; text-decoration: underline;">Exception</span>:
+            <span style="font-weight: bold;">try</span>:
+                app.logger.error(<span style="font-style: italic;">"error mesg = %s"</span> % err.message)
+                <span style="font-weight: bold; font-style: italic;">resp</span> = make_response(jsonify(error=err.message), 404)
+            <span style="font-weight: bold;">except</span> <span style="font-weight: bold; text-decoration: underline;">Exception</span>:
+                <span style="font-weight: bold; font-style: italic;">resp</span> = make_response(jsonify(error=<span style="font-weight: bold;">str</span>(err)), 404)
+                app.logger.error(<span style="font-style: italic;">"error = %s"</span> % <span style="font-weight: bold;">str</span>(err))
+        <span style="font-weight: bold;">return</span> resp
+
+    <span style="font-weight: bold; text-decoration: underline;">@app.errorhandler</span>(400)
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">bad_request</span>(err):
+        app.logger.error(<span style="font-style: italic;">"error code = %s"</span> % <span style="font-style: italic;">"400"</span>)
+        <span style="font-weight: bold; font-style: italic;">resp</span> = <span style="font-weight: bold; text-decoration: underline;">None</span>
+        <span style="font-weight: bold;">try</span>:
+            app.logger.error(<span style="font-style: italic;">"error desc = %s"</span> % err.description)
+            <span style="font-weight: bold; font-style: italic;">resp</span> = make_response(jsonify(error=err.description), 400)
+        <span style="font-weight: bold;">except</span> <span style="font-weight: bold; text-decoration: underline;">Exception</span>:
+            <span style="font-weight: bold;">try</span>:
+                app.logger.error(<span style="font-style: italic;">"error mesg = %s"</span> % err.message)
+                <span style="font-weight: bold; font-style: italic;">resp</span> = make_response(jsonify(error=err.message), 400)
+            <span style="font-weight: bold;">except</span> <span style="font-weight: bold; text-decoration: underline;">Exception</span>:
+                <span style="font-weight: bold; font-style: italic;">resp</span> = make_response(jsonify(error=<span style="font-weight: bold;">str</span>(err)), 400)
+                app.logger.error(<span style="font-style: italic;">"error = %s"</span> % <span style="font-weight: bold;">str</span>(err))
+        <span style="font-weight: bold;">return</span> resp
+
+
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">configure_logging</span>(app):
+    <span style="font-weight: bold;">import</span> logging
+    <span style="font-weight: bold;">import</span> logging.handlers
+    <span style="font-weight: bold; font-style: italic;">formatter</span> = logging.Formatter(<span style="font-style: italic;">'%(asctime)s: %(levelname)s: %(filename)s:'</span>
+                                  <span style="font-style: italic;">' %(funcName)s():%(lineno)d: %(message)s'</span>)
+
+    <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Also error can be sent out via email. So we can also have a SMTPHandler?</span>
+    <span style="font-weight: bold; font-style: italic;">log_dir</span> = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                           <span style="font-style: italic;">'..'</span>,
+                           LOG_FILE_DIRECTORY)
+
+    <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> os.path.exists(log_dir):
+        os.makedirs(log_dir)
+
+    <span style="font-weight: bold; font-style: italic;">log_file</span> = <span style="font-style: italic;">"%s/%s"</span> % (log_dir, LOG_FILE)
+    os.system(<span style="font-style: italic;">"sudo touch %s"</span> % log_file)
+    os.system(<span style="font-style: italic;">"sudo chmod 777 %s"</span> % log_file)
+    <span style="font-weight: bold; font-style: italic;">max_size</span> = 1024 * 1024 * 20  <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Max Size for a log file: 20MB</span>
+    <span style="font-weight: bold; font-style: italic;">log_handler</span> = logging.handlers.RotatingFileHandler(log_file,
+                                                       maxBytes=max_size,
+                                                       backupCount=10)
+
+    <span style="font-weight: bold; font-style: italic;">log_level</span> = LOG_LEVEL
+    log_handler.setFormatter(formatter)
+
+    app.logger.addHandler(log_handler)
+    app.logger.setLevel(log_level)
+
+<span style="font-weight: bold;">if</span> <span style="font-weight: bold;">__name__</span> == <span style="font-style: italic;">"__main__"</span>:
+    <span style="font-weight: bold; font-style: italic;">app</span> = create_app(config)
+    app.run(debug=<span style="font-weight: bold; text-decoration: underline;">True</span>, host=<span style="font-style: italic;">'0.0.0.0'</span>, threaded=<span style="font-weight: bold; text-decoration: underline;">True</span>)
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Date: <span class="timestamp-wrapper"><span class="timestamp">[2016-05-11 Wed]</span></span></p>
+<p class="author">Author: VLEAD</p>
+<p class="date">Created: 2016-06-02 Thu 17:26</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.4.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

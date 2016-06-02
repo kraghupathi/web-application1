@@ -1,0 +1,506 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>The Application Server</title>
+<!-- 2016-06-02 Thu 17:26 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="VLEAD" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="../style/css/worg-style.css" />
+<link rel="stylesheet" type="text/css" href="../style/css/override.css" />
+<link rel="icon" type="image/png" href="../style/img/favicon/popl.png" />
+<script type="text/javascript" src="../style/js/org-info.js">
+/**
+ *
+ * @source: ../style/js/org-info.js
+ *
+ * @licstart  The following is the entire license notice for the
+ *  JavaScript code in ../style/js/org-info.js.
+ *
+ * Copyright (C) 2012-2013 Free Software Foundation, Inc.
+ *
+ *
+ * The JavaScript code in this tag is free software: you can
+ * redistribute it and/or modify it under the terms of the GNU
+ * General Public License (GNU GPL) as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option)
+ * any later version.  The code is distributed WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+ *
+ * As additional permission under GNU GPL version 3 section 7, you
+ * may distribute non-source (e.g., minimized or compacted) forms of
+ * that code without the copy of the GNU GPL normally required by
+ * section 4, provided you include this license notice and a URL
+ * through which recipients can access the Corresponding Source.
+ *
+ * @licend  The above is the entire license notice
+ * for the JavaScript code in ../style/js/org-info.js.
+ *
+ */
+</script>
+
+<script type="text/javascript">
+
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+
+<!--/*--><![CDATA[/*><!--*/
+org_html_manager.set("TOC_DEPTH", "1");
+org_html_manager.set("LINK_HOME", "../index.html");
+org_html_manager.set("LINK_UP", "index.html");
+org_html_manager.set("LOCAL_TOC", "1");
+org_html_manager.set("VIEW_BUTTONS", "0");
+org_html_manager.set("MOUSE_HINT", "underline");
+org_html_manager.set("FIXED_TOC", "0");
+org_html_manager.set("TOC", "1");
+org_html_manager.set("VIEW", "info");
+org_html_manager.setup();  // activate after the parameters are set
+/*]]>*///-->
+</script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="index.html"> UP </a>
+ |
+ <a accesskey="H" href="../index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">The Application Server</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1. Introduction</a></li>
+<li><a href="#sec-2">2. Install dependendent python packages</a></li>
+<li><a href="#sec-3">3. Program to set up the database</a></li>
+<li><a href="#sec-4">4. Install all dependencies and setup the software</a></li>
+<li><a href="#sec-5">5. Configuring the application and its deployment</a></li>
+</ul>
+</div>
+</div>
+
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> Introduction</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+This document will illustrate installation of all the dependencies required
+for setting up the application.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> Install dependendent python packages</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+Here we use the <code>setuptools</code> module from the standard lib, to make a
+<code>setup.py</code> file, which will install all the python library dependencies.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold;">from</span> setuptools <span style="font-weight: bold;">import</span> setup
+
+<span style="font-weight: bold; font-style: italic;">requires</span> = [
+    <span style="font-style: italic;">'flask'</span>,
+    <span style="font-style: italic;">'Flask-SQLAlchemy'</span>,
+    <span style="font-style: italic;">'oursql'</span>,
+    <span style="font-style: italic;">'flask-cors'</span>,
+    <span style="font-style: italic;">'flask-testing'</span>,
+    <span style="font-style: italic;">'requests'</span>
+]
+
+setup(
+    name=<span style="font-style: italic;">'userdirectory'</span>,
+    version=<span style="font-style: italic;">'2.0'</span>,
+    install_requires=requires
+)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> Program to set up the database</h2>
+<div class="outline-text-2" id="text-3">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold;">from</span> src.app <span style="font-weight: bold;">import</span> create_app
+<span style="font-weight: bold;">from</span> src.db <span style="font-weight: bold;">import</span> *
+<span style="font-weight: bold;">import</span> src.config <span style="font-weight: bold;">as</span> config
+
+
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">create_roles</span>():
+    <span style="font-weight: bold; font-style: italic;">role1</span> = Role(name=Name(<span style="font-style: italic;">"admin"</span>))
+    role1.save()
+
+    <span style="font-weight: bold; font-style: italic;">role2</span> = Role(name=Name(<span style="font-style: italic;">"user"</span>))
+    role2.save()
+
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">create_admin_user</span>():
+    <span style="font-weight: bold; font-style: italic;">user</span> = User(name=Name(<span style="font-style: italic;">"Admin User"</span>),
+                email=Email(<span style="font-style: italic;">"xyz@gmail.com"</span>),
+                role=Role.get_by_id(1))
+    user.save()
+
+<span style="font-weight: bold;">if</span> <span style="font-weight: bold;">__name__</span> == <span style="font-style: italic;">"__main__"</span>:
+    db.create_all(app=create_app(config))
+    create_roles()
+    create_admin_user()
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4"><span class="section-number-2">4</span> Install all dependencies and setup the software</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+Install all dependencies, including the OS related packages, Python packages,
+setup the database, configure the webserver, and finally deploy the
+application.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-sh"><span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">!/bin/</span><span style="font-weight: bold;">bash</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Shell script to install deb package dependencies as well as python package</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">dependencies for dataservice.</span>
+
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">if any proxy server</span>
+<span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">PROXY=""</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">file to store the generated password</span>
+<span style="font-weight: bold; font-style: italic;">DB_PASS_FILE</span>=<span style="font-style: italic;">"db_pass.txt"</span>
+
+<span style="font-weight: bold;">if</span> [[ <span style="font-weight: bold;">`id -u`</span> -ne 0 ]]; <span style="font-weight: bold;">then</span>
+  <span style="font-weight: bold;">echo</span> <span style="font-style: italic;">"You have to execute this script as super user!"</span>
+  <span style="font-weight: bold;">exit</span> 1;
+<span style="font-weight: bold;">fi</span>
+
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Update the packages</span>
+<span style="font-weight: bold;">echo</span> <span style="font-style: italic;">"Updating package cache.."</span>
+apt-get -y update
+<span style="font-weight: bold;">if</span> [[ $<span style="font-weight: bold; font-style: italic;">?</span> -ne 0 ]]; <span style="font-weight: bold;">then</span>
+  <span style="font-weight: bold;">echo</span> <span style="font-style: italic;">"Updating package cache failed!"</span>
+  <span style="font-weight: bold;">exit</span> 1;
+<span style="font-weight: bold;">fi</span>
+
+<span style="font-weight: bold;">echo</span> <span style="font-style: italic;">"Installing MySQL database.."</span>
+<span style="font-weight: bold;">if</span> [ ! -f $<span style="font-weight: bold; font-style: italic;">DB_PASS_FILE</span> ]; <span style="font-weight: bold;">then</span>
+  <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">generate a random password for the database and store it in the $DB_PASS_FILE</span>
+  <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">file</span>
+<span style="font-weight: bold; font-style: italic;">#  </span><span style="font-weight: bold; font-style: italic;">DBPASS=$(</span><span style="font-weight: bold;">date</span><span style="font-weight: bold; font-style: italic;"> +%s | sha256sum | head -c 32)</span>
+  <span style="font-weight: bold; font-style: italic;">DBPASS</span>=<span style="font-style: italic;">"root"</span>
+  <span style="font-weight: bold;">echo</span> $<span style="font-weight: bold; font-style: italic;">DBPASS</span> &gt; $<span style="font-weight: bold; font-style: italic;">DB_PASS_FILE</span>
+<span style="font-weight: bold;">fi</span>
+
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Install MySQL Server in a Non-Interactive mode.</span>
+<span style="font-weight: bold;">echo</span> <span style="font-style: italic;">"mysql-server mysql-server/root_password password $DBPASS"</span> | sudo debconf-set-selections
+<span style="font-weight: bold;">echo</span> <span style="font-style: italic;">"mysql-server mysql-server/root_password_again password $DBPASS"</span> | sudo debconf-set-selections
+apt-get install -y mysql-server
+<span style="font-weight: bold;">if</span> [[ $<span style="font-weight: bold; font-style: italic;">?</span> -ne 0 ]]; <span style="font-weight: bold;">then</span>
+  <span style="font-weight: bold;">echo</span> <span style="font-style: italic;">"FATAL: MySQL installation failed!"</span>
+  <span style="font-weight: bold;">exit</span> 1;
+<span style="font-weight: bold;">fi</span>
+
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Install pre-requsite dependencies: python-dev, mysqld-dev, setuptools,</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">apache, mod_wsgi etc.</span>
+<span style="font-weight: bold;">echo</span> <span style="font-style: italic;">"Installing pre-requisite dependencies.."</span>
+apt-get install -y python-dev libmysqld-dev python-setuptools apache2 libapache2-mod-wsgi
+<span style="font-weight: bold;">if</span> [[ $<span style="font-weight: bold; font-style: italic;">?</span> -ne 0 ]]; <span style="font-weight: bold;">then</span>
+  <span style="font-weight: bold;">echo</span> <span style="font-style: italic;">"FATAL: Installing pre-requisite dependencies failed!"</span>
+  <span style="font-weight: bold;">exit</span> 1;
+<span style="font-weight: bold;">fi</span>
+
+<span style="font-weight: bold;">echo</span> <span style="font-style: italic;">"Enabling the mod WSGI on apache"</span>
+a2enmod wsgi
+<span style="font-weight: bold;">if</span> [[ $<span style="font-weight: bold; font-style: italic;">?</span> -ne 0 ]]; <span style="font-weight: bold;">then</span>
+  <span style="font-weight: bold;">echo</span> <span style="font-style: italic;">"FATAL: Unable to enable mod wsgi!"</span>
+  <span style="font-weight: bold;">exit</span> 1;
+<span style="font-weight: bold;">fi</span>
+
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Installing python dependencies</span>
+<span style="font-weight: bold;">echo</span> <span style="font-style: italic;">"Installing dependencies.."</span>
+<span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">export http_proxy=$PROXY</span>
+<span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">export https_proxy=$PROXY</span>
+<span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">python setup.py install</span>
+pip install Flask Flask-SQLAlchemy oursql requests flask-cors flask-testing
+<span style="font-weight: bold;">if</span> [[ $<span style="font-weight: bold; font-style: italic;">?</span> -ne 0 ]]; <span style="font-weight: bold;">then</span>
+  <span style="font-weight: bold;">echo</span> <span style="font-style: italic;">"FATAL: Installation failed!"</span>
+  <span style="font-weight: bold;">exit</span> 1;
+<span style="font-weight: bold;">fi</span>
+
+<span style="font-weight: bold;">exit</span> 0
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5"><span class="section-number-2">5</span> Configuring the application and its deployment</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+The following program configures the application, configures the web server
+to use WSGI and use the application scripts, and finally calls the database
+setup scripts to actually setup the database with tables.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-sh"><span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">!/bin/</span><span style="font-weight: bold;">bash</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Configure the application in the deployment environment</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">1. Update the config.py file with appropriate values</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">2. Update the apache config to server via WSGI</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">3. Run the database setup scripts to setup the database</span>
+
+<span style="font-weight: bold;">if</span> [[ <span style="font-weight: bold;">`id -u`</span> -ne 0 ]]; <span style="font-weight: bold;">then</span>
+  <span style="font-weight: bold;">echo</span> <span style="font-style: italic;">"You have to execute this script as super user!"</span>
+  <span style="font-weight: bold;">exit</span> 1;
+<span style="font-weight: bold;">fi</span>
+
+<span style="font-weight: bold; font-style: italic;">ABS_PATH_DS</span>=$( <span style="font-weight: bold;">cd</span> <span style="font-style: italic;">"$( dirname "${BASH_SOURCE[0]}" )"</span> &amp;&amp; <span style="font-weight: bold;">pwd</span> )
+
+<span style="font-weight: bold;">update_app_config</span> () {
+  <span style="font-weight: bold; font-style: italic;">CONFIG_FILE</span>=<span style="font-style: italic;">"src/config.py"</span>
+  <span style="font-weight: bold; font-style: italic;">DB_USER</span>=<span style="font-style: italic;">"root"</span>
+  <span style="font-weight: bold; font-style: italic;">DB_PASS</span>=$(<span style="font-weight: bold;">cat</span> db_pass.txt)
+  <span style="font-weight: bold; font-style: italic;">DB_NAME</span>=<span style="font-style: italic;">"userdirectory"</span>
+  <span style="font-weight: bold; font-style: italic;">DB_SERVER</span>=<span style="font-style: italic;">"localhost"</span>
+
+  <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">the list of white-listed IPs for POST/PUT requests to data service</span>
+  <span style="font-weight: bold; font-style: italic;">WHITELIST_IPS</span>=<span style="font-style: italic;">"['127.0.0.1']"</span>
+
+  <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">the list of allowed domains for CORS</span>
+  <span style="font-weight: bold; font-style: italic;">ALLOWED_ORIGINS</span>=<span style="font-style: italic;">"['*']"</span>
+
+  <span style="font-weight: bold;">echo</span> <span style="font-style: italic;">"Updating config.py.."</span>
+  <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Update parts of the DB URI</span>
+  sed -i <span style="font-style: italic;">"s/&lt;userid&gt;/$DB_USER/"</span> $<span style="font-weight: bold; font-style: italic;">ABS_PATH_DS</span>/$<span style="font-weight: bold; font-style: italic;">CONFIG_FILE</span>
+  sed -i <span style="font-style: italic;">"s/&lt;password&gt;/$DB_PASS/"</span> $<span style="font-weight: bold; font-style: italic;">ABS_PATH_DS</span>/$<span style="font-weight: bold; font-style: italic;">CONFIG_FILE</span>
+  sed -i <span style="font-style: italic;">"s/&lt;servername&gt;/$DB_SERVER/"</span> $<span style="font-weight: bold; font-style: italic;">ABS_PATH_DS</span>/$<span style="font-weight: bold; font-style: italic;">CONFIG_FILE</span>
+  sed -i <span style="font-style: italic;">"s/&lt;db_name&gt;/$DB_NAME/"</span> $<span style="font-weight: bold; font-style: italic;">ABS_PATH_DS</span>/$<span style="font-weight: bold; font-style: italic;">CONFIG_FILE</span>
+  <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">update SQLALCHEMY_ECHO</span>
+  sed -i <span style="font-style: italic;">"s/^SQLALCHEMY_ECHO.*$/SQLALCHEMY_ECHO = False/"</span> $<span style="font-weight: bold; font-style: italic;">ABS_PATH_DS</span>/$<span style="font-weight: bold; font-style: italic;">CONFIG_FILE</span>
+  <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">update WHITELIST_IPS</span>
+  <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">sed -i "s/^WHITELIST_IPS.*$/WHITELIST_IPS = $WHITELIST_IPS/" $CONFIG_FILE</span>
+  <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">update ALLOWED_ORIGINS</span>
+  <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">sed -i "s/^ALLOWED_ORIGINS.*$/ALLOWED_ORIGINS = $ALLOWED_ORIGINS/" $CONFIG_FILE</span>
+
+  <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">NOTE: this is hardcoded now..somehow the log file when dynamically created</span>
+  <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">is owned by root. then the app fails to run.. hence the following is</span>
+  <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">necessary</span>
+}
+
+<span style="font-weight: bold;">update_apache_config</span>() {
+  <span style="font-weight: bold; font-style: italic;">PROC_NAME</span>=<span style="font-style: italic;">"userdirectory"</span>
+  <span style="font-weight: bold; font-style: italic;">WSGI_SCRIPT</span>=<span style="font-style: italic;">"userdirectory.wsgi"</span>
+  <span style="font-weight: bold; font-style: italic;">APACHE_VHOST_FILE</span>=<span style="font-style: italic;">"/etc/apache2/sites-available/default"</span>
+
+  sed -i <span style="font-style: italic;">"/&lt;\/VirtualHost&gt;/i \</span>
+<span style="font-style: italic;">    WSGIScriptAlias / $ABS_PATH_DS/$WSGI_SCRIPT</span>
+<span style="font-style: italic;">  "</span> $<span style="font-weight: bold; font-style: italic;">APACHE_VHOST_FILE</span>
+
+  <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">sed -i '/&lt;\/VirtualHost&gt;/i \</span>
+  <span style="font-weight: bold; font-style: italic;">#  </span><span style="font-weight: bold; font-style: italic;">WSGIDaemonProcess $PROC_NAME user=www-data group=www-data threads=5</span>
+  <span style="font-weight: bold; font-style: italic;">#  </span><span style="font-weight: bold; font-style: italic;">WSGIScriptAlias / $ABS_PATH_DS/$WSGI_SCRIPT</span>
+
+  <span style="font-weight: bold; font-style: italic;">#  </span><span style="font-weight: bold; font-style: italic;">&lt;Directory $ABS_PATH_DS&gt;</span>
+  <span style="font-weight: bold; font-style: italic;">#    </span><span style="font-weight: bold; font-style: italic;">WSGIProcessGroup $PROC_NAME</span>
+  <span style="font-weight: bold; font-style: italic;">#    </span><span style="font-weight: bold; font-style: italic;">WSGIApplicationGroup %{GLOBAL}</span>
+  <span style="font-weight: bold; font-style: italic;">#    </span><span style="font-weight: bold; font-style: italic;">Order deny,allow</span>
+  <span style="font-weight: bold; font-style: italic;">#    </span><span style="font-weight: bold; font-style: italic;">Allow from all</span>
+  <span style="font-weight: bold; font-style: italic;">#  </span><span style="font-weight: bold; font-style: italic;">&lt;/Directory&gt;</span>
+  <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">' $APACHE_VHOST_FILE</span>
+
+}
+
+<span style="font-weight: bold;">setup_db</span>() {
+  <span style="font-weight: bold;">echo</span> <span style="font-style: italic;">"Creating database: $DB_NAME"</span>
+  mysql -u $<span style="font-weight: bold; font-style: italic;">DB_USER</span> -p$<span style="font-weight: bold; font-style: italic;">DB_PASS</span> -Bse <span style="font-style: italic;">"create database $DB_NAME;"</span>
+  <span style="font-weight: bold;">if</span> [[ $<span style="font-weight: bold; font-style: italic;">?</span> -ne 0 ]]; <span style="font-weight: bold;">then</span>
+    <span style="font-weight: bold;">echo</span> <span style="font-style: italic;">"Failed to create database $DB_NAME"</span>
+    <span style="font-weight: bold;">exit</span> 1;
+  <span style="font-weight: bold;">fi</span>
+
+}
+
+update_app_config
+<span style="font-weight: bold;">if</span> [[ $<span style="font-weight: bold; font-style: italic;">?</span> -ne 0 ]]; <span style="font-weight: bold;">then</span>
+  <span style="font-weight: bold;">echo</span> <span style="font-style: italic;">"FATAL: Failed to update application config.py"</span>
+  <span style="font-weight: bold;">exit</span> 1;
+<span style="font-weight: bold;">fi</span>
+update_apache_config
+<span style="font-weight: bold;">if</span> [[ $<span style="font-weight: bold; font-style: italic;">?</span> -ne 0 ]]; <span style="font-weight: bold;">then</span>
+  <span style="font-weight: bold;">echo</span> <span style="font-style: italic;">"FATAL: Failed to update apache config"</span>
+  <span style="font-weight: bold;">exit</span> 1;
+<span style="font-weight: bold;">fi</span>
+
+service apache2 restart
+
+setup_db
+<span style="font-weight: bold;">exit</span> 0;
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Date: <span class="timestamp-wrapper"><span class="timestamp">[2016-05-11 Wed]</span></span></p>
+<p class="author">Author: VLEAD</p>
+<p class="date">Created: 2016-06-02 Thu 17:26</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.4.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

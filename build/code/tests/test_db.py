@@ -1,75 +1,4 @@
-#+TITLE: Data Model of the User Directory Application
-#+AUTHOR: VLEAD
-#+DATE: [2016-05-11 Wed]
-#+PROPERTY: results output
-#+PROPERTY: exports code
-#+SETUPFILE: ../org-templates/level-1.org
-#+options: ^:nil
-#+LATEX: Literal LaTeX code for export
 
-* Initialization
-
-** Imports for Python API
-#+BEGIN_SRC python :tangle ../../src/db.py :eval no
-# -*- coding: utf-8 -*-
-
-from collections import OrderedDict
-
-from flask.ext.sqlalchemy import SQLAlchemy
-from flask import current_app, request
-from sqlalchemy.orm import relationship
-import sqlalchemy.types as types
-
-import os
-import re
-from urlparse import urlparse
-from datetime import datetime
-import json
-
-from op_exceptions import AttributeRequired, ConstraintError, NotAuthorizedError
-from utils import *
-
-db = SQLAlchemy()
-
-#system = None
-# Abstract class to hold common methods
-class Entity(db.Model):
-
-    __abstract__ = True
-
-    # save a db.Model to the database. commit it.
-    def save(self):
-        db.session.add(self)
-        db.session.commit()
-
-    # update the object, and commit to the database
-    def update(self, **kwargs):
-        for attr, val in kwargs.iteritems():
-            setter_method = "set_" + attr
-            try:
-                self.__getattribute__(setter_method)(val)
-            except Exception as e:
-                raise e
-
-        self.save()
-
-    #print "Setting new val"
-    #print "Calling %s on %s" % (method_to_set, curr_entity)
-    #try:
-    #    getattr(record, method_to_set)(new_val)
-    #except Exception as e:
-    #pass
-
-    def delete(self):
-        db.session.delete(self)
-        db.session.commit()
-
-#+END_SRC
-
-
-** Imports and Initialization of testcases for Python API
-
-#+BEGIN_SRC python :tangle ../../tests/test_db.py :eval no
 # -*- coding: utf-8 -*-
 import unittest
 from flask.ext.testing import TestCase
@@ -115,161 +44,7 @@ def tearDown():
     global system
     system.user_set = []
     #system.session_set = []
-#+END_SRC
 
-
-
-** Imports for utility functions
-   
-#+BEGIN_SRC python :tangle ../../src/utils_new.py :eval no
-
-# module to hold all utilities/helper functions
-
-import json
-
-from flask import make_response, current_app
-
-import re
-
-
-#+END_SRC
-
-
-* Utility Functions
-
-*** is_alphabetic_string(value)
-    This function take an argument and checks whether the argument contains
-    only alphabets.
-
-#+BEGIN_SRC  python :tangle ../../src/utils.py :eval no
-def is_alphabetic_string(value):
-    if re.search('[^a-zA-Z. ]+', value):
-        return False
-    else:
-        return True
-#+END_SRC
-
-
-*** is_email(value)
-    Email is a type as defined in RFC [[https://tools.ietf.org/html/rfc5321][5321]], [[https://tools.ietf.org/html/rfc5322][5322]] and [[https://tools.ietf.org/html/rfc6531][6531]].
-    Following is the constructor for this class.
-
-#+BEGIN_SRC python :tangle ../../src/utils.py :eval no
-def is_email(value):
-    if re.search('[^@]+@[^@]+\.[^@]+', value):
-        return True
-    else:
-        return False
-#+END_SRC
-
-
-
-*** Other function for REST
-
-#+BEGIN_SRC python :tangle ../../src/utils_new.py :eval no
-
-# module to hold all utilities/helper functions
-
-# return a list of dicts as json with correct mime types
-# flask does not provide a jsonify for lists; hence this method
-def jsonify_list(data):
-    if type(data) is not list:
-        raise Exception('jsonify_list function accepts only a list')
-
-    return make_response(json.dumps(data), 200,
-                         {'content-type': 'application/json'})
-
-
-# take in a flask request object and try to parse out a dictionary from the
-# request
-# try to find if request is as JSON first, then look into forms, finally force
-# find it.
-# If not found return a dict; else return the parsed data
-def parse_request(request):
-    if request.json:
-        # print 'found in request.json'
-        data = request.get_json()
-
-    elif request.data:
-        # print 'found in request.data'
-        data = json.loads(request.data)
-
-    elif request.form:
-        # print 'found in request.form'
-        data = request.form.to_dict()
-        # try to detect if form contains integers and boolean data and attempt
-        # to convert them
-        # FIXME: is this a good idea? Fix this to do it in a better way?
-        for k in data:
-            if is_number(data[k]):
-                data[k] = int(data[k])
-            if is_bool_in_str(data[k]):
-                data[k] = str_to_bool(data[k])
-
-            # print k, data[k]
-
-    else:
-        data = request.get_json(force=True)
-
-    if not data:
-        return False
-
-    return data
-
-
-# check if a given string is a number
-def is_number(s):
-    try:
-        float(s)
-        return True
-    except ValueError:
-        return False
-
-
-# check if in a given string python bool types are represented
-def is_bool_in_str(s):
-    if s == "True" or s == "False":
-        return True
-    return False
-
-
-# convert python bool types in string to native bool types
-def str_to_bool(s):
-    if s == "True":
-        return True
-    if s == "False":
-        return False
-    return None
-#+END_SRC
-
-
-* Object Relational Model
-
-** Name
-
-*** Construction
-
-     Name is an alphabetical string.
-
-#+BEGIN_SRC python :tangle ../../src/db.py :eval no
-class Name(object):
-    value = None
-    def __init__(self, value):
-        # value: String 
-        # if the string contains any non-alphabet and non-space character,
-        # raise a type error
-        if is_alphabetic_string(value):
-            self.value = value
-        else:
-            raise TypeError('%s is not a Name!' % value)
-
-    def __str__(self):
-        return self.value
-#+END_SRC
-
-
-*** Test the Construction
-#+BEGIN_SRC python :tangle ../../tests/test_db.py :eval no
 class TestName(TestCase):
     TESTING = True
 
@@ -294,32 +69,7 @@ class TestName(TestCase):
         self.assertEqual(new_name.value, "John")
         # incorrect name
         self.assertRaises(TypeError, Name, "123dasd")
-#+END_SRC
 
-
-** Email
-
-*** Construction
-
-     Email is a type as defined in RFC [[https://tools.ietf.org/html/rfc5321][5321]], [[https://tools.ietf.org/html/rfc5322][5322]] and [[https://tools.ietf.org/html/rfc6531][6531]].
-     Following is the constructor for this class.
-
-#+BEGIN_SRC python :tangle ../../src/db.py :eval no
-class Email(object):
-    value = None
-    def __init__(self, value):
-        if not is_email(value):
-            raise TypeError('%s is not an email!' % value)
-        self.value = value
-
-    def __str__(self):
-        return self.value
-#+END_SRC
-
-
-
-*** Test the Construction
-#+BEGIN_SRC python :tangle ../../tests/test_db.py :eval no
 class TestEmail(TestCase):
     TESTING = True
 
@@ -343,71 +93,7 @@ class TestEmail(TestCase):
         self.assertEqual(new_email.value, "smith@gmail.com")
         # incorrect name
         self.assertRaises(TypeError, Email, "@@@@smithgmail.com")
-#+END_SRC
 
-
-
-** User
-
-*** Immutable Data
-     This is the data associated with Institute type, which is immutable.
-
-     + Id
-
-
-*** Mutable Data
-
-     These are the data associated with User type, which are mutable
-
-     + Name
-     + Email
-     + Role
-
-
-*** Definition
-#+BEGIN_SRC python :tangle ../../src/db.py :eval no
-class User(Entity):
-
-    __tablename__ = 'users'
-
-    id = db.Column(db.Integer, primary_key=True)
-    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
-    name = db.Column(db.String(128), nullable=False)
-    email = db.Column(db.String(128), nullable=False, unique=True)
-
-#+END_SRC
-
-
-*** Constructor
-
-**** Implementation
-
-    Signature of the constructor of =User= is as follows:
-
-    #+BEGIN_EXAMPLE
-    usr = User(name=<object of Name>, email=<object of Email>, 
-              role=<object of Role>)
-    #+END_EXAMPLE
-
-#+BEGIN_SRC python :tangle ../../src/db.py :eval no
-    def __init__(self, **kwargs):
-        if 'email' not in kwargs:
-            raise AttributeRequired("email is mandatory")
-
-        if 'name' not in kwargs:
-            raise AttributeRequired("name is mandatory")
-
-        if 'role' not in kwargs:
-            raise AttributeRequired("Atleast one role is mandatory")
-
-        self.set_email(kwargs['email'])
-        self.set_name(kwargs['name'])
-        self.set_role(kwargs['role'])
-#+END_SRC
-
-
-**** Test the constructor
- #+BEGIN_SRC python :tangle ../../tests/test_db.py :eval no
 class TestUser(TestCase):
     TESTING = True
 
@@ -439,22 +125,7 @@ class TestUser(TestCase):
                     role=Role.get_by_id(1))
         user.save()
         self.assertEqual(user.role.name, "admin")   
- #+END_SRC
 
-
-*** Functions
-
-
-**** setRole User, Role ---> NIL
-
-***** Implementation
-#+BEGIN_SRC python :tangle ../../src/db.py :eval no
-    def set_role(self, role):
-        self.role = role
-#+END_SRC
-
-***** Test setRole to a user 
-#+BEGIN_SRC python :tangle ../../tests/test_db.py :eval no
     def test_set_roles_to_user(self):
         print "test_set_roles_to_user"
         #a_role = Role("admin")
@@ -469,64 +140,7 @@ class TestUser(TestCase):
         user.save()
         users = User.get_all()
         self.assertEqual(users[1].role.name, "user")
-#+END_SRC
 
-
-**** setEmail
-#+BEGIN_SRC python :tangle ../../src/db.py :eval no
-    def set_email(self, email):
-        if not is_email(email):
-            raise TypeError('email is invalid')
-        else:
-            self.email = email
-#+END_SRC
-
-
-**** setName
-#+BEGIN_SRC python :tangle ../../src/db.py :eval no
-    def set_name(self, name):
-        if not is_alphabetic_string(name):
-            raise TypeError('Invalid name')
-        else:
-            self.name = name
-#+END_SRC
-
-**** setRole
-#+BEGIN_SRC python :tangle ../../src/db.py :eval no
-    def set_role(self, role):
-        if not isinstance(role, Role):
-            raise TypeError('`role` argument should be of type Role.')
-        else:
-            self.role = role
-#+END_SRC
-
-
-**** getEmail
- #+BEGIN_SRC python :tangle ../../src/db.py :eval no
-    def get_email(self):
-        return self.email
- #+END_SRC
-
-
-**** getName
-#+BEGIN_SRC python :tangle ../../src/db.py :eval no
-    def get_name(self):
-        return self.name
-#+END_SRC
-
-
-**** getAll: Nil --> set[User]
-
-***** Implementation
-#+BEGIN_SRC python :tangle ../../src/db.py :eval no
-    @staticmethod
-    def get_all():
-        return User.query.all()
-#+END_SRC
-
-
-***** Test getAll
-#+BEGIN_SRC python :tangle ../../tests/test_db.py :eval no
     def test_user_get_all(self):
         print "test_user_get_all"
         #role = Role("Admin")
@@ -537,21 +151,7 @@ class TestUser(TestCase):
         user.save()
         users = User.get_all()
         self.assertEqual("admin", users[0].role.name)
-#+END_SRC
 
-
-**** getById : id --> User
-
-***** Implementation
-#+BEGIN_SRC python :tangle ../../src/db.py :eval no
-    @staticmethod
-    def get_by_id(id):
-        return User.query.get(id)
-#+END_SRC
-
-
-***** Test getById: Id --> User
-#+BEGIN_SRC python :tangle ../../tests/test_db.py :eval no
     def test_get_user_by_id(self):
         print "test_get_user_by_id"
         #role = Role("admin")
@@ -562,10 +162,7 @@ class TestUser(TestCase):
         user.save()
         self.assertEqual(user.get_by_id(2).role.name, "admin")
         self.assertEqual(user.get_by_id(2).name, "Robin Smith")
-#+END_SRC
 
-***** Test updateRole: Role -> Role
-#+BEGIN_SRC python :tangle ../../tests/test_db.py :eval no
     def test_update_user(self):
         print "test_update_role"
         #a_role = Role("admin")
@@ -584,82 +181,7 @@ class TestUser(TestCase):
         print u1.to_client()
         self.assertEqual(u1.get_by_id(1).name, "Duddley Rod")
         self.assertEqual(u1.get_by_id(1).role.name, "user")
-#+END_SRC
 
-
-**** toClient
-#+BEGIN_SRC python :tangle ../../src/db.py :eval no
-    def to_client(self):
-        return {
-            'id': self.id,
-            'name': self.name,
-            'email': self.email,
-            'role': self.role.to_client()
-        }
-#+END_SRC
-
-
-
-** Role
-
-*** Introduction
-   A Role has got certain privileges.  In this current application, the
-   privileges are understood 
-   
-   Different types of roles are:
-   - Owner  :: An owner is user an admin who cannot delete himself
-   - Admin :: An admin is an user who can add, modify and delete other users
-        except owner
-   - User :: A User is a user who can view all other users and either modify or
-        delete himself.
-   - Guest :: A Guest is a user who can view all other users
-
-
-*** Immutable Data
-     This is the data associated with Institute type, which is immutable.
-
-     + Id
-
-
-*** Mutable Data
-
-     These are the data associated with User type, which are mutable
-
-     + Name
-
-
-*** Definition
-#+BEGIN_SRC python :tangle ../../src/db.py :eval no
-class Role(Entity):
-    __tablename__ = 'roles'
-
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(128), unique=True, nullable=False)
-    
-    users = db.relationship('User', backref='role')
-#+END_SRC
-
-
-*** Constructor
-
-    The signature of Role is defined as follows
-    #+BEGIN_EXAMPLE
-    role = Role(name=<Object of Name>)
-    #+END_EXAMPLE
-
-#+BEGIN_SRC python :tangle ../../src/db.py :eval no
-    def __init__(self, name):
-        self.name = name
-
-    def __str__(self):
-        return self.name
-
-
-#+END_SRC
-
-
-*** Test Constructor
-#+BEGIN_SRC python :tangle ../../tests/test_db.py :eval no
 class TestRole(TestCase):
     TESTING = True
 
@@ -681,67 +203,7 @@ class TestRole(TestCase):
         role = Role.get_by_id(1)
         role.save()
         self.assertEqual(role.name, "admin")
-#+END_SRC
 
-
-*** Functions
-**** getALL
-***** Implementation
-#+BEGIN_SRC python :tangle ../../src/db.py :eval no
-    @staticmethod
-    def get_all():
-        return Role.query.all()
-#+END_SRC
-
-
-**** getById : id --> Role
-
-***** Implementation
-#+BEGIN_SRC python :tangle ../../src/db.py :eval no
-    @staticmethod
-    def get_by_id(id):
-        return Role.query.get(id)
-#+END_SRC
-
-
-
-**** to_client
-#+BEGIN_SRC python :tangle ../../src/db.py :eval no
-    def to_client(self):
-        return {
-            'id': self.id,
-            'name': self.name
-        }
-
-#+END_SRC
-
-
-
-
-
-
-
-** Session
-   
-*** Definition
-#+BEGIN_SRC python :tangle ../../src/db.py :eval no
-class Session(object):
-    user = None
-    
-#+End_SRC
-
-*** Constructor
-**** Implementation
-#+BEGIN_SRC python :tangle ../../src/db.py :eval no
-    def __init__(self, **kwargs):
-        if 'user' not in kwargs:
-            raise AttributeRequired("user is mandatory")
-        else:
-            self._set_user(kwargs['user'])
-#+END_SRC
-
-*** Test constructor
-#+BEGIN_SRC python :tangle ../../tests/test_db.py :eval no
 class TestSession(TestCase):
     TESTING = True
 
@@ -766,20 +228,7 @@ class TestSession(TestCase):
         session = Session(user=user)
         self.assertEqual(session.user.role, Role.get_by_id(1))
         #tearDown(system)
-#+END_SRC
 
-*** Operations
-
-**** getUser
-     
-***** Implementation
-#+BEGIN_SRC python :tangle ../../src/db.py :eval no
-    def get_user(self):
-        return self.user
-#+END_SRC
-
-***** Test case 
-#+BEGIN_SRC python :tangle ../../tests/test_db.py :eval no
     def test_get_user(self):
         #system = setUp()
         print "test_get_user"
@@ -788,22 +237,7 @@ class TestSession(TestCase):
         new_user = session.get_user()
         self.assertEquals(new_user, user)
         #tearDown(system)
-#+END_SRC
-    
-**** _set_user
 
-***** Implementation 
-
-#+BEGIN_SRC python :tangle ../../src/db.py :eval no
-    def _set_user(self, user):
-        if not isinstance(user, User):
-            raise TypeError('`user` argument should be of type User.')
-        else:
-            self.user = user
-#+END_SRC
-
-***** Test
-#+BEGIN_SRC python :tangle ../../tests/test_db.py :eval no
     def test_set_user(self):
         #system = setUp()
         print "test_set_user"
@@ -812,58 +246,7 @@ class TestSession(TestCase):
         session._set_user(user)
         self.assertEquals(session.user, user)
         #tearDown(system)
-#+END_SRC
-    
-**** toClient
-***** Implementation
-#+BEGIN_SRC python :tangle ../../src/db.py :eval no
-    def to_client(self):
-        return {
-            'session': self.user.to_client()
-        }
-#+END_SRC
 
-
-** System
-*** Definition
-#+BEGIN_SRC python :tangle ../../src/db.py :eval no
-class System(object):
-
-    user_set = []
-    session_set = []
-    created = False
-    
-#+END_SRC
-
-*** Constructor
-
-**** Implementation
-#+BEGIN_SRC python :tangle ../../src/db.py :eval no
-
-    def __init__(self):
-        if System.created == True:
-            raise ConstraintError("System has already been created")
-        else:
-            #a_role = Role("admin")
-            #u_role = Role("user")
-            #a_role.save()
-            #u_role.save()
-            #admin_user = User(name="abc", 
-            #              email="abc@vlabs.ac.in", 
-            #              role=Role.get_by_id(1))
-            #admin_user.save()       
-
-            #s = Session(user = admin_user)
-            System.created = True
-            #self.session_set.append(s)
-            #admin_user.save()
-            self.session_set = []
-            self.user_set = []
-
-#+END_SRC
-
-**** Test Constructor
-#+BEGIN_SRC python :tangle ../../tests/test_db.py :eval no
 class TestSystem(TestCase):
     TESTING = True
 
@@ -897,27 +280,6 @@ class TestSystem(TestCase):
         self.assertEquals(new_user.email, "app-admin@vlabs.ac.in")
         
         
-#+END_SRC
-
-*** Operations
-**** add_user
-     
-***** Implementation
-#+BEGIN_SRC python :tangle ../../src/db.py :eval no
-    def add_user(self, user,session):
-        if session in self.session_set:
-            if session.user.role == Role.get_by_id(1):
-                user.save()
-                self.user_set = User.get_all()
-            else:
-                raise NotAuthorizedError("Only admin can add")
-        else:
-            raise ConstraintError("Invalid Session")
-
-#+END_SRC
-
-***** Test
-#+BEGIN_SRC python :tangle ../../tests/test_db.py :eval no
 
     def test_add_user_session_admin(self):
         global system
@@ -978,41 +340,6 @@ class TestSystem(TestCase):
         with self.assertRaises(ConstraintError):
             system.add_user(user, session)
         #tearDown(system)
-
-
-#+END_SRC
-
-#+BEGIN_SRC python :tangle ../../src/db.py :eval no
-#system = None
-#+END_SRC
-
-**** del_user
-     
-***** Implementation
-#+BEGIN_SRC python :tangle ../../src/db.py :eval no
-    def del_user(self, user, session):
-        print session.user.email
-        if session in self.session_set:
-            if not session.user.role.name == "admin":
-                raise NotAuthorizedError("Only admin can remove users")
-            else:
-                check = False
-                for x in self.session_set:
-                    if x.user.email == user.email:
-                        check = True
-                if not check:
-                    #new_users = filter(lambda x: x.email ==  user.email, self.user_set)
-                    user.delete()
-                    self.user_set = User.get_all()
-                else:
-                    raise ConstraintError("User is still logged in")
-        else:
-            raise ConstraintError("Invalid session!!!")
-
-#+END_SRC
-
-***** Test
-#+BEGIN_SRC python :tangle ../../tests/test_db.py :eval no
 
     def test_delete_user_session_admin(self):
         global system
@@ -1096,24 +423,6 @@ class TestSystem(TestCase):
             system.add_user(user, session)
         #tearDown(system)
 
-
-#+END_SRC
-    
-**** show_users
-     
-***** Implementation
-#+BEGIN_SRC python :tangle ../../src/db.py :eval no
-    def show_users(self,session):
-        if session in self.session_set:
-            return self.user_set
-        else:
-            raise ConstraintError("Not a valid session")
-
-#+END_SRC
-
-***** Test
-#+BEGIN_SRC python :tangle ../../tests/test_db.py :eval no
-
     def test_show_users_valid(self):
         print "test_show_users_valid"
         global system
@@ -1146,33 +455,6 @@ class TestSystem(TestCase):
             system.show_users(current_session)
         #tearDown(system)
 
-#+END_SRC
-
-**** get_users_from_database
-#+BEGIN_SRC python :tangle ../../src/db.py :eval no
-    def get_users_from_database(self):
-        self.user_set = User.get_all()
-
-#+END_SRC
-
-
-**** get_user_by_email
-***** Implementation
-#+BEGIN_SRC python :tangle ../../src/db.py :eval no
-    def get_user_by_email(self, email, session):
-        user_check = filter(lambda x: x.email == email, self.user_set)
-        if session in self.session_set:
-            if user_check:
-                return user_check[0]
-            else:
-                raise ConstraintError("Invalid session")
-        else:
-            raise ConstraintError("No user by this email")
-
-#+END_SRC
-
-***** Test
-#+BEGIN_SRC python :tangle ../../tests/test_db.py :eval no
     def test_get_user_by_email_existing(self):
         print "test_get_user_by_email_existing"
         #system = setUp()
@@ -1219,28 +501,6 @@ class TestSystem(TestCase):
             email_check = system.get_user_by_email("abcdf@gmail.com",session)
         #tearDown(system)
 
-#+END_SRC
-
-**** make_user
-
-***** Implementation
-#+BEGIN_SRC python :tangle ../../src/db.py :eval no
-     
-    def make_user(self,name,email,role,session):
-        if session in self.session_set:
-            if(session.user.role==Role.get_by_id(1)):
-                user=User(name=name,email=email,role=role)
-                self.add_user(user,session)  
-            else:
-                raise NotAuthorizedError('only admin can create user')
-        else:
-            raise ConstraintError("Invalid Session")
-
-#+END_SRC
-
-***** Test
-
-#+BEGIN_SRC python :tangle ../../tests/test_db.py :eval no      
     def test_make_user_session_user(self):
         global system
         #system = setUp()
@@ -1292,24 +552,6 @@ class TestSystem(TestCase):
             system.make_user("abc", "abcd@gmail.com", Role.get_by_id(1), session)
         #tearDown(system)
 
-#+END_SRC
-**** get_email_of_user
-***** Implementation
-#+BEGIN_SRC python :tangle ../../src/db.py :eval no
-    def get_email_of_user(self, user, session):
-        if session in self.session_set:
-            if user in self.user_set:
-                return user.email  
-            else:
-                raise ConstraintError('User does not exist')
-        else:
-            raise ConstraintError("Invalid Session")
-
-#+END_SRC
-
-***** Test 
-#+BEGIN_SRC python :tangle ../../tests/test_db.py :eval no
-
     def test_get_email_of_user_valid(self):
         #system = setUp()
         global system
@@ -1357,26 +599,6 @@ class TestSystem(TestCase):
         with self.assertRaises(ConstraintError):
             email_check = system.get_email_of_user(user ,session)
         #tearDown(system)
-
-#+END_SRC    
-
-**** get_name_of_user
-***** Implementation
-#+BEGIN_SRC python :tangle ../../src/db.py :eval no
-    def get_name_of_user(self, user, session):
-        if session in self.session_set:
-            if user in self.user_set:
-                return user.name  
-            else:
-                raise ConstraintError('User does not exist')
-        else:
-            raise ConstraintError("Invalid Session")
-
-
-#+END_SRC
-
-***** Test
-#+BEGIN_SRC python :tangle ../../tests/test_db.py :eval no
 
     def test_get_name_of_user_valid(self):
         print "test_get_name_of_user_valid"
@@ -1426,42 +648,6 @@ class TestSystem(TestCase):
             email_check = system.get_name_of_user(user ,session)
         #tearDown(system)
         
-#+END_SRC    
-
-
-**** set_email_of_user
-***** Implementation
-#+BEGIN_SRC python :tangle ../../src/db.py :eval no
-    def set_email_of_user(self, user, email, session):
-        #global system
-        #print self.session_set
-        #for x in self.session_set:
-        #    print x.user.email
-        if session in self.session_set:
-            check = filter(lambda x: x.email == email, self.user_set)
-            if not check:
-                if user in self.user_set:
-                    if session.user.role.name == "admin":
-                        user.set_email(email)
-                        user.update()
-                        self.user_set = User.get_all()
-                    elif session.user.email == user.email:
-                        user.set_email(email)
-                        user.update()
-                        self.user_set = User.get_all()
-                    else:
-                        raise NotAuthorizedError("You don't have permission to change the email")
-                else:
-                    raise ConstraintError('User does not exist')
-            else:
-                raise ConstraintError("Email already exists")
-        else:
-            raise ConstraintError("Invalid Session")
-
-#+END_SRC
-
-***** Test
-#+BEGIN_SRC python :tangle ../../tests/test_db.py :eval no
 
     def test_set_email_of_user_valid_admin(self):
        
@@ -1535,58 +721,7 @@ class TestSystem(TestCase):
             email_check = system.set_email_of_user(user, "abcd@gmail.com", admin_session)
         #tearDown(system)
         
-#+END_SRC
 
-
-**** set_name_of_user
-***** Implementation
-#+BEGIN_SRC python :tangle ../../src/db.py :eval no
-    def set_name_of_user(self, user, name, session):
-        #global system
-        #print self.session_set
-        #for x in self.session_set:
-        #    print x.user.email
-        if session in self.session_set:
-            #check = filter(lambda x: x.email == email, self.user_set)
-            #if not check:
-            if user in self.user_set:
-                if session.user.role.name == "admin":
-                    user.set_name(name)
-                    user.update()
-                    self.user_set = User.get_all()
-                elif session.user.email == user.email:
-                    user.set_name(name)
-                    user.update()
-                    self.user_set = User.get_all()
-                else:
-                    raise NotAuthorizedError("You don't have permission to change the name")
-            else:
-                raise ConstraintError('User does not exist')
-        else:
-            raise ConstraintError("Invalid Session")
-
-#+END_SRC
-
-
-
-**** get_role_of_user
-***** Implementation
-#+BEGIN_SRC python :tangle ../../src/db.py :eval no
-    def get_role_of_user(self, user, session):
-        if session in self.session_set:
-            if user in self.user_set:
-                return user.role  
-            else:
-                raise ConstraintError('User does not exist')
-        else:
-            raise ConstraintError("Invalid Session")
-
-
-#+END_SRC
-
-
-***** Test
-#+BEGIN_SRC python :tangle ../../tests/test_db.py :eval no
     def test_get_role_of_user_valid(self):
         print "test_get_role_of_user_valid"
         #system = setUp()
@@ -1634,25 +769,6 @@ class TestSystem(TestCase):
         with self.assertRaises(ConstraintError):
             email_check = system.get_role_of_user(user ,session)
         #tearDown(system)       
-#+END_SRC    
-
-
-
-
-**** login
-
-***** Implementation
-#+BEGIN_SRC python :tangle ../../src/db.py :eval no
-
-    def login(self, user):
-        if not user in self.user_set:
-            raise ConstraintError("User not in system")
-        else:
-            self.add_session(user)
-#+END_SRC
-
-***** Test
-#+BEGIN_SRC python :tangle ../../tests/test_db.py :eval no
 
     def test_login_valid(self):
         print "test_login_valid"
@@ -1680,31 +796,6 @@ class TestSystem(TestCase):
         with self.assertRaises(ConstraintError):
             system.login(user)
         #tearDown(system)
-
-#+END_SRC        
-
-
-
-
-**** logout
-
-***** Implementation
-#+BEGIN_SRC python :tangle ../../src/db.py :eval no
-
-    def logout(self, user, session):
-        if session in self.session_set:
-            if user in self.user_set:
-                self.del_session(user, session)
-            else:
-                raise ConstraintError("user not in system")
-
-        else:
-            raise ConstraintError("Invalid session")
-
-#+END_SRC
-
-***** Test
-#+BEGIN_SRC python :tangle ../../tests/test_db.py :eval no
 
     def test_logout_valid(self):
         print "test_logout_valid"
@@ -1776,25 +867,6 @@ class TestSystem(TestCase):
             system.logout(user, session)
         #tearDown(system)
 
-#+END_SRC
-
-**** add_session
-     
-***** Implementation
-#+BEGIN_SRC python :tangle ../../src/db.py :eval no
-
-    def add_session(self, user):
-        check = filter(lambda x: x.email == user.email, self.user_set)
-        if check:
-            session = Session(user = user)
-            self.session_set.append(session)
-        else:
-            raise ConstraintError("User is not in the system")
-
-#+END_SRC
-
-***** Test
-#+BEGIN_SRC python :tangle ../../tests/test_db.py :eval no
     def test_add_session(self):
         print "test_add_session"
         #system = setUp()
@@ -1812,30 +884,6 @@ class TestSystem(TestCase):
         new_session_set_length = len(system.session_set)
         self.assertEquals(new_session_set_length, old_session_set_length + 1)
         #tearDown(system)
-
-#+END_SRC
-
-**** del_session
-
-***** Implementation
-#+BEGIN_SRC python :tangle ../../src/db.py :eval no
-    def del_session(self, user, session):
-        if session in self.session_set:
-            if not user in self.user_set:
-                raise ConstraintError("User doesn't exist in system")
-            else:
-                sessions_list = self.session_set
-                new_sessions = filter(lambda x: x.user.email == user.email,
-                sessions_list)
-                sessions_list = new_sessions
-                self.session_set = sessions_list
-        else:
-            raise ConstraintError("Invalid session")
-
-#+END_SRC
-
-***** Test
-#+BEGIN_SRC python :tangle ../../tests/test_db.py :eval no
 
     def test_del_session_valid(self):
         print "test_delete_session_valid"
@@ -1900,22 +948,6 @@ class TestSystem(TestCase):
             system.del_session(user, session)
         #tearDown(system)
     
-#+END_SRC
-**** show_sessions
-     
-***** Implementation
-#+BEGIN_SRC python :tangle ../../src/db.py :eval no
-    def show_sessions(self, session):
-        if not session.user.role == Role.get_by_id(1):
-            raise NotAuthorizedError("Only admin can view sessions")
-        else:
-            return self.session_set
-
-#+END_SRC
-
-
-***** Test
-#+BEGIN_SRC python :tangle ../../tests/test_db.py :eval no
 
     def test_show_sessions_admin(self):
         print "test_show_sessions_admin"
@@ -1955,13 +987,5 @@ class TestSystem(TestCase):
             check = system.show_sessions(session)
         #tearDown(system)
 
-#+END_SRC
-
-* Run Test Cases
- 
-#+BEGIN_SRC python :tangle ../../tests/test_db.py :eval no
 if __name__ == '__main__':
     unittest.main()
-#+END_SRC
-
-

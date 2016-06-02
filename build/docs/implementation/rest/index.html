@@ -1,0 +1,1457 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>The REST API</title>
+<!-- 2016-06-02 Thu 17:26 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="VLEAD" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">The REST API</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1. REST</a>
+<ul>
+<li><a href="#sec-1-1">1.1. Initialization</a></li>
+<li><a href="#sec-1-2">1.2. GET all users</a></li>
+<li><a href="#sec-1-3">1.3. GET all roles</a></li>
+<li><a href="#sec-1-4">1.4. GET a user with id</a></li>
+<li><a href="#sec-1-5">1.5. GET a role with id</a></li>
+<li><a href="#sec-1-6">1.6. Create a user</a></li>
+<li><a href="#sec-1-7">1.7. Create a role</a></li>
+<li><a href="#sec-1-8">1.8. Update/Delete user</a>
+<ul>
+<li><a href="#sec-1-8-1">1.8.1. Implementation</a></li>
+</ul>
+</li>
+<li><a href="#sec-1-9">1.9. Update/Delete a role</a></li>
+<li><a href="#sec-1-10">1.10. Get user by email</a>
+<ul>
+<li>
+<ul>
+<li><a href="#sec-1-10-0-1">1.10.0.1. Implementation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#sec-1-11">1.11. Get email of user</a>
+<ul>
+<li><a href="#sec-1-11-1">1.11.1. Implementation</a></li>
+</ul>
+</li>
+<li><a href="#sec-1-12">1.12. Get name of user</a>
+<ul>
+<li><a href="#sec-1-12-1">1.12.1. Implementation</a></li>
+</ul>
+</li>
+<li><a href="#sec-1-13">1.13. Set email of user</a>
+<ul>
+<li><a href="#sec-1-13-1">1.13.1. Implementation</a></li>
+</ul>
+</li>
+<li><a href="#sec-1-14">1.14. Login/Logout</a>
+<ul>
+<li><a href="#sec-1-14-1">1.14.1. Implementation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#sec-2">2. Tests for REST API</a>
+<ul>
+<li><a href="#sec-2-1">2.1. Initialization</a></li>
+<li><a href="#sec-2-2">2.2. User Tests</a>
+<ul>
+<li><a href="#sec-2-2-1">2.2.1. Initialization</a></li>
+<li><a href="#sec-2-2-2">2.2.2. test_get_all_users</a>
+<ul>
+<li><a href="#sec-2-2-2-1">2.2.2.1. Implementation</a></li>
+</ul>
+</li>
+<li><a href="#sec-2-2-3">2.2.3. test_get_one_user</a>
+<ul>
+<li><a href="#sec-2-2-3-1">2.2.3.1. Implementation</a></li>
+</ul>
+</li>
+<li><a href="#sec-2-2-4">2.2.4. test_update_existing_user</a>
+<ul>
+<li><a href="#sec-2-2-4-1">2.2.4.1. Implementation</a></li>
+</ul>
+</li>
+<li><a href="#sec-2-2-5">2.2.5. test_create_new_user</a>
+<ul>
+<li><a href="#sec-2-2-5-1">2.2.5.1. Implementation</a></li>
+</ul>
+</li>
+<li><a href="#sec-2-2-6">2.2.6. test_delete_user</a>
+<ul>
+<li><a href="#sec-2-2-6-1">2.2.6.1. Implementation</a></li>
+</ul>
+</li>
+<li><a href="#sec-2-2-7">2.2.7. test_create_role</a>
+<ul>
+<li><a href="#sec-2-2-7-1">2.2.7.1. Implementation</a></li>
+</ul>
+</li>
+<li><a href="#sec-2-2-8">2.2.8. test_update_role</a>
+<ul>
+<li><a href="#sec-2-2-8-1">2.2.8.1. Implementation</a></li>
+</ul>
+</li>
+<li><a href="#sec-2-2-9">2.2.9. test_delete_role</a>
+<ul>
+<li><a href="#sec-2-2-9-1">2.2.9.1. Implementation</a></li>
+</ul>
+</li>
+<li><a href="#sec-2-2-10">2.2.10. test_get_user_by_email</a>
+<ul>
+<li><a href="#sec-2-2-10-1">2.2.10.1. Implementation</a></li>
+</ul>
+</li>
+<li><a href="#sec-2-2-11">2.2.11. test_get_email_of_user</a>
+<ul>
+<li><a href="#sec-2-2-11-1">2.2.11.1. Implementation</a></li>
+</ul>
+</li>
+<li><a href="#sec-2-2-12">2.2.12. test_get_name_of_user</a>
+<ul>
+<li><a href="#sec-2-2-12-1">2.2.12.1. Implementation</a></li>
+</ul>
+</li>
+<li><a href="#sec-2-2-13">2.2.13. test_set_email_of_user</a>
+<ul>
+<li><a href="#sec-2-2-13-1">2.2.13.1. Implementation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#sec-2-3">2.3. Run Tests</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<p>
+This document illustrates building of the REST API.
+</p>
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> REST</h2>
+<div class="outline-text-2" id="text-1">
+</div><div id="outline-container-sec-1-1" class="outline-3">
+<h3 id="sec-1-1"><span class="section-number-3">1.1</span> Initialization</h3>
+<div class="outline-text-3" id="text-1-1">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">-*- coding: utf-8 -*-</span>
+
+<span style="font-weight: bold;">import</span> os
+<span style="font-weight: bold;">import</span> csv
+<span style="font-weight: bold;">import</span> requests
+<span style="font-weight: bold;">from</span> datetime <span style="font-weight: bold;">import</span> datetime
+<span style="font-weight: bold;">import</span> inspect
+<span style="font-weight: bold;">from</span> flask <span style="font-weight: bold;">import</span> session, render_template, Blueprint, request, jsonify, abort, current_app, redirect, url_for
+<span style="font-weight: bold;">from</span> config <span style="font-weight: bold;">import</span> *
+<span style="font-weight: bold;">from</span> flask <span style="font-weight: bold;">import</span> current_app
+
+<span style="font-weight: bold;">from</span> flask <span style="font-weight: bold;">import</span> Flask, redirect, url_for
+<span style="font-weight: bold;">from</span> werkzeug <span style="font-weight: bold;">import</span> secure_filename
+
+<span style="font-weight: bold;">from</span> db <span style="font-weight: bold;">import</span> *
+<span style="font-weight: bold;">from</span> utils_new <span style="font-weight: bold;">import</span> parse_request, jsonify_list
+<span style="font-weight: bold; font-style: italic;">api</span> = Blueprint(<span style="font-style: italic;">'APIs'</span>, <span style="font-weight: bold;">__name__</span>)
+
+<span style="font-weight: bold; font-style: italic;">system</span> = System()
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-1-2" class="outline-3">
+<h3 id="sec-1-2"><span class="section-number-3">1.2</span> GET all users</h3>
+<div class="outline-text-3" id="text-1-2">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold; text-decoration: underline;">@api.route</span>(<span style="font-style: italic;">'/users'</span>, methods=[<span style="font-style: italic;">'GET'</span>])
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">get_users</span>():
+    <span style="font-weight: bold;">global</span> system
+    system.get_users_from_database()
+    <span style="font-weight: bold;">return</span> jsonify_list([i.to_client() <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> system.user_set])
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-1-3" class="outline-3">
+<h3 id="sec-1-3"><span class="section-number-3">1.3</span> GET all roles</h3>
+<div class="outline-text-3" id="text-1-3">
+<p>
+The is the REST API to get all the roles.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold; text-decoration: underline;">@api.route</span>(<span style="font-style: italic;">'/roles'</span>, methods=[<span style="font-style: italic;">'GET'</span>])
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">get_roles</span>():
+    <span style="font-weight: bold;">return</span> jsonify_list([i.to_client() <span style="font-weight: bold;">for</span> i <span style="font-weight: bold;">in</span> Role.get_all()])
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-1-4" class="outline-3">
+<h3 id="sec-1-4"><span class="section-number-3">1.4</span> GET a user with id</h3>
+<div class="outline-text-3" id="text-1-4">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold; text-decoration: underline;">@api.route</span>(<span style="font-style: italic;">'/users/&lt;int:id&gt;'</span>, methods=[<span style="font-style: italic;">'GET'</span>])
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">get_user_by_id</span>(<span style="font-weight: bold;">id</span>):
+    <span style="font-weight: bold; font-style: italic;">record</span> = User.get_by_id(<span style="font-weight: bold;">id</span>)
+    <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> record:
+        abort(404, <span style="font-style: italic;">"No entry for %s with id: %s found."</span> % (<span style="font-style: italic;">"user"</span>, <span style="font-weight: bold;">id</span>))
+
+    <span style="font-weight: bold;">return</span> jsonify(record.to_client())
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-1-5" class="outline-3">
+<h3 id="sec-1-5"><span class="section-number-3">1.5</span> GET a role with id</h3>
+<div class="outline-text-3" id="text-1-5">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold; text-decoration: underline;">@api.route</span>(<span style="font-style: italic;">'/roles/&lt;int:id&gt;'</span>, methods=[<span style="font-style: italic;">'GET'</span>])
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">get_role_by_id</span>(<span style="font-weight: bold;">id</span>):
+    <span style="font-weight: bold; font-style: italic;">record</span> = Role.get_by_id(<span style="font-weight: bold;">id</span>)
+    <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> record:
+        abort(404, <span style="font-style: italic;">"No entry for %s with id: %s found."</span> % (<span style="font-style: italic;">"role"</span>, <span style="font-weight: bold;">id</span>))
+
+    <span style="font-weight: bold;">return</span> jsonify(record.to_client())
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-1-6" class="outline-3">
+<h3 id="sec-1-6"><span class="section-number-3">1.6</span> Create a user</h3>
+<div class="outline-text-3" id="text-1-6">
+<p>
+Usage:
+</p>
+<pre class="example">
+POST request
+{
+"name": "Jimi hendrix",
+"email": "jimi@gmail.com",
+"role": 2,
+"session": "admin@vlabs.ac.in"
+}
+</pre>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">not implemented for session, implement with session</span>
+<span style="font-weight: bold; text-decoration: underline;">@api.route</span>(<span style="font-style: italic;">'/users'</span>, methods=[<span style="font-style: italic;">'POST'</span>])
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">create_user</span>():
+
+    <span style="font-weight: bold; font-style: italic;">### </span><span style="font-weight: bold; font-style: italic;">Check if there is a session and act according to the specification</span>
+    <span style="font-weight: bold;">global</span> system
+    <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> request.json <span style="font-weight: bold;">or</span> <span style="font-weight: bold;">not</span> <span style="font-style: italic;">'name'</span> <span style="font-weight: bold;">in</span> request.json <span style="font-weight: bold;">or</span> <span style="font-weight: bold;">not</span> <span style="font-style: italic;">'email'</span> <span style="font-weight: bold;">in</span> request.json:
+        abort(400)
+    <span style="font-weight: bold;">else</span>:
+        <span style="font-weight: bold; font-style: italic;">name</span> = request.json[<span style="font-style: italic;">'name'</span>]
+        <span style="font-weight: bold; font-style: italic;">email</span> = request.json[<span style="font-style: italic;">'email'</span>]
+        <span style="font-weight: bold; font-style: italic;">role</span> = request.json[<span style="font-style: italic;">'role'</span>]
+        <span style="font-weight: bold; font-style: italic;">session_email</span> = request.json[<span style="font-style: italic;">'session'</span>]
+
+        <span style="font-weight: bold;">try</span>:
+            <span style="font-weight: bold; font-style: italic;">user</span> = User(name=name,
+                        email=email,
+                        role=Role.get_by_id(role))
+
+            user.save()
+            <span style="font-weight: bold; font-style: italic;">system.user_set</span> = User.get_all()
+            <span style="font-weight: bold;">return</span> jsonify(user.to_client())
+        <span style="font-weight: bold;">except</span> <span style="font-weight: bold; text-decoration: underline;">Exception</span>, e:
+            current_app.logger.error(<span style="font-style: italic;">"Error occured while inserting"</span>
+                                     <span style="font-style: italic;">"user record: %s"</span> % <span style="font-weight: bold;">str</span>(e))
+            abort(500, <span style="font-weight: bold;">str</span>(e))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-1-7" class="outline-3">
+<h3 id="sec-1-7"><span class="section-number-3">1.7</span> Create a role</h3>
+<div class="outline-text-3" id="text-1-7">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold; text-decoration: underline;">@api.route</span>(<span style="font-style: italic;">'/roles'</span>, methods=[<span style="font-style: italic;">'POST'</span>])
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">create_role</span>():
+    <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> request.json <span style="font-weight: bold;">or</span> <span style="font-weight: bold;">not</span> <span style="font-style: italic;">'name'</span> <span style="font-weight: bold;">in</span> request.json:
+        abort(400)
+    <span style="font-weight: bold;">else</span>:
+        <span style="font-weight: bold; font-style: italic;">name</span> = request.json[<span style="font-style: italic;">'name'</span>]
+        <span style="font-weight: bold;">try</span>:
+            <span style="font-weight: bold; font-style: italic;">role</span> = Role(name)
+            role.save()
+            <span style="font-weight: bold;">return</span> jsonify(role.to_client())
+        <span style="font-weight: bold;">except</span> <span style="font-weight: bold; text-decoration: underline;">Exception</span>, e:
+            current_app.logger.error(<span style="font-style: italic;">"Error occured while inserting"</span> 
+                                     <span style="font-style: italic;">"role record: %s"</span> % <span style="font-weight: bold;">str</span>(e))
+            abort(500, <span style="font-weight: bold;">str</span>(e))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-1-8" class="outline-3">
+<h3 id="sec-1-8"><span class="section-number-3">1.8</span> Update/Delete user</h3>
+<div class="outline-text-3" id="text-1-8">
+</div><div id="outline-container-sec-1-8-1" class="outline-4">
+<h4 id="sec-1-8-1"><span class="section-number-4">1.8.1</span> Implementation</h4>
+<div class="outline-text-4" id="text-1-8-1">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold; text-decoration: underline;">@api.route</span>(<span style="font-style: italic;">'/users/&lt;int:id&gt;'</span>, methods=[<span style="font-style: italic;">'PUT'</span>, <span style="font-style: italic;">'DELETE'</span>])
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">update_delete_user</span>(<span style="font-weight: bold;">id</span>):
+    <span style="font-weight: bold;">global</span> system
+    <span style="font-weight: bold; font-style: italic;">session</span> = <span style="font-weight: bold; text-decoration: underline;">None</span>
+    <span style="font-weight: bold; font-style: italic;">### </span><span style="font-weight: bold; font-style: italic;">Check if there is a session and act according to the specification</span>
+    <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">if 'session' not in request.json:</span>
+    <span style="font-weight: bold; font-style: italic;">#    </span><span style="font-weight: bold; font-style: italic;">print "throw error"</span>
+    <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">else:</span>
+    <span style="font-weight: bold; font-style: italic;">#    </span><span style="font-weight: bold; font-style: italic;">print "Check according to your specification"</span>
+    
+
+    
+    <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">print request.json['session']</span>
+
+    <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">admin_user = User.get_by_id(1)</span>
+    <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system.add_session(admin_user)</span>
+    <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">session = system.session_set[0]</span>
+                   
+    system.get_users_from_database()
+    <span style="font-weight: bold; font-style: italic;">record</span> = User.get_by_id(<span style="font-weight: bold;">id</span>)
+    <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> record:
+        abort(404, <span style="font-style: italic;">'No %s with id %s'</span> % (user, <span style="font-weight: bold;">id</span>))
+
+    <span style="font-weight: bold;">if</span> request.method == <span style="font-style: italic;">'DELETE'</span>:
+    
+        <span style="font-weight: bold; font-style: italic;">delete_session_email</span>= request.headers.get(<span style="font-style: italic;">'session'</span>)
+        <span style="font-weight: bold; font-style: italic;">delete_session</span> = <span style="font-weight: bold; text-decoration: underline;">None</span>
+        <span style="font-weight: bold;">for</span> x <span style="font-weight: bold;">in</span> system.session_set:
+            <span style="font-weight: bold;">if</span> x.user.email == delete_session_email:
+                <span style="font-weight: bold; font-style: italic;">delete_session</span> = x
+        <span style="font-weight: bold;">try</span>:
+            <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">record.delete()</span>
+            system.del_user(record,delete_session)
+            <span style="font-weight: bold;">return</span> jsonify(<span style="font-weight: bold;">id</span>=<span style="font-weight: bold;">id</span>, status=<span style="font-style: italic;">"success"</span>)
+        <span style="font-weight: bold;">except</span> <span style="font-weight: bold; text-decoration: underline;">Exception</span>, e:
+            current_app.logger.error(<span style="font-style: italic;">"Error occured while deleting"</span>
+                                     <span style="font-style: italic;">"user record %d: %s"</span> % (<span style="font-weight: bold;">id</span>, <span style="font-weight: bold;">str</span>(e)))
+            abort(500, <span style="font-weight: bold;">str</span>(e))
+
+    <span style="font-weight: bold;">if</span> request.method == <span style="font-style: italic;">'PUT'</span>:
+    
+        <span style="font-weight: bold;">print</span> system.session_set
+        <span style="font-weight: bold;">for</span> x <span style="font-weight: bold;">in</span> system.session_set:
+            <span style="font-weight: bold;">print</span> x.user.email
+        <span style="font-weight: bold;">for</span> s <span style="font-weight: bold;">in</span> system.session_set:
+            <span style="font-weight: bold;">if</span> s.user.email==request.json[<span style="font-style: italic;">'session'</span>]:
+                <span style="font-weight: bold; font-style: italic;">session</span>=s
+    
+        <span style="font-weight: bold;">print</span> session.user.email
+        <span style="font-weight: bold; font-style: italic;">new_data</span> = {}
+        <span style="font-weight: bold;">try</span>:
+            <span style="font-weight: bold;">if</span> <span style="font-style: italic;">'name'</span> <span style="font-weight: bold;">in</span> request.json:
+                <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">new_data['name'] = request.json['name']</span>
+                system.set_name_of_user(record, request.json[<span style="font-style: italic;">'name'</span>], session)
+            <span style="font-weight: bold;">if</span> <span style="font-style: italic;">'email'</span> <span style="font-weight: bold;">in</span> request.json:
+                <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">new_data['email'] = request.json['email']</span>
+                system.set_email_of_user(record, request.json[<span style="font-style: italic;">'email'</span>], session)
+            <span style="font-weight: bold;">if</span> <span style="font-style: italic;">'role_id'</span> <span style="font-weight: bold;">in</span> request.json:
+                <span style="font-weight: bold; font-style: italic;">role</span> = Role.get_by_id(request.json[<span style="font-style: italic;">'role_id'</span>])
+                <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">new_data['role'] = role</span>
+
+            <span style="font-weight: bold; font-style: italic;">record.role</span> = role
+            record.update()
+
+            <span style="font-weight: bold;">return</span> jsonify(User.get_by_id(<span style="font-weight: bold;">id</span>).to_client())
+
+        <span style="font-weight: bold;">except</span> <span style="font-weight: bold; text-decoration: underline;">Exception</span>, e:
+            current_app.logger.error(<span style="font-style: italic;">"Error occured while updating"</span>
+                                     <span style="font-style: italic;">" user record %d: %s"</span> % (<span style="font-weight: bold;">id</span>, <span style="font-weight: bold;">str</span>(e)))
+            abort(500, <span style="font-weight: bold;">str</span>(e))
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-1-9" class="outline-3">
+<h3 id="sec-1-9"><span class="section-number-3">1.9</span> Update/Delete a role</h3>
+<div class="outline-text-3" id="text-1-9">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold; text-decoration: underline;">@api.route</span>(<span style="font-style: italic;">'/roles/&lt;int:id&gt;'</span>, methods=[<span style="font-style: italic;">'PUT'</span>, <span style="font-style: italic;">'DELETE'</span>])
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">update_delete_role</span>(<span style="font-weight: bold;">id</span>):
+
+    <span style="font-weight: bold;">if</span> <span style="font-style: italic;">'session'</span> <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">in</span> request.json:
+        abort(400)
+    <span style="font-weight: bold;">else</span>:
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"choose according to configuraton"</span>
+    <span style="font-weight: bold; font-style: italic;">record</span> = Role.get_by_id(<span style="font-weight: bold;">id</span>)
+    <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> record:
+        abort(404, <span style="font-style: italic;">'No %s with id %s'</span> % (role, <span style="font-weight: bold;">id</span>))
+
+    <span style="font-weight: bold;">if</span> request.method == <span style="font-style: italic;">'DELETE'</span>:
+        <span style="font-weight: bold;">try</span>:
+            record.delete()
+            <span style="font-weight: bold;">return</span> jsonify(<span style="font-weight: bold;">id</span>=<span style="font-weight: bold;">id</span>, status=<span style="font-style: italic;">"success"</span>)
+        <span style="font-weight: bold;">except</span> <span style="font-weight: bold; text-decoration: underline;">Exception</span>, e:
+            current_app.logger.error(<span style="font-style: italic;">"Error occured while deleting "</span>
+                                     <span style="font-style: italic;">"role record %d: %s"</span> % (<span style="font-weight: bold;">id</span>, <span style="font-weight: bold;">str</span>(e)))
+            abort(500, <span style="font-weight: bold;">str</span>(e))
+
+    <span style="font-weight: bold;">if</span> request.method == <span style="font-style: italic;">'PUT'</span>:
+        <span style="font-weight: bold;">try</span>:
+            <span style="font-weight: bold;">if</span> <span style="font-style: italic;">'role'</span> <span style="font-weight: bold;">in</span> request.json:
+                <span style="font-weight: bold; font-style: italic;">record.role</span> = request.json[<span style="font-style: italic;">'role'</span>]
+
+            record.update()
+            
+            <span style="font-weight: bold;">return</span> jsonify(Role.get_by_id(<span style="font-weight: bold;">id</span>).to_client())
+
+        <span style="font-weight: bold;">except</span> <span style="font-weight: bold; text-decoration: underline;">Exception</span>, e:
+            current_app.logger.error(<span style="font-style: italic;">"Error occured while updating "</span>
+                                     <span style="font-style: italic;">"role record %d: %s"</span> % (<span style="font-weight: bold;">id</span>, <span style="font-weight: bold;">str</span>(e)))
+            abort(500, <span style="font-weight: bold;">str</span>(e))
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-1-10" class="outline-3">
+<h3 id="sec-1-10"><span class="section-number-3">1.10</span> Get user by email</h3>
+<div class="outline-text-3" id="text-1-10">
+</div><div id="outline-container-sec-1-10-0-1" class="outline-5">
+<h5 id="sec-1-10-0-1"><span class="section-number-5">1.10.0.1</span> Implementation</h5>
+<div class="outline-text-5" id="text-1-10-0-1">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold; text-decoration: underline;">@api.route</span>(<span style="font-style: italic;">'/users/get_email'</span>, methods=[<span style="font-style: italic;">'GET'</span>])
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">get_user_by_email</span>():
+    <span style="font-weight: bold;">global</span> system
+    system.get_users_from_database()
+
+    <span style="font-weight: bold;">if</span> <span style="font-style: italic;">'email'</span> <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">in</span> request.json:
+        abort(400)
+    <span style="font-weight: bold;">else</span>:
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"choose according to configuraton"</span>
+    
+    <span style="font-weight: bold; font-style: italic;">record</span> = <span style="font-weight: bold; text-decoration: underline;">None</span>
+
+    <span style="font-weight: bold;">for</span> x <span style="font-weight: bold;">in</span> system.user_set:
+        <span style="font-weight: bold;">if</span> x.email == request.json[<span style="font-style: italic;">'email'</span>]:
+            <span style="font-weight: bold; font-style: italic;">record</span> = x
+    
+    <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> record:
+        abort(404, <span style="font-style: italic;">"No entry for %s with id: %s found."</span> % (<span style="font-style: italic;">"user"</span>, <span style="font-weight: bold;">id</span>))
+
+    <span style="font-weight: bold;">return</span> jsonify(record.to_client())
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-1-11" class="outline-3">
+<h3 id="sec-1-11"><span class="section-number-3">1.11</span> Get email of user</h3>
+<div class="outline-text-3" id="text-1-11">
+</div><div id="outline-container-sec-1-11-1" class="outline-4">
+<h4 id="sec-1-11-1"><span class="section-number-4">1.11.1</span> Implementation</h4>
+<div class="outline-text-4" id="text-1-11-1">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold; text-decoration: underline;">@api.route</span>(<span style="font-style: italic;">'/users/&lt;int:id&gt;/email'</span>, methods=[<span style="font-style: italic;">'GET'</span>])
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">get_email_of_user</span>(<span style="font-weight: bold;">id</span>):
+    <span style="font-weight: bold;">global</span> system
+
+    <span style="font-weight: bold; font-style: italic;">session</span> = <span style="font-weight: bold; text-decoration: underline;">None</span>
+    system.get_users_from_database()
+    <span style="font-weight: bold;">if</span> <span style="font-style: italic;">'session'</span> <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">in</span> request.json:
+        abort(400)
+    <span style="font-weight: bold;">else</span>:
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"choose according to configuraton"</span>
+    
+
+    <span style="font-weight: bold;">for</span> s <span style="font-weight: bold;">in</span> system.session_set:
+        <span style="font-weight: bold;">if</span> s.user.email==request.json[<span style="font-style: italic;">'session'</span>]:
+            <span style="font-weight: bold; font-style: italic;">session</span>=s
+    <span style="font-weight: bold; font-style: italic;">record</span> = User.get_by_id(<span style="font-weight: bold;">id</span>)         
+    <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> record:
+        abort(404, <span style="font-style: italic;">'No %s with id %s'</span> % (user, <span style="font-weight: bold;">id</span>))
+
+        
+
+    <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">if email_check == "email":</span>
+    <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system.user_set = User.get_all()</span>
+    <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">record = User.get_by_id(id)</span>
+    <span style="font-weight: bold; font-style: italic;">new_data</span> = {}
+    <span style="font-weight: bold; font-style: italic;">new_data</span>[<span style="font-style: italic;">'email'</span>] = system.get_email_of_user(record, session)        
+    <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">if not record:</span>
+    <span style="font-weight: bold; font-style: italic;">#    </span><span style="font-weight: bold; font-style: italic;">abort(404, "No entry for %s with id: %s found." % ("user", id))</span>
+
+    <span style="font-weight: bold;">return</span> jsonify(new_data)
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-1-12" class="outline-3">
+<h3 id="sec-1-12"><span class="section-number-3">1.12</span> Get name of user</h3>
+<div class="outline-text-3" id="text-1-12">
+</div><div id="outline-container-sec-1-12-1" class="outline-4">
+<h4 id="sec-1-12-1"><span class="section-number-4">1.12.1</span> Implementation</h4>
+<div class="outline-text-4" id="text-1-12-1">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold; text-decoration: underline;">@api.route</span>(<span style="font-style: italic;">'/users/&lt;int:id&gt;/name'</span>, methods=[<span style="font-style: italic;">'GET'</span>])
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">get_name_of_user</span>(<span style="font-weight: bold;">id</span>):
+    <span style="font-weight: bold;">global</span> system
+
+    <span style="font-weight: bold; font-style: italic;">session</span> = <span style="font-weight: bold; text-decoration: underline;">None</span>
+    system.get_users_from_database()
+    <span style="font-weight: bold;">if</span> <span style="font-style: italic;">'session'</span> <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">in</span> request.json:
+        abort(400)
+    <span style="font-weight: bold;">else</span>:
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"choose according to configuraton"</span>
+    
+
+    <span style="font-weight: bold;">for</span> s <span style="font-weight: bold;">in</span> system.session_set:
+        <span style="font-weight: bold;">if</span> s.user.email==request.json[<span style="font-style: italic;">'session'</span>]:
+            <span style="font-weight: bold; font-style: italic;">session</span>=s
+    <span style="font-weight: bold; font-style: italic;">record</span> = User.get_by_id(<span style="font-weight: bold;">id</span>)         
+    <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> record:
+        abort(404, <span style="font-style: italic;">'No %s with id %s'</span> % (user, <span style="font-weight: bold;">id</span>))
+
+        
+
+    <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">if email_check == "email":</span>
+    <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system.user_set = User.get_all()</span>
+    <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">record = User.get_by_id(id)</span>
+    <span style="font-weight: bold; font-style: italic;">new_data</span> = {}
+    <span style="font-weight: bold; font-style: italic;">new_data</span>[<span style="font-style: italic;">'name'</span>] = system.get_name_of_user(record, session)        
+    <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">if not record:</span>
+    <span style="font-weight: bold; font-style: italic;">#    </span><span style="font-weight: bold; font-style: italic;">abort(404, "No entry for %s with id: %s found." % ("user", id))</span>
+
+    <span style="font-weight: bold;">return</span> jsonify(new_data)
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-1-13" class="outline-3">
+<h3 id="sec-1-13"><span class="section-number-3">1.13</span> Set email of user</h3>
+<div class="outline-text-3" id="text-1-13">
+</div><div id="outline-container-sec-1-13-1" class="outline-4">
+<h4 id="sec-1-13-1"><span class="section-number-4">1.13.1</span> Implementation</h4>
+<div class="outline-text-4" id="text-1-13-1">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold; text-decoration: underline;">@api.route</span>(<span style="font-style: italic;">'/users/&lt;int:id&gt;/email'</span>, methods=[<span style="font-style: italic;">'PUT'</span>])
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">change_user_email</span>(<span style="font-weight: bold;">id</span>):
+
+    <span style="font-weight: bold; font-style: italic;">record</span> = User.get_by_id(<span style="font-weight: bold;">id</span>)
+    <span style="font-weight: bold;">global</span> system
+
+    system.get_users_from_database()
+    <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> record:
+        abort(404, <span style="font-style: italic;">'No %s with id %s'</span> % (user, <span style="font-weight: bold;">id</span>))
+
+    <span style="font-weight: bold; font-style: italic;">session</span> = <span style="font-weight: bold; text-decoration: underline;">None</span>
+    <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system.get_users_from_database()</span>
+    <span style="font-weight: bold;">if</span> <span style="font-style: italic;">'session'</span> <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">in</span> request.json:
+        abort(400)
+    <span style="font-weight: bold;">else</span>:
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"choose according to configuraton"</span>
+    
+
+    <span style="font-weight: bold;">for</span> s <span style="font-weight: bold;">in</span> system.session_set:
+        <span style="font-weight: bold;">if</span> s.user.email==request.json[<span style="font-style: italic;">'session'</span>]:
+            <span style="font-weight: bold; font-style: italic;">session</span>=s
+    
+
+<span style="font-weight: bold; font-style: italic;">#    </span><span style="font-weight: bold; font-style: italic;">if request.method == 'DELETE':</span>
+<span style="font-weight: bold; font-style: italic;">#        </span><span style="font-weight: bold; font-style: italic;">try:</span>
+<span style="font-weight: bold; font-style: italic;">#            </span><span style="font-weight: bold; font-style: italic;">record.delete()</span>
+<span style="font-weight: bold; font-style: italic;">#            </span><span style="font-weight: bold; font-style: italic;">return jsonify(id=id, status="success")</span>
+<span style="font-weight: bold; font-style: italic;">#        </span><span style="font-weight: bold; font-style: italic;">except Exception, e:</span>
+<span style="font-weight: bold; font-style: italic;">#            </span><span style="font-weight: bold; font-style: italic;">current_app.logger.error("Error occured while deleting"</span>
+<span style="font-weight: bold; font-style: italic;">#                                     </span><span style="font-weight: bold; font-style: italic;">"user record %d: %s" % (id, str(e)))</span>
+<span style="font-weight: bold; font-style: italic;">#            </span><span style="font-weight: bold; font-style: italic;">abort(500, str(e))</span>
+
+<span style="font-weight: bold; font-style: italic;">#    </span><span style="font-weight: bold; font-style: italic;">if request.method == 'PUT':</span>
+    <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">if email_update == "change_email":</span>
+    <span style="font-weight: bold; font-style: italic;">new_data</span> = {}
+    <span style="font-weight: bold;">try</span>:
+            <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">if 'name' in request.json:</span>
+        <span style="font-weight: bold; font-style: italic;">new_data</span>[<span style="font-style: italic;">'name'</span>] = system.get_name_of_user(record, session)
+        <span style="font-weight: bold;">if</span> <span style="font-style: italic;">'email'</span> <span style="font-weight: bold;">in</span> request.json:
+            <span style="font-weight: bold; font-style: italic;">new_data</span>[<span style="font-style: italic;">'email'</span>] = request.json[<span style="font-style: italic;">'email'</span>]
+            <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">if 'roles' in request.json:</span>
+            <span style="font-weight: bold; font-style: italic;">#    </span><span style="font-weight: bold; font-style: italic;">role_ids = request.json['roles']</span>
+            <span style="font-weight: bold; font-style: italic;">#    </span><span style="font-weight: bold; font-style: italic;">roles = []</span>
+            <span style="font-weight: bold; font-style: italic;">#    </span><span style="font-weight: bold; font-style: italic;">for role_id in role_ids:</span>
+            <span style="font-weight: bold; font-style: italic;">#        </span><span style="font-weight: bold; font-style: italic;">roles.append(Role.get_by_id(role_id))</span>
+        <span style="font-weight: bold; font-style: italic;">new_data</span>[<span style="font-style: italic;">'role'</span>] = system.get_role_of_user(record,session)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">new_data['session'] = record.session</span>
+        record.update(**new_data)
+        system.get_users_from_database()
+        <span style="font-weight: bold;">return</span> jsonify(User.get_by_id(<span style="font-weight: bold;">id</span>).to_client())
+
+    <span style="font-weight: bold;">except</span> <span style="font-weight: bold; text-decoration: underline;">Exception</span>, e:
+        current_app.logger.error(<span style="font-style: italic;">"Error occured while updating"</span>
+                                     <span style="font-style: italic;">"user record %d: %s"</span> % (<span style="font-weight: bold;">id</span>, <span style="font-weight: bold;">str</span>(e)))
+        abort(500, <span style="font-weight: bold;">str</span>(e))
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-1-14" class="outline-3">
+<h3 id="sec-1-14"><span class="section-number-3">1.14</span> Login/Logout</h3>
+<div class="outline-text-3" id="text-1-14">
+</div><div id="outline-container-sec-1-14-1" class="outline-4">
+<h4 id="sec-1-14-1"><span class="section-number-4">1.14.1</span> Implementation</h4>
+<div class="outline-text-4" id="text-1-14-1">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold; text-decoration: underline;">@api.route</span>(<span style="font-style: italic;">"/"</span>, methods=[<span style="font-style: italic;">'GET'</span>])
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">index</span>():
+    <span style="font-weight: bold;">if</span> request.method == <span style="font-style: italic;">'GET'</span>:
+        <span style="font-weight: bold;">if</span> (<span style="font-style: italic;">'email'</span> <span style="font-weight: bold;">in</span> session):
+            <span style="font-weight: bold;">return</span> render_template(<span style="font-style: italic;">"user-list.html"</span>)
+        <span style="font-weight: bold;">else</span>:
+            <span style="font-weight: bold;">return</span> render_template(<span style="font-style: italic;">"login.html"</span>)
+
+<span style="font-weight: bold; text-decoration: underline;">@api.route</span>(<span style="font-style: italic;">"/auth/login"</span>, methods=[<span style="font-style: italic;">'GET'</span>, <span style="font-style: italic;">'POST'</span>])
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">login</span>():
+    <span style="font-weight: bold;">global</span> system
+    <span style="font-weight: bold; font-style: italic;">user</span>=<span style="font-weight: bold; text-decoration: underline;">None</span>
+    <span style="font-weight: bold;">if</span> request.method == <span style="font-style: italic;">'POST'</span>:
+        <span style="font-weight: bold; font-style: italic;">email</span> = <span style="font-weight: bold;">str</span>(request.form[<span style="font-style: italic;">'email'</span>])
+        <span style="font-weight: bold; font-style: italic;">url_for_getting_the_user</span> = <span style="font-style: italic;">"%s/users"</span> % \
+                                   (APP_URL)
+        <span style="font-weight: bold; font-style: italic;">backend_resp</span> = requests.get(url_for_getting_the_user)
+        <span style="font-weight: bold; font-style: italic;">user_list</span> = backend_resp.json()
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(backend_resp.text.encode(<span style="font-style: italic;">'ascii'</span>)) != 2:
+            <span style="font-weight: bold; font-style: italic;">count</span> = 0
+            <span style="font-weight: bold;">for</span> user <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">range</span>(<span style="font-weight: bold;">len</span>(user_list)):
+                <span style="font-weight: bold;">print</span> <span style="font-weight: bold;">len</span>(user_list)
+                <span style="font-weight: bold;">print</span> user_list[user]
+                <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">str</span>(email) == <span style="font-weight: bold;">str</span>(user_list[user][<span style="font-style: italic;">'email'</span>]):
+                    current_app.logger.info(<span style="font-style: italic;">"Successfully Logged in"</span>)
+                    <span style="font-weight: bold; font-style: italic;">session</span>[<span style="font-style: italic;">'email'</span>] = <span style="font-weight: bold;">str</span>(user_list[user][<span style="font-style: italic;">'email'</span>])
+                    <span style="font-weight: bold; font-style: italic;">session</span>[<span style="font-style: italic;">'role_name'</span>] = <span style="font-weight: bold;">str</span>(user_list[user][<span style="font-style: italic;">'role'</span>][<span style="font-style: italic;">'name'</span>])
+                    <span style="font-weight: bold; font-style: italic;">session</span>[<span style="font-style: italic;">'user_id'</span>] = <span style="font-weight: bold;">str</span>(user_list[user][<span style="font-style: italic;">'id'</span>])
+                    <span style="font-weight: bold;">for</span> u <span style="font-weight: bold;">in</span> system.user_set:
+                        <span style="font-weight: bold;">if</span> u.email==<span style="font-weight: bold;">str</span>(email):
+                           <span style="font-weight: bold; font-style: italic;">user</span>=u
+                    system.login(user)
+                    <span style="font-weight: bold;">print</span> system.session_set
+                    <span style="font-weight: bold;">for</span> x <span style="font-weight: bold;">in</span> system.session_set:
+                        <span style="font-weight: bold;">print</span> x.user.email
+                    <span style="font-weight: bold;">return</span> redirect(<span style="font-style: italic;">"/"</span>)
+                <span style="font-weight: bold;">else</span>:
+                    <span style="font-weight: bold; font-style: italic;">count</span> = count + 1
+            <span style="font-weight: bold;">if</span> count == <span style="font-weight: bold;">len</span>(user_list):
+                <span style="font-weight: bold;">return</span> render_template(<span style="font-style: italic;">"login.html"</span>, message=<span style="font-style: italic;">"Invalid email id"</span>)
+            
+<span style="font-weight: bold; text-decoration: underline;">@api.route</span>(<span style="font-style: italic;">'/auth/logout'</span>, methods=[<span style="font-style: italic;">'GET'</span>])
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">logout_handler</span>():
+    <span style="font-weight: bold;">global</span> system
+    
+    
+    <span style="font-weight: bold; font-style: italic;">user</span>=<span style="font-weight: bold; text-decoration: underline;">None</span>
+    <span style="font-weight: bold; font-style: italic;">ses</span>=<span style="font-weight: bold; text-decoration: underline;">None</span>
+    <span style="font-weight: bold;">for</span> s <span style="font-weight: bold;">in</span> system.session_set:
+        <span style="font-weight: bold;">if</span>(s.user.email == session[<span style="font-style: italic;">'email'</span>] ):
+            <span style="font-weight: bold; font-style: italic;">ses</span>=s
+    <span style="font-weight: bold;">for</span> u <span style="font-weight: bold;">in</span> system.user_set:
+        <span style="font-weight: bold;">if</span>(u.email == session[<span style="font-style: italic;">'email'</span>]):
+            <span style="font-weight: bold; font-style: italic;">user</span>=u
+    system.logout(user,ses)
+    session.pop(<span style="font-style: italic;">'email'</span>, <span style="font-weight: bold; text-decoration: underline;">None</span>)
+    session.pop(<span style="font-style: italic;">'role_name'</span>, <span style="font-weight: bold; text-decoration: underline;">None</span>)   
+    <span style="font-weight: bold;">return</span> redirect(<span style="font-style: italic;">"/"</span>)
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> Tests for REST API</h2>
+<div class="outline-text-2" id="text-2">
+</div><div id="outline-container-sec-2-1" class="outline-3">
+<h3 id="sec-2-1"><span class="section-number-3">2.1</span> Initialization</h3>
+<div class="outline-text-3" id="text-2-1">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">-*- coding: utf-8 -*-</span>
+
+<span style="font-weight: bold;">import</span> unittest
+<span style="font-weight: bold;">from</span> flask.ext.testing <span style="font-weight: bold;">import</span> TestCase
+<span style="font-weight: bold;">from</span> datetime <span style="font-weight: bold;">import</span> datetime
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">import json</span>
+
+<span style="font-weight: bold;">from</span> src.db <span style="font-weight: bold;">import</span> *
+<span style="font-weight: bold;">from</span> src.app <span style="font-weight: bold;">import</span> create_app
+<span style="font-weight: bold;">from</span> src.op_exceptions <span style="font-weight: bold;">import</span> AttributeRequired
+<span style="font-weight: bold;">from</span> src.api <span style="font-weight: bold;">import</span> system
+<span style="font-weight: bold; font-style: italic;">config</span> = {
+    <span style="font-style: italic;">'SQLALCHEMY_DATABASE_URI'</span>: <span style="font-style: italic;">''</span>
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2-2" class="outline-3">
+<h3 id="sec-2-2"><span class="section-number-3">2.2</span> User Tests</h3>
+<div class="outline-text-3" id="text-2-2">
+</div><div id="outline-container-sec-2-2-1" class="outline-4">
+<h4 id="sec-2-2-1"><span class="section-number-4">2.2.1</span> Initialization</h4>
+<div class="outline-text-4" id="text-2-2-1">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">TestUser</span>(TestCase):
+
+    <span style="font-weight: bold; font-style: italic;">TESTING</span> = <span style="font-weight: bold; text-decoration: underline;">True</span>
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">create_app</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold; font-style: italic;">app</span> = create_app(config)
+        <span style="font-weight: bold;">return</span> app
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">setUp</span>(<span style="font-weight: bold;">self</span>):
+        db.create_all()
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">tearDown</span>(<span style="font-weight: bold;">self</span>):
+        db.session.remove()
+        db.drop_all()
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-2-2-2" class="outline-4">
+<h4 id="sec-2-2-2"><span class="section-number-4">2.2.2</span> test_get_all_users</h4>
+<div class="outline-text-4" id="text-2-2-2">
+</div><div id="outline-container-sec-2-2-2-1" class="outline-5">
+<h5 id="sec-2-2-2-1"><span class="section-number-5">2.2.2.1</span> Implementation</h5>
+<div class="outline-text-5" id="text-2-2-2-1">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_get_all_users</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_get_all_users"</span>
+
+        <span style="font-weight: bold; font-style: italic;">###</span><span style="font-weight: bold; font-style: italic;">Create Users</span>
+        <span style="font-weight: bold; font-style: italic;">role1</span> = Role(<span style="font-style: italic;">"admin"</span>)
+        role1.save()
+        <span style="font-weight: bold; font-style: italic;">role2</span> = Role(<span style="font-style: italic;">"user"</span>)
+        role2.save()
+        <span style="font-weight: bold; font-style: italic;">user1</span> = User(name = <span style="font-style: italic;">"admin user"</span>,
+                    email = <span style="font-style: italic;">"admin@xyz.com"</span>,
+                    role=role1)
+        user1.save()
+        <span style="font-weight: bold; font-style: italic;">user2</span> = User(name = <span style="font-style: italic;">"normal user"</span>,
+                    email=<span style="font-style: italic;">"normal@xyz.com"</span>,
+                    role=role2)
+        user2.save()
+        <span style="font-weight: bold; font-style: italic;">r</span> = <span style="font-weight: bold;">self</span>.client.get(<span style="font-style: italic;">'/users'</span>)
+        <span style="font-weight: bold; font-style: italic;">result</span> = json.loads(r.data)
+        <span style="font-weight: bold;">self</span>.assertEquals(<span style="font-weight: bold;">len</span>(result), 2)
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2-2-3" class="outline-4">
+<h4 id="sec-2-2-3"><span class="section-number-4">2.2.3</span> test_get_one_user</h4>
+<div class="outline-text-4" id="text-2-2-3">
+</div><div id="outline-container-sec-2-2-3-1" class="outline-5">
+<h5 id="sec-2-2-3-1"><span class="section-number-5">2.2.3.1</span> Implementation</h5>
+<div class="outline-text-5" id="text-2-2-3-1">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_get_one_user</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_get_one_user"</span>
+
+        <span style="font-weight: bold; font-style: italic;">### </span><span style="font-weight: bold; font-style: italic;">create a User</span>
+        <span style="font-weight: bold; font-style: italic;">role1</span> = Role(<span style="font-style: italic;">"admin"</span>)
+        role1.save()
+        <span style="font-weight: bold; font-style: italic;">role2</span> = Role(<span style="font-style: italic;">"user"</span>)
+        role2.save()
+
+        <span style="font-weight: bold; font-style: italic;">user1</span> = User(name = <span style="font-style: italic;">"admin user"</span>,
+                    email=<span style="font-style: italic;">"admin@xyz.com"</span>,
+                    role=role1)
+        user1.save()
+        <span style="font-weight: bold; font-style: italic;">user2</span> = User(name=<span style="font-style: italic;">"normal user"</span>,
+                    email=<span style="font-style: italic;">"normal@xyz.com"</span>,
+                    role=role2)
+        user2.save()
+
+        <span style="font-weight: bold; font-style: italic;">r</span> = <span style="font-weight: bold;">self</span>.client.get(<span style="font-style: italic;">'/users/1'</span>)
+        <span style="font-weight: bold; font-style: italic;">result</span> = json.loads(r.data)
+        <span style="font-weight: bold;">self</span>.assertEqual(result[<span style="font-style: italic;">'name'</span>], <span style="font-style: italic;">"admin user"</span>)
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2-2-4" class="outline-4">
+<h4 id="sec-2-2-4"><span class="section-number-4">2.2.4</span> test_update_existing_user</h4>
+<div class="outline-text-4" id="text-2-2-4">
+</div><div id="outline-container-sec-2-2-4-1" class="outline-5">
+<h5 id="sec-2-2-4-1"><span class="section-number-5">2.2.4.1</span> Implementation</h5>
+<div class="outline-text-5" id="text-2-2-4-1">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_update_existing_user</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Create a user</span>
+        <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">update the same user</span>
+        <span style="font-weight: bold;">global</span> system
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_update_existing_user"</span>
+        <span style="font-weight: bold; font-style: italic;">role1</span> = Role(<span style="font-style: italic;">"admin"</span>)
+        role1.save()
+        <span style="font-weight: bold; font-style: italic;">role2</span> = Role(<span style="font-style: italic;">"user"</span>)
+        role2.save()
+
+        <span style="font-weight: bold; font-style: italic;">user1</span> = User(name=<span style="font-style: italic;">"admin user"</span>,
+                     email=<span style="font-style: italic;">"admin@xyz.com"</span>,
+                     role=role1)
+
+        user1.save()
+        <span style="font-weight: bold; font-style: italic;">user2</span> = User(name=<span style="font-style: italic;">"normal user"</span>,
+                     email=<span style="font-style: italic;">"normal@xyz.com"</span>,
+                     role=role2)
+
+        user2.save()
+
+        <span style="font-weight: bold; font-style: italic;">system.user_set</span> = []
+        <span style="font-weight: bold; font-style: italic;">system.session_set</span> = []
+
+        system.get_users_from_database()
+        <span style="font-weight: bold; font-style: italic;">admin_user</span> = User.get_by_id(1)
+        <span style="font-weight: bold; font-style: italic;">admin_session</span> = Session(user = admin_user)
+        system.session_set.append(admin_session)
+        
+        
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">for x in system.session_set:</span>
+        <span style="font-weight: bold; font-style: italic;">#    </span><span style="font-weight: bold; font-style: italic;">print x.to_client()</span>
+
+        <span style="font-weight: bold; font-style: italic;">payload</span> = {<span style="font-style: italic;">'email'</span>: <span style="font-style: italic;">'abcdef@gmail.com'</span>,
+                   <span style="font-style: italic;">'name'</span>: <span style="font-style: italic;">'NEW ADMIN'</span>,
+                   <span style="font-style: italic;">'role_id'</span>: [1],
+                   <span style="font-style: italic;">'session'</span>: <span style="font-style: italic;">'admin@xyz.com'</span>}
+        <span style="font-weight: bold; font-style: italic;">headers</span> = {<span style="font-style: italic;">'content-type'</span>: <span style="font-style: italic;">'application/json'</span>}
+        <span style="font-weight: bold; font-style: italic;">response</span> = <span style="font-weight: bold;">self</span>.client.put(<span style="font-style: italic;">"/users/2"</span>,
+                                   data=json.dumps(payload),
+                                   headers=headers)
+
+        <span style="font-weight: bold;">self</span>.assertEqual(response.status_code, 200)
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2-2-5" class="outline-4">
+<h4 id="sec-2-2-5"><span class="section-number-4">2.2.5</span> test_create_new_user</h4>
+<div class="outline-text-4" id="text-2-2-5">
+</div><div id="outline-container-sec-2-2-5-1" class="outline-5">
+<h5 id="sec-2-2-5-1"><span class="section-number-5">2.2.5.1</span> Implementation</h5>
+<div class="outline-text-5" id="text-2-2-5-1">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_create_new_user</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_create_new_user"</span>
+        <span style="font-weight: bold; font-style: italic;">role1</span> = Role(<span style="font-style: italic;">"admin"</span>)
+        role1.save()
+        <span style="font-weight: bold; font-style: italic;">role2</span> = Role(<span style="font-style: italic;">"user"</span>)
+        role2.save()
+
+        <span style="font-weight: bold; font-style: italic;">user1</span> = User(name = <span style="font-style: italic;">"admin user"</span>,
+                     email= <span style="font-style: italic;">"admin@xyz.com"</span>,
+                     role=role1)
+
+        user1.save()
+        <span style="font-weight: bold; font-style: italic;">user2</span> = User(name=<span style="font-style: italic;">"normal user"</span>,
+                     email=<span style="font-style: italic;">"normal@xyz.com"</span>,
+                     role=role2)
+
+        user2.save()
+
+        <span style="font-weight: bold; font-style: italic;">payload</span> = {<span style="font-style: italic;">'email'</span>: <span style="font-style: italic;">'ttt@kkk.com'</span>,
+                   <span style="font-style: italic;">'name'</span>: <span style="font-style: italic;">'nearly normal user'</span>,
+                   <span style="font-style: italic;">'role'</span>: [2],
+                   <span style="font-style: italic;">'session'</span>: <span style="font-style: italic;">'t@g.com'</span>}
+
+        <span style="font-weight: bold; font-style: italic;">headers</span> = {<span style="font-style: italic;">'content-type'</span>: <span style="font-style: italic;">'application/json'</span>}
+
+        <span style="font-weight: bold; font-style: italic;">response</span> = <span style="font-weight: bold;">self</span>.client.post(<span style="font-style: italic;">"/users"</span>,
+                                    data=json.dumps(payload),
+                                    headers=headers)
+
+        <span style="font-weight: bold;">self</span>.assertEqual(response.status_code, 200)
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2-2-6" class="outline-4">
+<h4 id="sec-2-2-6"><span class="section-number-4">2.2.6</span> test_delete_user</h4>
+<div class="outline-text-4" id="text-2-2-6">
+</div><div id="outline-container-sec-2-2-6-1" class="outline-5">
+<h5 id="sec-2-2-6-1"><span class="section-number-5">2.2.6.1</span> Implementation</h5>
+<div class="outline-text-5" id="text-2-2-6-1">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_delete_user</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">global</span> system
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_delete_user"</span>
+        <span style="font-weight: bold; font-style: italic;">role1</span> = Role(<span style="font-style: italic;">"admin"</span>)
+        role1.save()
+        <span style="font-weight: bold; font-style: italic;">role2</span> = Role(<span style="font-style: italic;">"user"</span>)
+        role2.save()
+
+        <span style="font-weight: bold; font-style: italic;">user1</span> = User(name=<span style="font-style: italic;">"admin user"</span>,
+                     email=<span style="font-style: italic;">"admin@xyz.com"</span>,
+                     role=role1)
+
+        user1.save()
+        <span style="font-weight: bold; font-style: italic;">user2</span> = User(name=<span style="font-style: italic;">"normal user"</span>,
+                     email=<span style="font-style: italic;">"normal@xyz.com"</span>,
+                     role=role2)
+
+        user2.save()
+        
+        <span style="font-weight: bold; font-style: italic;">system.session_set</span> = []
+        <span style="font-weight: bold; font-style: italic;">system.user_set</span> = []
+
+        system.get_users_from_database()
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">s=Session(user=user1)</span>
+        system.add_session(user1)
+        <span style="font-weight: bold; font-style: italic;">payload</span> = {<span style="font-style: italic;">'session'</span>: <span style="font-style: italic;">'admin@xyz.com'</span>}
+
+        <span style="font-weight: bold; font-style: italic;">headers</span> = {<span style="font-style: italic;">'content-type'</span>: <span style="font-style: italic;">'application/json'</span>}
+
+        <span style="font-weight: bold; font-style: italic;">response</span> = <span style="font-weight: bold;">self</span>.client.delete(<span style="font-style: italic;">"/users/2"</span>,
+                                      data=json.dumps(payload),
+                                      headers=headers)
+
+        <span style="font-weight: bold;">self</span>.assertEqual(response.status_code, 200)
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2-2-7" class="outline-4">
+<h4 id="sec-2-2-7"><span class="section-number-4">2.2.7</span> test_create_role</h4>
+<div class="outline-text-4" id="text-2-2-7">
+</div><div id="outline-container-sec-2-2-7-1" class="outline-5">
+<h5 id="sec-2-2-7-1"><span class="section-number-5">2.2.7.1</span> Implementation</h5>
+<div class="outline-text-5" id="text-2-2-7-1">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_create_role</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_create_role"</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">role1 = Role("admin")</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">role1.save()</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">role2 = Role("user")</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">role2.save()</span>
+
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">user1 = User(name = "admin user",</span>
+        <span style="font-weight: bold; font-style: italic;">#             </span><span style="font-weight: bold; font-style: italic;">email= "admin@xyz.com",</span>
+        <span style="font-weight: bold; font-style: italic;">#             </span><span style="font-weight: bold; font-style: italic;">role=role1)</span>
+
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">user1.save()</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">user2 = User(name="normal user",</span>
+        <span style="font-weight: bold; font-style: italic;">#             </span><span style="font-weight: bold; font-style: italic;">email="normal@xyz.com",</span>
+        <span style="font-weight: bold; font-style: italic;">#             </span><span style="font-weight: bold; font-style: italic;">role=role2)</span>
+
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">user2.save()</span>
+
+        <span style="font-weight: bold; font-style: italic;">payload</span> = {<span style="font-style: italic;">'name'</span>: <span style="font-style: italic;">'owner'</span>}
+
+        <span style="font-weight: bold; font-style: italic;">headers</span> = {<span style="font-style: italic;">'content-type'</span>: <span style="font-style: italic;">'application/json'</span>}
+
+        <span style="font-weight: bold; font-style: italic;">response</span> = <span style="font-weight: bold;">self</span>.client.post(<span style="font-style: italic;">"/roles"</span>,
+                                    data=json.dumps(payload),
+                                    headers=headers)
+
+        <span style="font-weight: bold;">self</span>.assertEqual(response.status_code, 200)
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2-2-8" class="outline-4">
+<h4 id="sec-2-2-8"><span class="section-number-4">2.2.8</span> test_update_role</h4>
+<div class="outline-text-4" id="text-2-2-8">
+</div><div id="outline-container-sec-2-2-8-1" class="outline-5">
+<h5 id="sec-2-2-8-1"><span class="section-number-5">2.2.8.1</span> Implementation</h5>
+<div class="outline-text-5" id="text-2-2-8-1">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_update_role</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Create a user</span>
+        <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">update the same user</span>
+        <span style="font-weight: bold;">global</span> system
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_update_role"</span>
+        <span style="font-weight: bold; font-style: italic;">role1</span> = Role(<span style="font-style: italic;">"admin"</span>)
+        role1.save()
+        <span style="font-weight: bold; font-style: italic;">role2</span> = Role(<span style="font-style: italic;">"user"</span>)
+        role2.save()
+
+        <span style="font-weight: bold; font-style: italic;">user1</span> = User(name=<span style="font-style: italic;">"admin user"</span>,
+                     email=<span style="font-style: italic;">"admin@xyz.com"</span>,
+                     role=role1)
+
+        user1.save()
+        system.get_users_from_database()
+        <span style="font-weight: bold; font-style: italic;">s</span>=Session(user=user1)
+        system.add_session(user1)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">payload = {'session': 'admin@xyz.com'}</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">user1 = User(name="admin user",</span>
+        <span style="font-weight: bold; font-style: italic;">#             </span><span style="font-weight: bold; font-style: italic;">email="admin@xyz.com",</span>
+        <span style="font-weight: bold; font-style: italic;">#             </span><span style="font-weight: bold; font-style: italic;">role=role1)</span>
+
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">user1.save()</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">user2 = User(name="normal user",</span>
+        <span style="font-weight: bold; font-style: italic;">#             </span><span style="font-weight: bold; font-style: italic;">email="normal@xyz.com",</span>
+        <span style="font-weight: bold; font-style: italic;">#             </span><span style="font-weight: bold; font-style: italic;">role=role2)</span>
+
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">user2.save()</span>
+
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">admin_user = User.get_by_id(1)</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">admin_session = Session(user = admin_user)</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system.session_set.append(admin_session)</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system.get_users_from_database()</span>
+        
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">for x in system.session_set:</span>
+        <span style="font-weight: bold; font-style: italic;">#    </span><span style="font-weight: bold; font-style: italic;">print x.to_client()</span>
+
+        <span style="font-weight: bold; font-style: italic;">payload</span> = {<span style="font-style: italic;">'role'</span>: <span style="font-style: italic;">'owner'</span>,
+                   <span style="font-style: italic;">'session'</span> : <span style="font-style: italic;">'admin@xyz.com'</span>
+                   }
+        <span style="font-weight: bold; font-style: italic;">headers</span> = {<span style="font-style: italic;">'content-type'</span>: <span style="font-style: italic;">'application/json'</span>}
+        <span style="font-weight: bold; font-style: italic;">response</span> = <span style="font-weight: bold;">self</span>.client.put(<span style="font-style: italic;">"/roles/2"</span>,
+                                   data=json.dumps(payload),
+                                   headers=headers)
+
+        <span style="font-weight: bold;">self</span>.assertEqual(response.status_code, 200)
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2-2-9" class="outline-4">
+<h4 id="sec-2-2-9"><span class="section-number-4">2.2.9</span> test_delete_role</h4>
+<div class="outline-text-4" id="text-2-2-9">
+</div><div id="outline-container-sec-2-2-9-1" class="outline-5">
+<h5 id="sec-2-2-9-1"><span class="section-number-5">2.2.9.1</span> Implementation</h5>
+<div class="outline-text-5" id="text-2-2-9-1">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_delete_role</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">global</span> system
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_delete_role"</span>
+        <span style="font-weight: bold; font-style: italic;">role1</span> = Role(<span style="font-style: italic;">"admin"</span>)
+        role1.save()
+        <span style="font-weight: bold; font-style: italic;">role2</span> = Role(<span style="font-style: italic;">"user"</span>)
+        role2.save()
+
+        <span style="font-weight: bold; font-style: italic;">user1</span> = User(name=<span style="font-style: italic;">"admin user"</span>,
+                     email=<span style="font-style: italic;">"admin@xyz.com"</span>,
+                     role=role1)
+
+        user1.save()
+        system.get_users_from_database()
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">user2 = User(name="normal user",</span>
+        <span style="font-weight: bold; font-style: italic;">#             </span><span style="font-weight: bold; font-style: italic;">email="normal@xyz.com",</span>
+        <span style="font-weight: bold; font-style: italic;">#             </span><span style="font-weight: bold; font-style: italic;">role=role2)</span>
+
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">user2.save()</span>
+        
+        <span style="font-weight: bold; font-style: italic;">s</span>=Session(user=user1)
+        system.add_session(user1)
+        <span style="font-weight: bold; font-style: italic;">payload</span> = {<span style="font-style: italic;">'session'</span>: <span style="font-style: italic;">'admin@xyz.com'</span>}
+
+        <span style="font-weight: bold; font-style: italic;">headers</span> = {<span style="font-style: italic;">'content-type'</span>: <span style="font-style: italic;">'application/json'</span>}
+
+        <span style="font-weight: bold; font-style: italic;">response</span> = <span style="font-weight: bold;">self</span>.client.delete(<span style="font-style: italic;">"/roles/2"</span>,
+                                      data=json.dumps(payload),
+                                      headers=headers)
+
+        <span style="font-weight: bold;">self</span>.assertEqual(response.status_code, 200)
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2-2-10" class="outline-4">
+<h4 id="sec-2-2-10"><span class="section-number-4">2.2.10</span> test_get_user_by_email</h4>
+<div class="outline-text-4" id="text-2-2-10">
+</div><div id="outline-container-sec-2-2-10-1" class="outline-5">
+<h5 id="sec-2-2-10-1"><span class="section-number-5">2.2.10.1</span> Implementation</h5>
+<div class="outline-text-5" id="text-2-2-10-1">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_get_user_by_email</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_get_user_by_email"</span>
+
+        <span style="font-weight: bold; font-style: italic;">###</span><span style="font-weight: bold; font-style: italic;">Create Users</span>
+        <span style="font-weight: bold; font-style: italic;">role1</span> = Role(<span style="font-style: italic;">"admin"</span>)
+        role1.save()
+        <span style="font-weight: bold; font-style: italic;">role2</span> = Role(<span style="font-style: italic;">"user"</span>)
+        role2.save()
+        <span style="font-weight: bold; font-style: italic;">user1</span> = User(name = <span style="font-style: italic;">"admin user"</span>,
+                    email = <span style="font-style: italic;">"admin@xyz.com"</span>,
+                    role=role1)
+        user1.save()
+        <span style="font-weight: bold; font-style: italic;">user2</span> = User(name = <span style="font-style: italic;">"normal user"</span>,
+                    email=<span style="font-style: italic;">"normal@xyz.com"</span>,
+                    role=role2)
+        user2.save()
+        
+        <span style="font-weight: bold; font-style: italic;">system.user_set</span> = []
+        <span style="font-weight: bold; font-style: italic;">system.session_set</span> = []
+
+        system.get_users_from_database()
+
+        <span style="font-weight: bold; font-style: italic;">payload</span> = { <span style="font-style: italic;">'email'</span> : <span style="font-style: italic;">'normal@xyz.com'</span> }
+
+        
+        <span style="font-weight: bold; font-style: italic;">headers</span> = {<span style="font-style: italic;">'content-type'</span>: <span style="font-style: italic;">'application/json'</span>}
+        <span style="font-weight: bold; font-style: italic;">response</span> = <span style="font-weight: bold;">self</span>.client.get(<span style="font-style: italic;">"/users/get_email"</span>,
+                                   data=json.dumps(payload),
+                                   headers=headers)
+        <span style="font-weight: bold; font-style: italic;">result</span> = json.loads(response.data)
+        <span style="font-weight: bold;">self</span>.assertEquals(result[<span style="font-style: italic;">'email'</span>], user2.email)
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-2-2-11" class="outline-4">
+<h4 id="sec-2-2-11"><span class="section-number-4">2.2.11</span> test_get_email_of_user</h4>
+<div class="outline-text-4" id="text-2-2-11">
+</div><div id="outline-container-sec-2-2-11-1" class="outline-5">
+<h5 id="sec-2-2-11-1"><span class="section-number-5">2.2.11.1</span> Implementation</h5>
+<div class="outline-text-5" id="text-2-2-11-1">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_get_email_of_user</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_get_email_of_user"</span>
+
+        <span style="font-weight: bold; font-style: italic;">###</span><span style="font-weight: bold; font-style: italic;">Create Users</span>
+        <span style="font-weight: bold; font-style: italic;">role1</span> = Role(<span style="font-style: italic;">"admin"</span>)
+        role1.save()
+        <span style="font-weight: bold; font-style: italic;">role2</span> = Role(<span style="font-style: italic;">"user"</span>)
+        role2.save()
+        <span style="font-weight: bold; font-style: italic;">user1</span> = User(name = <span style="font-style: italic;">"admin user"</span>,
+                    email = <span style="font-style: italic;">"admin@xyz.com"</span>,
+                    role=role1)
+        user1.save()
+        <span style="font-weight: bold; font-style: italic;">user2</span> = User(name = <span style="font-style: italic;">"normal user"</span>,
+                    email=<span style="font-style: italic;">"normal@xyz.com"</span>,
+                    role=role2)
+        user2.save()
+        
+        <span style="font-weight: bold; font-style: italic;">system.user_set</span> = []
+        <span style="font-weight: bold; font-style: italic;">system.session_set</span> = []
+
+        system.get_users_from_database()
+        system.add_session(user1)
+        <span style="font-weight: bold; font-style: italic;">payload</span> = { <span style="font-style: italic;">'session'</span> : <span style="font-style: italic;">'admin@xyz.com'</span> }
+
+        
+        <span style="font-weight: bold; font-style: italic;">headers</span> = {<span style="font-style: italic;">'content-type'</span>: <span style="font-style: italic;">'application/json'</span>}
+        <span style="font-weight: bold; font-style: italic;">response</span> = <span style="font-weight: bold;">self</span>.client.get(<span style="font-style: italic;">"/users/2/email"</span>,
+                                   data=json.dumps(payload),
+                                   headers=headers)
+        <span style="font-weight: bold; font-style: italic;">result</span> = json.loads(response.data)
+        <span style="font-weight: bold;">self</span>.assertEquals(result[<span style="font-style: italic;">'email'</span>], user2.email)
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2-2-12" class="outline-4">
+<h4 id="sec-2-2-12"><span class="section-number-4">2.2.12</span> test_get_name_of_user</h4>
+<div class="outline-text-4" id="text-2-2-12">
+</div><div id="outline-container-sec-2-2-12-1" class="outline-5">
+<h5 id="sec-2-2-12-1"><span class="section-number-5">2.2.12.1</span> Implementation</h5>
+<div class="outline-text-5" id="text-2-2-12-1">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_get_name_of_user</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_get_name_of_user"</span>
+
+        <span style="font-weight: bold; font-style: italic;">###</span><span style="font-weight: bold; font-style: italic;">Create Users</span>
+        <span style="font-weight: bold; font-style: italic;">role1</span> = Role(<span style="font-style: italic;">"admin"</span>)
+        role1.save()
+        <span style="font-weight: bold; font-style: italic;">role2</span> = Role(<span style="font-style: italic;">"user"</span>)
+        role2.save()
+        <span style="font-weight: bold; font-style: italic;">user1</span> = User(name = <span style="font-style: italic;">"admin user"</span>,
+                    email = <span style="font-style: italic;">"admin@xyz.com"</span>,
+                    role=role1)
+        user1.save()
+        <span style="font-weight: bold; font-style: italic;">user2</span> = User(name = <span style="font-style: italic;">"normal user"</span>,
+                    email=<span style="font-style: italic;">"normal@xyz.com"</span>,
+                    role=role2)
+        user2.save()
+        
+        <span style="font-weight: bold; font-style: italic;">system.user_set</span> = []
+        <span style="font-weight: bold; font-style: italic;">system.session_set</span> = []
+
+        system.get_users_from_database()
+        system.add_session(user1)
+        <span style="font-weight: bold; font-style: italic;">payload</span> = { <span style="font-style: italic;">'session'</span> : <span style="font-style: italic;">'admin@xyz.com'</span> }
+
+        
+        <span style="font-weight: bold; font-style: italic;">headers</span> = {<span style="font-style: italic;">'content-type'</span>: <span style="font-style: italic;">'application/json'</span>}
+        <span style="font-weight: bold; font-style: italic;">response</span> = <span style="font-weight: bold;">self</span>.client.get(<span style="font-style: italic;">"/users/2/name"</span>,
+                                   data=json.dumps(payload),
+                                   headers=headers)
+        <span style="font-weight: bold; font-style: italic;">result</span> = json.loads(response.data)
+        <span style="font-weight: bold;">self</span>.assertEquals(result[<span style="font-style: italic;">'name'</span>], user2.name)
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-2-2-13" class="outline-4">
+<h4 id="sec-2-2-13"><span class="section-number-4">2.2.13</span> test_set_email_of_user</h4>
+<div class="outline-text-4" id="text-2-2-13">
+</div><div id="outline-container-sec-2-2-13-1" class="outline-5">
+<h5 id="sec-2-2-13-1"><span class="section-number-5">2.2.13.1</span> Implementation</h5>
+<div class="outline-text-5" id="text-2-2-13-1">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_set_email_of_user</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_set_email_of_user"</span>
+
+        <span style="font-weight: bold; font-style: italic;">###</span><span style="font-weight: bold; font-style: italic;">Create Users</span>
+        <span style="font-weight: bold; font-style: italic;">role1</span> = Role(<span style="font-style: italic;">"admin"</span>)
+        role1.save()
+        <span style="font-weight: bold; font-style: italic;">role2</span> = Role(<span style="font-style: italic;">"user"</span>)
+        role2.save()
+        <span style="font-weight: bold; font-style: italic;">user1</span> = User(name = <span style="font-style: italic;">"admin user"</span>,
+                    email = <span style="font-style: italic;">"admin@xyz.com"</span>,
+                    role=role1)
+        user1.save()
+        <span style="font-weight: bold; font-style: italic;">user2</span> = User(name = <span style="font-style: italic;">"normal user"</span>,
+                    email=<span style="font-style: italic;">"normal@xyz.com"</span>,
+                    role=role2)
+        user2.save()
+        
+        <span style="font-weight: bold; font-style: italic;">system.user_set</span> = []
+        <span style="font-weight: bold; font-style: italic;">system.session_set</span> = []
+
+        system.get_users_from_database()
+        system.add_session(user1)
+        <span style="font-weight: bold; font-style: italic;">payload</span> = { <span style="font-style: italic;">'session'</span> : <span style="font-style: italic;">'admin@xyz.com'</span>,
+                    <span style="font-style: italic;">'email'</span> : <span style="font-style: italic;">'abcd@xyz.com'</span>
+                    }
+        
+        <span style="font-weight: bold; font-style: italic;">headers</span> = {<span style="font-style: italic;">'content-type'</span>: <span style="font-style: italic;">'application/json'</span>}
+        <span style="font-weight: bold; font-style: italic;">response</span> = <span style="font-weight: bold;">self</span>.client.put(<span style="font-style: italic;">"/users/2/email"</span>,
+                                   data=json.dumps(payload),
+                                   headers=headers)
+        <span style="font-weight: bold; font-style: italic;">result</span> = json.loads(response.data)
+        <span style="font-weight: bold;">self</span>.assertEquals(result[<span style="font-style: italic;">'email'</span>], <span style="font-style: italic;">"abcd@xyz.com"</span>)
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-2-3" class="outline-3">
+<h3 id="sec-2-3"><span class="section-number-3">2.3</span> Run Tests</h3>
+<div class="outline-text-3" id="text-2-3">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold;">if</span> <span style="font-weight: bold;">__name__</span> == <span style="font-style: italic;">'__main__'</span>:
+    unittest.main()
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Date: <span class="timestamp-wrapper"><span class="timestamp">[2016-05-11 Wed]</span></span></p>
+<p class="author">Author: VLEAD</p>
+<p class="date">Created: 2016-06-02 Thu 17:26</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.4.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

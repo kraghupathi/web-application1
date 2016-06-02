@@ -1,0 +1,47 @@
+<div class="row">
+  <div class="col-md-4"></div>
+  <div class="col-md-5"><h2>Details of <b>{{ name }}</b></h2></div>
+  <div class="col-md-3">
+    <a onclick="history.back();" role="button" class="btn btn-success btn-large">Back</a>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="table-responsive">
+      <table class="table table-stripped">
+	<thead>
+	  <tr>
+            <th class="span3">Name</th>
+	    <th class="span7">Email-id</th>
+	    <th class="span2">Role</th>
+	  </tr>
+	</thead>
+	<tbody>
+	  <tr>
+            <td>{{ name }}</td>
+	    <td>{{ email }}</td>
+	    <td>{{ role }}</td>
+          </tr>
+	  
+      </tbody>
+      </table>
+      <div class="col-md-12">
+	<div class="col-md-4"></div>
+	<span ng-if="role_name == 'admin' || user_id == id">
+          <a href="#/edit-user/{{id}}" class="btn btn-primary">Edit</a>
+	  <span ng-if="role_name == 'admin' &&  user_id != id">
+	    <a class="btn btn-primary" ng-click="delete_user(id)">Delete</a>
+	  </span>
+	</span>
+	
+      </div>
+      <!--
+      <div ng-if="user_id == (id+1)">
+        <a href="#/edit-oc/{{oc.id}}" class="btn btn-primary">Edit</a>
+	
+	<a class="btn btn-primary" ng-click="delete_oc(oc.id)">Delete</a>
+      </div>
+      -->
+    </div>
+  </div>
+</div>

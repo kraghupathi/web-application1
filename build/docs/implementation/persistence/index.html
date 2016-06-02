@@ -1,0 +1,2681 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Data Model of the User Directory Application</title>
+<!-- 2016-06-02 Thu 17:26 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="VLEAD" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Data Model of the User Directory Application</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1. Initialization</a>
+<ul>
+<li><a href="#sec-1-1">1.1. Imports for Python API</a></li>
+<li><a href="#sec-1-2">1.2. Imports and Initialization of testcases for Python API</a></li>
+<li><a href="#sec-1-3">1.3. Imports for utility functions</a></li>
+</ul>
+</li>
+<li><a href="#sec-2">2. Utility Functions</a>
+<ul>
+<li>
+<ul>
+<li><a href="#sec-2-0-1">2.0.1. is_alphabetic_string(value)</a></li>
+<li><a href="#sec-2-0-2">2.0.2. is_email(value)</a></li>
+<li><a href="#sec-2-0-3">2.0.3. Other function for REST</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#sec-3">3. Object Relational Model</a>
+<ul>
+<li><a href="#sec-3-1">3.1. Name</a>
+<ul>
+<li><a href="#sec-3-1-1">3.1.1. Construction</a></li>
+<li><a href="#sec-3-1-2">3.1.2. Test the Construction</a></li>
+</ul>
+</li>
+<li><a href="#sec-3-2">3.2. Email</a>
+<ul>
+<li><a href="#sec-3-2-1">3.2.1. Construction</a></li>
+<li><a href="#sec-3-2-2">3.2.2. Test the Construction</a></li>
+</ul>
+</li>
+<li><a href="#sec-3-3">3.3. User</a>
+<ul>
+<li><a href="#sec-3-3-1">3.3.1. Immutable Data</a></li>
+<li><a href="#sec-3-3-2">3.3.2. Mutable Data</a></li>
+<li><a href="#sec-3-3-3">3.3.3. Definition</a></li>
+<li><a href="#sec-3-3-4">3.3.4. Constructor</a>
+<ul>
+<li><a href="#sec-3-3-4-1">3.3.4.1. Implementation</a></li>
+<li><a href="#sec-3-3-4-2">3.3.4.2. Test the constructor</a></li>
+</ul>
+</li>
+<li><a href="#sec-3-3-5">3.3.5. Functions</a>
+<ul>
+<li><a href="#sec-3-3-5-1">3.3.5.1. setRole User, Role &#x2014;&gt; NIL</a></li>
+<li><a href="#sec-3-3-5-2">3.3.5.2. setEmail</a></li>
+<li><a href="#sec-3-3-5-3">3.3.5.3. setName</a></li>
+<li><a href="#sec-3-3-5-4">3.3.5.4. setRole</a></li>
+<li><a href="#sec-3-3-5-5">3.3.5.5. getEmail</a></li>
+<li><a href="#sec-3-3-5-6">3.3.5.6. getName</a></li>
+<li><a href="#sec-3-3-5-7">3.3.5.7. getAll: Nil &#x2013;&gt; set[User]</a></li>
+<li><a href="#sec-3-3-5-8">3.3.5.8. getById : id &#x2013;&gt; User</a></li>
+<li><a href="#sec-3-3-5-9">3.3.5.9. toClient</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#sec-3-4">3.4. Role</a>
+<ul>
+<li><a href="#sec-3-4-1">3.4.1. Introduction</a></li>
+<li><a href="#sec-3-4-2">3.4.2. Immutable Data</a></li>
+<li><a href="#sec-3-4-3">3.4.3. Mutable Data</a></li>
+<li><a href="#sec-3-4-4">3.4.4. Definition</a></li>
+<li><a href="#sec-3-4-5">3.4.5. Constructor</a></li>
+<li><a href="#sec-3-4-6">3.4.6. Test Constructor</a></li>
+<li><a href="#sec-3-4-7">3.4.7. Functions</a>
+<ul>
+<li><a href="#sec-3-4-7-1">3.4.7.1. getALL</a></li>
+<li><a href="#sec-3-4-7-2">3.4.7.2. getById : id &#x2013;&gt; Role</a></li>
+<li><a href="#sec-3-4-7-3">3.4.7.3. to_client</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#sec-3-5">3.5. Session</a>
+<ul>
+<li><a href="#sec-3-5-1">3.5.1. Definition</a></li>
+<li><a href="#sec-3-5-2">3.5.2. Constructor</a>
+<ul>
+<li><a href="#sec-3-5-2-1">3.5.2.1. Implementation</a></li>
+</ul>
+</li>
+<li><a href="#sec-3-5-3">3.5.3. Test constructor</a></li>
+<li><a href="#sec-3-5-4">3.5.4. Operations</a>
+<ul>
+<li><a href="#sec-3-5-4-1">3.5.4.1. getUser</a></li>
+<li><a href="#sec-3-5-4-2">3.5.4.2. _set_user</a></li>
+<li><a href="#sec-3-5-4-3">3.5.4.3. toClient</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#sec-3-6">3.6. System</a>
+<ul>
+<li><a href="#sec-3-6-1">3.6.1. Definition</a></li>
+<li><a href="#sec-3-6-2">3.6.2. Constructor</a>
+<ul>
+<li><a href="#sec-3-6-2-1">3.6.2.1. Implementation</a></li>
+<li><a href="#sec-3-6-2-2">3.6.2.2. Test Constructor</a></li>
+</ul>
+</li>
+<li><a href="#sec-3-6-3">3.6.3. Operations</a>
+<ul>
+<li><a href="#sec-3-6-3-1">3.6.3.1. add_user</a></li>
+<li><a href="#sec-3-6-3-2">3.6.3.2. del_user</a></li>
+<li><a href="#sec-3-6-3-3">3.6.3.3. show_users</a></li>
+<li><a href="#sec-3-6-3-4">3.6.3.4. get_users_from_database</a></li>
+<li><a href="#sec-3-6-3-5">3.6.3.5. get_user_by_email</a></li>
+<li><a href="#sec-3-6-3-6">3.6.3.6. make_user</a></li>
+<li><a href="#sec-3-6-3-7">3.6.3.7. get_email_of_user</a></li>
+<li><a href="#sec-3-6-3-8">3.6.3.8. get_name_of_user</a></li>
+<li><a href="#sec-3-6-3-9">3.6.3.9. set_email_of_user</a></li>
+<li><a href="#sec-3-6-3-10">3.6.3.10. set_name_of_user</a></li>
+<li><a href="#sec-3-6-3-11">3.6.3.11. get_role_of_user</a></li>
+<li><a href="#sec-3-6-3-12">3.6.3.12. login</a></li>
+<li><a href="#sec-3-6-3-13">3.6.3.13. logout</a></li>
+<li><a href="#sec-3-6-3-14">3.6.3.14. add_session</a></li>
+<li><a href="#sec-3-6-3-15">3.6.3.15. del_session</a></li>
+<li><a href="#sec-3-6-3-16">3.6.3.16. show_sessions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#sec-4">4. Run Test Cases</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> Initialization</h2>
+<div class="outline-text-2" id="text-1">
+</div><div id="outline-container-sec-1-1" class="outline-3">
+<h3 id="sec-1-1"><span class="section-number-3">1.1</span> Imports for Python API</h3>
+<div class="outline-text-3" id="text-1-1">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">-*- coding: utf-8 -*-</span>
+
+<span style="font-weight: bold;">from</span> collections <span style="font-weight: bold;">import</span> OrderedDict
+
+<span style="font-weight: bold;">from</span> flask.ext.sqlalchemy <span style="font-weight: bold;">import</span> SQLAlchemy
+<span style="font-weight: bold;">from</span> flask <span style="font-weight: bold;">import</span> current_app, request
+<span style="font-weight: bold;">from</span> sqlalchemy.orm <span style="font-weight: bold;">import</span> relationship
+<span style="font-weight: bold;">import</span> sqlalchemy.types <span style="font-weight: bold;">as</span> types
+
+<span style="font-weight: bold;">import</span> os
+<span style="font-weight: bold;">import</span> re
+<span style="font-weight: bold;">from</span> urlparse <span style="font-weight: bold;">import</span> urlparse
+<span style="font-weight: bold;">from</span> datetime <span style="font-weight: bold;">import</span> datetime
+<span style="font-weight: bold;">import</span> json
+
+<span style="font-weight: bold;">from</span> op_exceptions <span style="font-weight: bold;">import</span> AttributeRequired, ConstraintError, NotAuthorizedError
+<span style="font-weight: bold;">from</span> utils <span style="font-weight: bold;">import</span> *
+
+<span style="font-weight: bold; font-style: italic;">db</span> = SQLAlchemy()
+
+<span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system = None</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Abstract class to hold common methods</span>
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Entity</span>(db.Model):
+
+    <span style="font-weight: bold; font-style: italic;">__abstract__</span> = <span style="font-weight: bold; text-decoration: underline;">True</span>
+
+    <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">save a db.Model to the database. commit it.</span>
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">save</span>(<span style="font-weight: bold;">self</span>):
+        db.session.add(<span style="font-weight: bold;">self</span>)
+        db.session.commit()
+
+    <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">update the object, and commit to the database</span>
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">update</span>(<span style="font-weight: bold;">self</span>, **kwargs):
+        <span style="font-weight: bold;">for</span> attr, val <span style="font-weight: bold;">in</span> kwargs.iteritems():
+            <span style="font-weight: bold; font-style: italic;">setter_method</span> = <span style="font-style: italic;">"set_"</span> + attr
+            <span style="font-weight: bold;">try</span>:
+                <span style="font-weight: bold;">self</span>.__getattribute__(setter_method)(val)
+            <span style="font-weight: bold;">except</span> <span style="font-weight: bold; text-decoration: underline;">Exception</span> <span style="font-weight: bold;">as</span> e:
+                <span style="font-weight: bold;">raise</span> e
+
+        <span style="font-weight: bold;">self</span>.save()
+
+    <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">print "Setting new val"</span>
+    <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">print "Calling %s on %s" % (method_to_set, curr_entity)</span>
+    <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">try:</span>
+    <span style="font-weight: bold; font-style: italic;">#    </span><span style="font-weight: bold; font-style: italic;">getattr(record, method_to_set)(new_val)</span>
+    <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">except Exception as e:</span>
+    <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">pass</span>
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">delete</span>(<span style="font-weight: bold;">self</span>):
+        db.session.delete(<span style="font-weight: bold;">self</span>)
+        db.session.commit()
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-1-2" class="outline-3">
+<h3 id="sec-1-2"><span class="section-number-3">1.2</span> Imports and Initialization of testcases for Python API</h3>
+<div class="outline-text-3" id="text-1-2">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">-*- coding: utf-8 -*-</span>
+<span style="font-weight: bold;">import</span> unittest
+<span style="font-weight: bold;">from</span> flask.ext.testing <span style="font-weight: bold;">import</span> TestCase
+<span style="font-weight: bold;">from</span> datetime <span style="font-weight: bold;">import</span> datetime
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">import json</span>
+
+<span style="font-weight: bold;">from</span> src.db <span style="font-weight: bold;">import</span> *
+<span style="font-weight: bold;">from</span> src.app <span style="font-weight: bold;">import</span> create_app
+<span style="font-weight: bold;">from</span> src.op_exceptions <span style="font-weight: bold;">import</span> AttributeRequired, ConstraintError, NotAuthorizedError
+
+
+<span style="font-weight: bold; font-style: italic;">config</span> = {
+    <span style="font-style: italic;">'SQLALCHEMY_DATABASE_URI'</span>: <span style="font-style: italic;">''</span>
+}
+
+<span style="font-weight: bold; font-style: italic;">system</span> = <span style="font-weight: bold; text-decoration: underline;">None</span>
+
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">setUp</span>():
+    <span style="font-weight: bold;">global</span> system
+    <span style="font-weight: bold; font-style: italic;">a_role</span> = Role(<span style="font-style: italic;">"admin"</span>)
+    <span style="font-weight: bold; font-style: italic;">u_role</span> = Role(<span style="font-style: italic;">"user"</span>)
+    a_role.save()
+    u_role.save()
+    <span style="font-weight: bold; font-style: italic;">admin_user</span> = User(name=<span style="font-style: italic;">"admin"</span>, 
+                          email=<span style="font-style: italic;">"app-admin@vlabs.ac.in"</span>, 
+                          role=Role.get_by_id(1))
+    admin_user.save()       
+    
+    <span style="font-weight: bold; font-style: italic;">System.created</span> = <span style="font-weight: bold; text-decoration: underline;">False</span>
+    <span style="font-weight: bold; font-style: italic;">system</span> = System()
+    <span style="font-weight: bold; font-style: italic;">session</span> = Session(user = admin_user)
+    <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">print " *************SETUP****************"</span>
+    <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">print system</span>
+    <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">print " *************SETUP****************"</span>
+    <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">global system</span>
+    <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system.login(admin_user)</span>
+    system.session_set.append(session)
+    <span style="font-weight: bold; font-style: italic;">system.user_set</span> = User.get_all()
+    <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">print len(system.user_set)</span>
+
+
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">tearDown</span>():
+    <span style="font-weight: bold;">global</span> system
+    <span style="font-weight: bold; font-style: italic;">system.user_set</span> = []
+    <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system.session_set = []</span>
+</pre>
+</div>
+</div>
+</div>
+
+
+
+<div id="outline-container-sec-1-3" class="outline-3">
+<h3 id="sec-1-3"><span class="section-number-3">1.3</span> Imports for utility functions</h3>
+<div class="outline-text-3" id="text-1-3">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">module to hold all utilities/helper functions</span>
+
+<span style="font-weight: bold;">import</span> json
+
+<span style="font-weight: bold;">from</span> flask <span style="font-weight: bold;">import</span> make_response, current_app
+
+<span style="font-weight: bold;">import</span> re
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> Utility Functions</h2>
+<div class="outline-text-2" id="text-2">
+</div><div id="outline-container-sec-2-0-1" class="outline-4">
+<h4 id="sec-2-0-1"><span class="section-number-4">2.0.1</span> is_alphabetic_string(value)</h4>
+<div class="outline-text-4" id="text-2-0-1">
+<p>
+This function take an argument and checks whether the argument contains
+only alphabets.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold;">def</span> <span style="font-weight: bold;">is_alphabetic_string</span>(value):
+    <span style="font-weight: bold;">if</span> re.search(<span style="font-style: italic;">'[^a-zA-Z. ]+'</span>, value):
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">False</span>
+    <span style="font-weight: bold;">else</span>:
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">True</span>
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-2-0-2" class="outline-4">
+<h4 id="sec-2-0-2"><span class="section-number-4">2.0.2</span> is_email(value)</h4>
+<div class="outline-text-4" id="text-2-0-2">
+<p>
+Email is a type as defined in RFC <a href="https://tools.ietf.org/html/rfc5321">5321</a>, <a href="https://tools.ietf.org/html/rfc5322">5322</a> and <a href="https://tools.ietf.org/html/rfc6531">6531</a>.
+Following is the constructor for this class.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold;">def</span> <span style="font-weight: bold;">is_email</span>(value):
+    <span style="font-weight: bold;">if</span> re.search(<span style="font-style: italic;">'[^@]+@[^@]+\.[^@]+'</span>, value):
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">True</span>
+    <span style="font-weight: bold;">else</span>:
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">False</span>
+</pre>
+</div>
+</div>
+</div>
+
+
+
+<div id="outline-container-sec-2-0-3" class="outline-4">
+<h4 id="sec-2-0-3"><span class="section-number-4">2.0.3</span> Other function for REST</h4>
+<div class="outline-text-4" id="text-2-0-3">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">module to hold all utilities/helper functions</span>
+
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">return a list of dicts as json with correct mime types</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">flask does not provide a jsonify for lists; hence this method</span>
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">jsonify_list</span>(data):
+    <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">type</span>(data) <span style="font-weight: bold;">is</span> <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">list</span>:
+        <span style="font-weight: bold;">raise</span> <span style="font-weight: bold; text-decoration: underline;">Exception</span>(<span style="font-style: italic;">'jsonify_list function accepts only a list'</span>)
+
+    <span style="font-weight: bold;">return</span> make_response(json.dumps(data), 200,
+                         {<span style="font-style: italic;">'content-type'</span>: <span style="font-style: italic;">'application/json'</span>})
+
+
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">take in a flask request object and try to parse out a dictionary from the</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">request</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">try to find if request is as JSON first, then look into forms, finally force</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">find it.</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">If not found return a dict; else return the parsed data</span>
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">parse_request</span>(request):
+    <span style="font-weight: bold;">if</span> request.json:
+        <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">print 'found in request.json'</span>
+        <span style="font-weight: bold; font-style: italic;">data</span> = request.get_json()
+
+    <span style="font-weight: bold;">elif</span> request.data:
+        <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">print 'found in request.data'</span>
+        <span style="font-weight: bold; font-style: italic;">data</span> = json.loads(request.data)
+
+    <span style="font-weight: bold;">elif</span> request.form:
+        <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">print 'found in request.form'</span>
+        <span style="font-weight: bold; font-style: italic;">data</span> = request.form.to_dict()
+        <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">try to detect if form contains integers and boolean data and attempt</span>
+        <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">to convert them</span>
+        <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">FIXME: is this a good idea? Fix this to do it in a better way?</span>
+        <span style="font-weight: bold;">for</span> k <span style="font-weight: bold;">in</span> data:
+            <span style="font-weight: bold;">if</span> is_number(data[k]):
+                <span style="font-weight: bold; font-style: italic;">data</span>[k] = <span style="font-weight: bold;">int</span>(data[k])
+            <span style="font-weight: bold;">if</span> is_bool_in_str(data[k]):
+                <span style="font-weight: bold; font-style: italic;">data</span>[k] = str_to_bool(data[k])
+
+            <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">print k, data[k]</span>
+
+    <span style="font-weight: bold;">else</span>:
+        <span style="font-weight: bold; font-style: italic;">data</span> = request.get_json(force=<span style="font-weight: bold; text-decoration: underline;">True</span>)
+
+    <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> data:
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">False</span>
+
+    <span style="font-weight: bold;">return</span> data
+
+
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">check if a given string is a number</span>
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">is_number</span>(s):
+    <span style="font-weight: bold;">try</span>:
+        <span style="font-weight: bold;">float</span>(s)
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">True</span>
+    <span style="font-weight: bold;">except</span> <span style="font-weight: bold; text-decoration: underline;">ValueError</span>:
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">False</span>
+
+
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">check if in a given string python bool types are represented</span>
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">is_bool_in_str</span>(s):
+    <span style="font-weight: bold;">if</span> s == <span style="font-style: italic;">"True"</span> <span style="font-weight: bold;">or</span> s == <span style="font-style: italic;">"False"</span>:
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">True</span>
+    <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">False</span>
+
+
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">convert python bool types in string to native bool types</span>
+<span style="font-weight: bold;">def</span> <span style="font-weight: bold;">str_to_bool</span>(s):
+    <span style="font-weight: bold;">if</span> s == <span style="font-style: italic;">"True"</span>:
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">True</span>
+    <span style="font-weight: bold;">if</span> s == <span style="font-style: italic;">"False"</span>:
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">False</span>
+    <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">None</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> Object Relational Model</h2>
+<div class="outline-text-2" id="text-3">
+</div><div id="outline-container-sec-3-1" class="outline-3">
+<h3 id="sec-3-1"><span class="section-number-3">3.1</span> Name</h3>
+<div class="outline-text-3" id="text-3-1">
+</div><div id="outline-container-sec-3-1-1" class="outline-4">
+<h4 id="sec-3-1-1"><span class="section-number-4">3.1.1</span> Construction</h4>
+<div class="outline-text-4" id="text-3-1-1">
+<p>
+Name is an alphabetical string.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Name</span>(<span style="font-weight: bold;">object</span>):
+    <span style="font-weight: bold; font-style: italic;">value</span> = <span style="font-weight: bold; text-decoration: underline;">None</span>
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__init__</span>(<span style="font-weight: bold;">self</span>, value):
+        <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">value: String </span>
+        <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">if the string contains any non-alphabet and non-space character,</span>
+        <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">raise a type error</span>
+        <span style="font-weight: bold;">if</span> is_alphabetic_string(value):
+            <span style="font-weight: bold;">self</span>.value = value
+        <span style="font-weight: bold;">else</span>:
+            <span style="font-weight: bold;">raise</span> <span style="font-weight: bold; text-decoration: underline;">TypeError</span>(<span style="font-style: italic;">'%s is not a Name!'</span> % value)
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__str__</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span>.value
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-3-1-2" class="outline-4">
+<h4 id="sec-3-1-2"><span class="section-number-4">3.1.2</span> Test the Construction</h4>
+<div class="outline-text-4" id="text-3-1-2">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">TestName</span>(TestCase):
+    <span style="font-weight: bold; font-style: italic;">TESTING</span> = <span style="font-weight: bold; text-decoration: underline;">True</span>
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">create_app</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold; font-style: italic;">app</span> = create_app(config)
+        <span style="font-weight: bold;">return</span> app
+
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">setUp</span>(<span style="font-weight: bold;">self</span>):
+        db.create_all()
+        setUp()
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">tearDown</span>(<span style="font-weight: bold;">self</span>):
+        db.session.remove()
+        db.drop_all()
+        tearDown()
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_name_type</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_name_type"</span>
+        <span style="font-weight: bold; font-style: italic;">new_name</span> = Name(<span style="font-style: italic;">"John"</span>)
+        <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">correct name</span>
+        <span style="font-weight: bold;">self</span>.assertEqual(new_name.value, <span style="font-style: italic;">"John"</span>)
+        <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">incorrect name</span>
+        <span style="font-weight: bold;">self</span>.assertRaises(<span style="font-weight: bold; text-decoration: underline;">TypeError</span>, Name, <span style="font-style: italic;">"123dasd"</span>)
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-3-2" class="outline-3">
+<h3 id="sec-3-2"><span class="section-number-3">3.2</span> Email</h3>
+<div class="outline-text-3" id="text-3-2">
+</div><div id="outline-container-sec-3-2-1" class="outline-4">
+<h4 id="sec-3-2-1"><span class="section-number-4">3.2.1</span> Construction</h4>
+<div class="outline-text-4" id="text-3-2-1">
+<p>
+Email is a type as defined in RFC <a href="https://tools.ietf.org/html/rfc5321">5321</a>, <a href="https://tools.ietf.org/html/rfc5322">5322</a> and <a href="https://tools.ietf.org/html/rfc6531">6531</a>.
+Following is the constructor for this class.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Email</span>(<span style="font-weight: bold;">object</span>):
+    <span style="font-weight: bold; font-style: italic;">value</span> = <span style="font-weight: bold; text-decoration: underline;">None</span>
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__init__</span>(<span style="font-weight: bold;">self</span>, value):
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> is_email(value):
+            <span style="font-weight: bold;">raise</span> <span style="font-weight: bold; text-decoration: underline;">TypeError</span>(<span style="font-style: italic;">'%s is not an email!'</span> % value)
+        <span style="font-weight: bold;">self</span>.value = value
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__str__</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span>.value
+</pre>
+</div>
+</div>
+</div>
+
+
+
+<div id="outline-container-sec-3-2-2" class="outline-4">
+<h4 id="sec-3-2-2"><span class="section-number-4">3.2.2</span> Test the Construction</h4>
+<div class="outline-text-4" id="text-3-2-2">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">TestEmail</span>(TestCase):
+    <span style="font-weight: bold; font-style: italic;">TESTING</span> = <span style="font-weight: bold; text-decoration: underline;">True</span>
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">create_app</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold; font-style: italic;">app</span> = create_app(config)
+        <span style="font-weight: bold;">return</span> app
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">setUp</span>(<span style="font-weight: bold;">self</span>):
+        db.create_all()
+        setUp()
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">tearDown</span>(<span style="font-weight: bold;">self</span>):
+        db.session.remove()
+        db.drop_all()
+        tearDown()
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_email_type</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_email_type"</span>
+        <span style="font-weight: bold; font-style: italic;">new_email</span> = Email(<span style="font-style: italic;">"smith@gmail.com"</span>)
+        <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">correct name</span>
+        <span style="font-weight: bold;">self</span>.assertEqual(new_email.value, <span style="font-style: italic;">"smith@gmail.com"</span>)
+        <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">incorrect name</span>
+        <span style="font-weight: bold;">self</span>.assertRaises(<span style="font-weight: bold; text-decoration: underline;">TypeError</span>, Email, <span style="font-style: italic;">"@@@@smithgmail.com"</span>)
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+
+<div id="outline-container-sec-3-3" class="outline-3">
+<h3 id="sec-3-3"><span class="section-number-3">3.3</span> User</h3>
+<div class="outline-text-3" id="text-3-3">
+</div><div id="outline-container-sec-3-3-1" class="outline-4">
+<h4 id="sec-3-3-1"><span class="section-number-4">3.3.1</span> Immutable Data</h4>
+<div class="outline-text-4" id="text-3-3-1">
+<p>
+This is the data associated with Institute type, which is immutable.
+</p>
+
+<ul class="org-ul">
+<li>Id
+</li>
+</ul>
+</div>
+</div>
+
+
+<div id="outline-container-sec-3-3-2" class="outline-4">
+<h4 id="sec-3-3-2"><span class="section-number-4">3.3.2</span> Mutable Data</h4>
+<div class="outline-text-4" id="text-3-3-2">
+<p>
+These are the data associated with User type, which are mutable
+</p>
+
+<ul class="org-ul">
+<li>Name
+</li>
+<li>Email
+</li>
+<li>Role
+</li>
+</ul>
+</div>
+</div>
+
+
+<div id="outline-container-sec-3-3-3" class="outline-4">
+<h4 id="sec-3-3-3"><span class="section-number-4">3.3.3</span> Definition</h4>
+<div class="outline-text-4" id="text-3-3-3">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">User</span>(Entity):
+
+    <span style="font-weight: bold; font-style: italic;">__tablename__</span> = <span style="font-style: italic;">'users'</span>
+
+    <span style="font-weight: bold;">id</span> = db.Column(db.Integer, primary_key=<span style="font-weight: bold; text-decoration: underline;">True</span>)
+    <span style="font-weight: bold; font-style: italic;">role_id</span> = db.Column(db.Integer, db.ForeignKey(<span style="font-style: italic;">'roles.id'</span>))
+    <span style="font-weight: bold; font-style: italic;">name</span> = db.Column(db.String(128), nullable=<span style="font-weight: bold; text-decoration: underline;">False</span>)
+    <span style="font-weight: bold; font-style: italic;">email</span> = db.Column(db.String(128), nullable=<span style="font-weight: bold; text-decoration: underline;">False</span>, unique=<span style="font-weight: bold; text-decoration: underline;">True</span>)
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-3-3-4" class="outline-4">
+<h4 id="sec-3-3-4"><span class="section-number-4">3.3.4</span> Constructor</h4>
+<div class="outline-text-4" id="text-3-3-4">
+</div><div id="outline-container-sec-3-3-4-1" class="outline-5">
+<h5 id="sec-3-3-4-1"><span class="section-number-5">3.3.4.1</span> Implementation</h5>
+<div class="outline-text-5" id="text-3-3-4-1">
+<p>
+Signature of the constructor of <code>User</code> is as follows:
+</p>
+
+<pre class="example">
+usr = User(name=&lt;object of Name&gt;, email=&lt;object of Email&gt;, 
+          role=&lt;object of Role&gt;)
+</pre>
+
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__init__</span>(<span style="font-weight: bold;">self</span>, **kwargs):
+        <span style="font-weight: bold;">if</span> <span style="font-style: italic;">'email'</span> <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">in</span> kwargs:
+            <span style="font-weight: bold;">raise</span> AttributeRequired(<span style="font-style: italic;">"email is mandatory"</span>)
+
+        <span style="font-weight: bold;">if</span> <span style="font-style: italic;">'name'</span> <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">in</span> kwargs:
+            <span style="font-weight: bold;">raise</span> AttributeRequired(<span style="font-style: italic;">"name is mandatory"</span>)
+
+        <span style="font-weight: bold;">if</span> <span style="font-style: italic;">'role'</span> <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">in</span> kwargs:
+            <span style="font-weight: bold;">raise</span> AttributeRequired(<span style="font-style: italic;">"Atleast one role is mandatory"</span>)
+
+        <span style="font-weight: bold;">self</span>.set_email(kwargs[<span style="font-style: italic;">'email'</span>])
+        <span style="font-weight: bold;">self</span>.set_name(kwargs[<span style="font-style: italic;">'name'</span>])
+        <span style="font-weight: bold;">self</span>.set_role(kwargs[<span style="font-style: italic;">'role'</span>])
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-3-3-4-2" class="outline-5">
+<h5 id="sec-3-3-4-2"><span class="section-number-5">3.3.4.2</span> Test the constructor</h5>
+<div class="outline-text-5" id="text-3-3-4-2">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">TestUser</span>(TestCase):
+    <span style="font-weight: bold; font-style: italic;">TESTING</span> = <span style="font-weight: bold; text-decoration: underline;">True</span>
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">create_app</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold; font-style: italic;">app</span> = create_app(config)
+        <span style="font-weight: bold;">return</span> app
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">setUp</span>(<span style="font-weight: bold;">self</span>):
+        db.create_all()
+        setUp()
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">tearDown</span>(<span style="font-weight: bold;">self</span>):
+        db.session.remove()
+        db.drop_all()
+        tearDown()
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_user_creation_without_role</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_user_creation_without_role"</span>
+        <span style="font-weight: bold;">with</span> <span style="font-weight: bold;">self</span>.assertRaises(AttributeRequired):
+            <span style="font-weight: bold; font-style: italic;">user</span> = User(name=<span style="font-style: italic;">"Robin Smith"</span>, 
+                            email=<span style="font-style: italic;">"smith@gmail.com"</span>)
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_user_creation_with_role</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_user_creation_with_role"</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">role = Role("admin")</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">role.save()</span>
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name=<span style="font-style: italic;">"Robin Smith"</span>, 
+                    email=<span style="font-style: italic;">"smith@gmail.com"</span>,
+                    role=Role.get_by_id(1))
+        user.save()
+        <span style="font-weight: bold;">self</span>.assertEqual(user.role.name, <span style="font-style: italic;">"admin"</span>)
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-3-3-5" class="outline-4">
+<h4 id="sec-3-3-5"><span class="section-number-4">3.3.5</span> Functions</h4>
+<div class="outline-text-4" id="text-3-3-5">
+</div><div id="outline-container-sec-3-3-5-1" class="outline-5">
+<h5 id="sec-3-3-5-1"><span class="section-number-5">3.3.5.1</span> setRole User, Role &#x2014;&gt; NIL</h5>
+<div class="outline-text-5" id="text-3-3-5-1">
+</div><ol class="org-ol"><li><a id="sec-3-3-5-1-1" name="sec-3-3-5-1-1"></a>Implementation<br  /><div class="outline-text-6" id="text-3-3-5-1-1">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">set_role</span>(<span style="font-weight: bold;">self</span>, role):
+        <span style="font-weight: bold;">self</span>.role = role
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="sec-3-3-5-1-2" name="sec-3-3-5-1-2"></a>Test setRole to a user<br  /><div class="outline-text-6" id="text-3-3-5-1-2">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_set_roles_to_user</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_set_roles_to_user"</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">a_role = Role("admin")</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">role.save()</span>
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name=<span style="font-style: italic;">"Robin Smith"</span>, 
+                    email=<span style="font-style: italic;">"smith@gmail.com"</span>,
+                    role=Role.get_by_id(1))
+        user.save()
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">role = Role("user")</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">role.sa</span>
+        user.set_role(Role.get_by_id(2))
+        user.save()
+        <span style="font-weight: bold; font-style: italic;">users</span> = User.get_all()
+        <span style="font-weight: bold;">self</span>.assertEqual(users[1].role.name, <span style="font-style: italic;">"user"</span>)
+</pre>
+</div>
+</div>
+</li></ol>
+</div>
+
+
+<div id="outline-container-sec-3-3-5-2" class="outline-5">
+<h5 id="sec-3-3-5-2"><span class="section-number-5">3.3.5.2</span> setEmail</h5>
+<div class="outline-text-5" id="text-3-3-5-2">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">set_email</span>(<span style="font-weight: bold;">self</span>, email):
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> is_email(email):
+            <span style="font-weight: bold;">raise</span> <span style="font-weight: bold; text-decoration: underline;">TypeError</span>(<span style="font-style: italic;">'email is invalid'</span>)
+        <span style="font-weight: bold;">else</span>:
+            <span style="font-weight: bold;">self</span>.email = email
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-3-3-5-3" class="outline-5">
+<h5 id="sec-3-3-5-3"><span class="section-number-5">3.3.5.3</span> setName</h5>
+<div class="outline-text-5" id="text-3-3-5-3">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">set_name</span>(<span style="font-weight: bold;">self</span>, name):
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> is_alphabetic_string(name):
+            <span style="font-weight: bold;">raise</span> <span style="font-weight: bold; text-decoration: underline;">TypeError</span>(<span style="font-style: italic;">'Invalid name'</span>)
+        <span style="font-weight: bold;">else</span>:
+            <span style="font-weight: bold;">self</span>.name = name
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3-3-5-4" class="outline-5">
+<h5 id="sec-3-3-5-4"><span class="section-number-5">3.3.5.4</span> setRole</h5>
+<div class="outline-text-5" id="text-3-3-5-4">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">set_role</span>(<span style="font-weight: bold;">self</span>, role):
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">isinstance</span>(role, Role):
+            <span style="font-weight: bold;">raise</span> <span style="font-weight: bold; text-decoration: underline;">TypeError</span>(<span style="font-style: italic;">'`role` argument should be of type Role.'</span>)
+        <span style="font-weight: bold;">else</span>:
+            <span style="font-weight: bold;">self</span>.role = role
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-3-3-5-5" class="outline-5">
+<h5 id="sec-3-3-5-5"><span class="section-number-5">3.3.5.5</span> getEmail</h5>
+<div class="outline-text-5" id="text-3-3-5-5">
+<div class="org-src-container">
+
+<pre class="src src-python">   <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">get_email</span>(<span style="font-weight: bold;">self</span>):
+       <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span>.email
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-3-3-5-6" class="outline-5">
+<h5 id="sec-3-3-5-6"><span class="section-number-5">3.3.5.6</span> getName</h5>
+<div class="outline-text-5" id="text-3-3-5-6">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">get_name</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span>.name
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-3-3-5-7" class="outline-5">
+<h5 id="sec-3-3-5-7"><span class="section-number-5">3.3.5.7</span> getAll: Nil &#x2013;&gt; set[User]</h5>
+<div class="outline-text-5" id="text-3-3-5-7">
+</div><ol class="org-ol"><li><a id="sec-3-3-5-7-1" name="sec-3-3-5-7-1"></a>Implementation<br  /><div class="outline-text-6" id="text-3-3-5-7-1">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold; text-decoration: underline;">@staticmethod</span>
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">get_all</span>():
+        <span style="font-weight: bold;">return</span> User.query.<span style="font-weight: bold;">all</span>()
+</pre>
+</div>
+</div>
+</li>
+
+
+<li><a id="sec-3-3-5-7-2" name="sec-3-3-5-7-2"></a>Test getAll<br  /><div class="outline-text-6" id="text-3-3-5-7-2">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_user_get_all</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_user_get_all"</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">role = Role("Admin")</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">role.save()</span>
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name=<span style="font-style: italic;">"Termite"</span>, 
+                    email=<span style="font-style: italic;">"tremite@gmail.com"</span>,
+                    role=Role.get_by_id(1))
+        user.save()
+        <span style="font-weight: bold; font-style: italic;">users</span> = User.get_all()
+        <span style="font-weight: bold;">self</span>.assertEqual(<span style="font-style: italic;">"admin"</span>, users[0].role.name)
+</pre>
+</div>
+</div>
+</li></ol>
+</div>
+
+
+<div id="outline-container-sec-3-3-5-8" class="outline-5">
+<h5 id="sec-3-3-5-8"><span class="section-number-5">3.3.5.8</span> getById : id &#x2013;&gt; User</h5>
+<div class="outline-text-5" id="text-3-3-5-8">
+</div><ol class="org-ol"><li><a id="sec-3-3-5-8-1" name="sec-3-3-5-8-1"></a>Implementation<br  /><div class="outline-text-6" id="text-3-3-5-8-1">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold; text-decoration: underline;">@staticmethod</span>
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">get_by_id</span>(<span style="font-weight: bold;">id</span>):
+        <span style="font-weight: bold;">return</span> User.query.get(<span style="font-weight: bold;">id</span>)
+</pre>
+</div>
+</div>
+</li>
+
+
+<li><a id="sec-3-3-5-8-2" name="sec-3-3-5-8-2"></a>Test getById: Id &#x2013;&gt; User<br  /><div class="outline-text-6" id="text-3-3-5-8-2">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_get_user_by_id</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_get_user_by_id"</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">role = Role("admin")</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">role.save()</span>
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name=<span style="font-style: italic;">"Robin Smith"</span>, 
+                    email=<span style="font-style: italic;">"smith@gmail.com"</span>,
+                    role=Role.get_by_id(1))
+        user.save()
+        <span style="font-weight: bold;">self</span>.assertEqual(user.get_by_id(2).role.name, <span style="font-style: italic;">"admin"</span>)
+        <span style="font-weight: bold;">self</span>.assertEqual(user.get_by_id(2).name, <span style="font-style: italic;">"Robin Smith"</span>)
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="sec-3-3-5-8-3" name="sec-3-3-5-8-3"></a>Test updateRole: Role -&gt; Role<br  /><div class="outline-text-6" id="text-3-3-5-8-3">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_update_user</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_update_role"</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">a_role = Role("admin")</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">a_role.save()</span>
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name=<span style="font-style: italic;">"Robin Smith"</span>, 
+                    email=<span style="font-style: italic;">"smith@gmail.com"</span>,
+                    role=Role.get_by_id(1))
+        user.save()
+        <span style="font-weight: bold; font-style: italic;">u1</span> = User.get_by_id(1)
+        <span style="font-weight: bold;">print</span> u1.to_client()
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">u_role = Role("user")</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">u_role.save()</span>
+        u1.update(name=<span style="font-style: italic;">"Duddley Rod"</span>, 
+                  email=<span style="font-style: italic;">"duddley@gmail.com"</span>,
+                  role=Role.get_by_id(2))
+        <span style="font-weight: bold;">print</span> u1.to_client()
+        <span style="font-weight: bold;">self</span>.assertEqual(u1.get_by_id(1).name, <span style="font-style: italic;">"Duddley Rod"</span>)
+        <span style="font-weight: bold;">self</span>.assertEqual(u1.get_by_id(1).role.name, <span style="font-style: italic;">"user"</span>)
+</pre>
+</div>
+</div>
+</li></ol>
+</div>
+
+
+<div id="outline-container-sec-3-3-5-9" class="outline-5">
+<h5 id="sec-3-3-5-9"><span class="section-number-5">3.3.5.9</span> toClient</h5>
+<div class="outline-text-5" id="text-3-3-5-9">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">to_client</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">return</span> {
+            <span style="font-style: italic;">'id'</span>: <span style="font-weight: bold;">self</span>.<span style="font-weight: bold;">id</span>,
+            <span style="font-style: italic;">'name'</span>: <span style="font-weight: bold;">self</span>.name,
+            <span style="font-style: italic;">'email'</span>: <span style="font-weight: bold;">self</span>.email,
+            <span style="font-style: italic;">'role'</span>: <span style="font-weight: bold;">self</span>.role.to_client()
+        }
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+
+<div id="outline-container-sec-3-4" class="outline-3">
+<h3 id="sec-3-4"><span class="section-number-3">3.4</span> Role</h3>
+<div class="outline-text-3" id="text-3-4">
+</div><div id="outline-container-sec-3-4-1" class="outline-4">
+<h4 id="sec-3-4-1"><span class="section-number-4">3.4.1</span> Introduction</h4>
+<div class="outline-text-4" id="text-3-4-1">
+<p>
+A Role has got certain privileges.  In this current application, the
+privileges are understood 
+</p>
+
+<p>
+Different types of roles are:
+</p>
+<dl class="org-dl">
+<dt> Owner  </dt><dd>An owner is user an admin who cannot delete himself
+</dd>
+<dt> Admin </dt><dd>An admin is an user who can add, modify and delete other users
+except owner
+</dd>
+<dt> User </dt><dd>A User is a user who can view all other users and either modify or
+delete himself.
+</dd>
+<dt> Guest </dt><dd>A Guest is a user who can view all other users
+</dd>
+</dl>
+</div>
+</div>
+
+
+<div id="outline-container-sec-3-4-2" class="outline-4">
+<h4 id="sec-3-4-2"><span class="section-number-4">3.4.2</span> Immutable Data</h4>
+<div class="outline-text-4" id="text-3-4-2">
+<p>
+This is the data associated with Institute type, which is immutable.
+</p>
+
+<ul class="org-ul">
+<li>Id
+</li>
+</ul>
+</div>
+</div>
+
+
+<div id="outline-container-sec-3-4-3" class="outline-4">
+<h4 id="sec-3-4-3"><span class="section-number-4">3.4.3</span> Mutable Data</h4>
+<div class="outline-text-4" id="text-3-4-3">
+<p>
+These are the data associated with User type, which are mutable
+</p>
+
+<ul class="org-ul">
+<li>Name
+</li>
+</ul>
+</div>
+</div>
+
+
+<div id="outline-container-sec-3-4-4" class="outline-4">
+<h4 id="sec-3-4-4"><span class="section-number-4">3.4.4</span> Definition</h4>
+<div class="outline-text-4" id="text-3-4-4">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Role</span>(Entity):
+    <span style="font-weight: bold; font-style: italic;">__tablename__</span> = <span style="font-style: italic;">'roles'</span>
+
+    <span style="font-weight: bold;">id</span> = db.Column(db.Integer, primary_key=<span style="font-weight: bold; text-decoration: underline;">True</span>)
+    <span style="font-weight: bold; font-style: italic;">name</span> = db.Column(db.String(128), unique=<span style="font-weight: bold; text-decoration: underline;">True</span>, nullable=<span style="font-weight: bold; text-decoration: underline;">False</span>)
+    
+    <span style="font-weight: bold; font-style: italic;">users</span> = db.relationship(<span style="font-style: italic;">'User'</span>, backref=<span style="font-style: italic;">'role'</span>)
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-3-4-5" class="outline-4">
+<h4 id="sec-3-4-5"><span class="section-number-4">3.4.5</span> Constructor</h4>
+<div class="outline-text-4" id="text-3-4-5">
+<p>
+The signature of Role is defined as follows
+</p>
+<pre class="example">
+role = Role(name=&lt;Object of Name&gt;)
+</pre>
+
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__init__</span>(<span style="font-weight: bold;">self</span>, name):
+        <span style="font-weight: bold;">self</span>.name = name
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__str__</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span>.name
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-3-4-6" class="outline-4">
+<h4 id="sec-3-4-6"><span class="section-number-4">3.4.6</span> Test Constructor</h4>
+<div class="outline-text-4" id="text-3-4-6">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">TestRole</span>(TestCase):
+    <span style="font-weight: bold; font-style: italic;">TESTING</span> = <span style="font-weight: bold; text-decoration: underline;">True</span>
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">create_app</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold; font-style: italic;">app</span> = create_app(config)
+        <span style="font-weight: bold;">return</span> app
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">setUp</span>(<span style="font-weight: bold;">self</span>):
+        db.create_all()
+        setUp()
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">tearDown</span>(<span style="font-weight: bold;">self</span>):
+        db.session.remove()
+        db.drop_all()
+        tearDown()
+        
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_role_creation</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_role_creation"</span>
+        <span style="font-weight: bold; font-style: italic;">role</span> = Role.get_by_id(1)
+        role.save()
+        <span style="font-weight: bold;">self</span>.assertEqual(role.name, <span style="font-style: italic;">"admin"</span>)
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-3-4-7" class="outline-4">
+<h4 id="sec-3-4-7"><span class="section-number-4">3.4.7</span> Functions</h4>
+<div class="outline-text-4" id="text-3-4-7">
+</div><div id="outline-container-sec-3-4-7-1" class="outline-5">
+<h5 id="sec-3-4-7-1"><span class="section-number-5">3.4.7.1</span> getALL</h5>
+<div class="outline-text-5" id="text-3-4-7-1">
+</div><ol class="org-ol"><li><a id="sec-3-4-7-1-1" name="sec-3-4-7-1-1"></a>Implementation<br  /><div class="outline-text-6" id="text-3-4-7-1-1">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold; text-decoration: underline;">@staticmethod</span>
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">get_all</span>():
+        <span style="font-weight: bold;">return</span> Role.query.<span style="font-weight: bold;">all</span>()
+</pre>
+</div>
+</div>
+</li></ol>
+</div>
+
+
+<div id="outline-container-sec-3-4-7-2" class="outline-5">
+<h5 id="sec-3-4-7-2"><span class="section-number-5">3.4.7.2</span> getById : id &#x2013;&gt; Role</h5>
+<div class="outline-text-5" id="text-3-4-7-2">
+</div><ol class="org-ol"><li><a id="sec-3-4-7-2-1" name="sec-3-4-7-2-1"></a>Implementation<br  /><div class="outline-text-6" id="text-3-4-7-2-1">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold; text-decoration: underline;">@staticmethod</span>
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">get_by_id</span>(<span style="font-weight: bold;">id</span>):
+        <span style="font-weight: bold;">return</span> Role.query.get(<span style="font-weight: bold;">id</span>)
+</pre>
+</div>
+</div>
+</li></ol>
+</div>
+
+
+
+<div id="outline-container-sec-3-4-7-3" class="outline-5">
+<h5 id="sec-3-4-7-3"><span class="section-number-5">3.4.7.3</span> to_client</h5>
+<div class="outline-text-5" id="text-3-4-7-3">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">to_client</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">return</span> {
+            <span style="font-style: italic;">'id'</span>: <span style="font-weight: bold;">self</span>.<span style="font-weight: bold;">id</span>,
+            <span style="font-style: italic;">'name'</span>: <span style="font-weight: bold;">self</span>.name
+        }
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+
+
+
+
+
+<div id="outline-container-sec-3-5" class="outline-3">
+<h3 id="sec-3-5"><span class="section-number-3">3.5</span> Session</h3>
+<div class="outline-text-3" id="text-3-5">
+</div><div id="outline-container-sec-3-5-1" class="outline-4">
+<h4 id="sec-3-5-1"><span class="section-number-4">3.5.1</span> Definition</h4>
+<div class="outline-text-4" id="text-3-5-1">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Session</span>(<span style="font-weight: bold;">object</span>):
+    <span style="font-weight: bold; font-style: italic;">user</span> = <span style="font-weight: bold; text-decoration: underline;">None</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3-5-2" class="outline-4">
+<h4 id="sec-3-5-2"><span class="section-number-4">3.5.2</span> Constructor</h4>
+<div class="outline-text-4" id="text-3-5-2">
+</div><div id="outline-container-sec-3-5-2-1" class="outline-5">
+<h5 id="sec-3-5-2-1"><span class="section-number-5">3.5.2.1</span> Implementation</h5>
+<div class="outline-text-5" id="text-3-5-2-1">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__init__</span>(<span style="font-weight: bold;">self</span>, **kwargs):
+        <span style="font-weight: bold;">if</span> <span style="font-style: italic;">'user'</span> <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">in</span> kwargs:
+            <span style="font-weight: bold;">raise</span> AttributeRequired(<span style="font-style: italic;">"user is mandatory"</span>)
+        <span style="font-weight: bold;">else</span>:
+            <span style="font-weight: bold;">self</span>._set_user(kwargs[<span style="font-style: italic;">'user'</span>])
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3-5-3" class="outline-4">
+<h4 id="sec-3-5-3"><span class="section-number-4">3.5.3</span> Test constructor</h4>
+<div class="outline-text-4" id="text-3-5-3">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">TestSession</span>(TestCase):
+    <span style="font-weight: bold; font-style: italic;">TESTING</span> = <span style="font-weight: bold; text-decoration: underline;">True</span>
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">create_app</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold; font-style: italic;">app</span> = create_app(config)
+        <span style="font-weight: bold;">return</span> app
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">setUp</span>(<span style="font-weight: bold;">self</span>):
+        db.create_all()
+        setUp()
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">tearDown</span>(<span style="font-weight: bold;">self</span>):
+        tearDown()
+        
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_session_creation</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_session_creation"</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system = setUp()</span>
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name=<span style="font-style: italic;">"Robin Smith"</span>, 
+                    email=<span style="font-style: italic;">"smith@gmail.com"</span>,
+                    role=Role.get_by_id(1))
+        <span style="font-weight: bold; font-style: italic;">session</span> = Session(user=user)
+        <span style="font-weight: bold;">self</span>.assertEqual(session.user.role, Role.get_by_id(1))
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">tearDown(system)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3-5-4" class="outline-4">
+<h4 id="sec-3-5-4"><span class="section-number-4">3.5.4</span> Operations</h4>
+<div class="outline-text-4" id="text-3-5-4">
+</div><div id="outline-container-sec-3-5-4-1" class="outline-5">
+<h5 id="sec-3-5-4-1"><span class="section-number-5">3.5.4.1</span> getUser</h5>
+<div class="outline-text-5" id="text-3-5-4-1">
+</div><ol class="org-ol"><li><a id="sec-3-5-4-1-1" name="sec-3-5-4-1-1"></a>Implementation<br  /><div class="outline-text-6" id="text-3-5-4-1-1">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">get_user</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span>.user
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="sec-3-5-4-1-2" name="sec-3-5-4-1-2"></a>Test case<br  /><div class="outline-text-6" id="text-3-5-4-1-2">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_get_user</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system = setUp()</span>
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_get_user"</span>
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name = <span style="font-style: italic;">"def"</span>, email = <span style="font-style: italic;">"def@gmail.com"</span>, role = Role.get_by_id(1))
+        <span style="font-weight: bold; font-style: italic;">session</span> = Session(user = user)
+        <span style="font-weight: bold; font-style: italic;">new_user</span> = session.get_user()
+        <span style="font-weight: bold;">self</span>.assertEquals(new_user, user)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">tearDown(system)</span>
+</pre>
+</div>
+</div>
+</li></ol>
+</div>
+
+<div id="outline-container-sec-3-5-4-2" class="outline-5">
+<h5 id="sec-3-5-4-2"><span class="section-number-5">3.5.4.2</span> _set_user</h5>
+<div class="outline-text-5" id="text-3-5-4-2">
+</div><ol class="org-ol"><li><a id="sec-3-5-4-2-1" name="sec-3-5-4-2-1"></a>Implementation<br  /><div class="outline-text-6" id="text-3-5-4-2-1">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">_set_user</span>(<span style="font-weight: bold;">self</span>, user):
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">isinstance</span>(user, User):
+            <span style="font-weight: bold;">raise</span> <span style="font-weight: bold; text-decoration: underline;">TypeError</span>(<span style="font-style: italic;">'`user` argument should be of type User.'</span>)
+        <span style="font-weight: bold;">else</span>:
+            <span style="font-weight: bold;">self</span>.user = user
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="sec-3-5-4-2-2" name="sec-3-5-4-2-2"></a>Test<br  /><div class="outline-text-6" id="text-3-5-4-2-2">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_set_user</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system = setUp()</span>
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_set_user"</span>
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name = <span style="font-style: italic;">"def"</span>, email = <span style="font-style: italic;">"def@gmail.com"</span>, role = Role.get_by_id(2))
+        <span style="font-weight: bold; font-style: italic;">session</span> = Session(user = user)
+        session._set_user(user)
+        <span style="font-weight: bold;">self</span>.assertEquals(session.user, user)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">tearDown(system)</span>
+</pre>
+</div>
+</div>
+</li></ol>
+</div>
+
+<div id="outline-container-sec-3-5-4-3" class="outline-5">
+<h5 id="sec-3-5-4-3"><span class="section-number-5">3.5.4.3</span> toClient</h5>
+<div class="outline-text-5" id="text-3-5-4-3">
+</div><ol class="org-ol"><li><a id="sec-3-5-4-3-1" name="sec-3-5-4-3-1"></a>Implementation<br  /><div class="outline-text-6" id="text-3-5-4-3-1">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">to_client</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">return</span> {
+            <span style="font-style: italic;">'session'</span>: <span style="font-weight: bold;">self</span>.user.to_client()
+        }
+</pre>
+</div>
+</div>
+</li></ol>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-3-6" class="outline-3">
+<h3 id="sec-3-6"><span class="section-number-3">3.6</span> System</h3>
+<div class="outline-text-3" id="text-3-6">
+</div><div id="outline-container-sec-3-6-1" class="outline-4">
+<h4 id="sec-3-6-1"><span class="section-number-4">3.6.1</span> Definition</h4>
+<div class="outline-text-4" id="text-3-6-1">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">System</span>(<span style="font-weight: bold;">object</span>):
+
+    <span style="font-weight: bold; font-style: italic;">user_set</span> = []
+    <span style="font-weight: bold; font-style: italic;">session_set</span> = []
+    <span style="font-weight: bold; font-style: italic;">created</span> = <span style="font-weight: bold; text-decoration: underline;">False</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3-6-2" class="outline-4">
+<h4 id="sec-3-6-2"><span class="section-number-4">3.6.2</span> Constructor</h4>
+<div class="outline-text-4" id="text-3-6-2">
+</div><div id="outline-container-sec-3-6-2-1" class="outline-5">
+<h5 id="sec-3-6-2-1"><span class="section-number-5">3.6.2.1</span> Implementation</h5>
+<div class="outline-text-5" id="text-3-6-2-1">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__init__</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">if</span> System.created == <span style="font-weight: bold; text-decoration: underline;">True</span>:
+            <span style="font-weight: bold;">raise</span> ConstraintError(<span style="font-style: italic;">"System has already been created"</span>)
+        <span style="font-weight: bold;">else</span>:
+            <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">a_role = Role("admin")</span>
+            <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">u_role = Role("user")</span>
+            <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">a_role.save()</span>
+            <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">u_role.save()</span>
+            <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">admin_user = User(name="abc", </span>
+            <span style="font-weight: bold; font-style: italic;">#              </span><span style="font-weight: bold; font-style: italic;">email="abc@vlabs.ac.in", </span>
+            <span style="font-weight: bold; font-style: italic;">#              </span><span style="font-weight: bold; font-style: italic;">role=Role.get_by_id(1))</span>
+            <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">admin_user.save()       </span>
+
+            <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">s = Session(user = admin_user)</span>
+            <span style="font-weight: bold; font-style: italic;">System.created</span> = <span style="font-weight: bold; text-decoration: underline;">True</span>
+            <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">self.session_set.append(s)</span>
+            <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">admin_user.save()</span>
+            <span style="font-weight: bold;">self</span>.session_set = []
+            <span style="font-weight: bold;">self</span>.user_set = []
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3-6-2-2" class="outline-5">
+<h5 id="sec-3-6-2-2"><span class="section-number-5">3.6.2.2</span> Test Constructor</h5>
+<div class="outline-text-5" id="text-3-6-2-2">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">TestSystem</span>(TestCase):
+    <span style="font-weight: bold; font-style: italic;">TESTING</span> = <span style="font-weight: bold; text-decoration: underline;">True</span>
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">create_app</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold; font-style: italic;">app</span> = create_app(config)
+        <span style="font-weight: bold;">return</span> app
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">setUp</span>(<span style="font-weight: bold;">self</span>):
+        db.create_all()
+        setUp()
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">tearDown</span>(<span style="font-weight: bold;">self</span>):
+        db.session.remove()
+        db.drop_all()
+        tearDown()
+    
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_system_creation</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_system_creation"</span>
+        <span style="font-weight: bold;">global</span> system
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system = System()</span>
+        
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">admin_user = User(name="abc", </span>
+        <span style="font-weight: bold; font-style: italic;">#                  </span><span style="font-weight: bold; font-style: italic;">email="abc@vlabs.ac.in", </span>
+        <span style="font-weight: bold; font-style: italic;">#                  </span><span style="font-weight: bold; font-style: italic;">role=Role.get_by_id(1))</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">admin_user.save()</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">print " *************TEST****************"</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">print system</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">print " *************TEST****************"</span>
+        <span style="font-weight: bold; font-style: italic;">new_users</span> = system.user_set
+        <span style="font-weight: bold; font-style: italic;">new_user</span> = new_users[0]
+        <span style="font-weight: bold;">self</span>.assertEquals(new_user.email, <span style="font-style: italic;">"app-admin@vlabs.ac.in"</span>)
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3-6-3" class="outline-4">
+<h4 id="sec-3-6-3"><span class="section-number-4">3.6.3</span> Operations</h4>
+<div class="outline-text-4" id="text-3-6-3">
+</div><div id="outline-container-sec-3-6-3-1" class="outline-5">
+<h5 id="sec-3-6-3-1"><span class="section-number-5">3.6.3.1</span> add_user</h5>
+<div class="outline-text-5" id="text-3-6-3-1">
+</div><ol class="org-ol"><li><a id="sec-3-6-3-1-1" name="sec-3-6-3-1-1"></a>Implementation<br  /><div class="outline-text-6" id="text-3-6-3-1-1">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">add_user</span>(<span style="font-weight: bold;">self</span>, user,session):
+        <span style="font-weight: bold;">if</span> session <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">self</span>.session_set:
+            <span style="font-weight: bold;">if</span> session.user.role == Role.get_by_id(1):
+                user.save()
+                <span style="font-weight: bold;">self</span>.user_set = User.get_all()
+            <span style="font-weight: bold;">else</span>:
+                <span style="font-weight: bold;">raise</span> NotAuthorizedError(<span style="font-style: italic;">"Only admin can add"</span>)
+        <span style="font-weight: bold;">else</span>:
+            <span style="font-weight: bold;">raise</span> ConstraintError(<span style="font-style: italic;">"Invalid Session"</span>)
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="sec-3-6-3-1-2" name="sec-3-6-3-1-2"></a>Test<br  /><div class="outline-text-6" id="text-3-6-3-1-2">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_add_user_session_admin</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">global</span> system
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system = setUp()</span>
+        
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_add_user_by_admin"</span>
+        <span style="font-weight: bold; font-style: italic;">old_user_set_length</span> =<span style="font-weight: bold;">len</span>( system.user_set)
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name = <span style="font-style: italic;">"abcdef"</span>, email = <span style="font-style: italic;">"abcdef@gmail.com"</span>, role = Role.get_by_id(2))
+        <span style="font-weight: bold; font-style: italic;">admin_users</span> = <span style="font-weight: bold;">filter</span>(<span style="font-weight: bold;">lambda</span> x: x.role == Role.get_by_id(1), system.user_set)
+        <span style="font-weight: bold; font-style: italic;">admin_user</span> = admin_users[0]
+        <span style="font-weight: bold; font-style: italic;">admin_session</span> = Session(user = admin_user)
+        system.session_set.append(admin_session)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">global system</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">user.save()</span>
+        <span style="font-weight: bold; font-style: italic;">system.user_set</span> = User.get_all()
+        system.add_user(user, admin_session)
+        <span style="font-weight: bold; font-style: italic;">new_user_set_length</span> = <span style="font-weight: bold;">len</span>(system.user_set)
+        <span style="font-weight: bold;">self</span>.assertEquals( new_user_set_length, old_user_set_length + 1)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">tearDown(system)</span>
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_add_user_session_user</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">global</span> system
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system = setUp()</span>
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_add_user_by_user"</span>
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name = <span style="font-style: italic;">"abcdef"</span>, email = <span style="font-style: italic;">"abcdef@gmail.com"</span>, role = Role.get_by_id(2))
+        <span style="font-weight: bold; font-style: italic;">user1</span> = User(name = <span style="font-style: italic;">"asdfg"</span>, email = <span style="font-style: italic;">"asdf@gmail.com"</span>, role = Role.get_by_id(2))
+        <span style="font-weight: bold; font-style: italic;">admin_users</span> = <span style="font-weight: bold;">filter</span>(<span style="font-weight: bold;">lambda</span> x: x.role == Role.get_by_id(1), system.user_set)
+        <span style="font-weight: bold; font-style: italic;">admin_user</span> = admin_users[0]
+        <span style="font-weight: bold; font-style: italic;">admin_session</span> = Session(user = admin_user)
+        system.session_set.append(admin_session)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">user1.save()</span>
+        system.add_user(user1, admin_session)
+        system.login(user1)
+        <span style="font-weight: bold; font-style: italic;">user_list</span> = <span style="font-weight: bold;">filter</span>(<span style="font-weight: bold;">lambda</span> x: x.email == user.email,
+        system.user_set)
+        <span style="font-weight: bold; font-style: italic;">user_check</span> = user_list[0]
+        <span style="font-weight: bold; font-style: italic;">user_session</span> = Session(user = user_check)
+        system.session_set.append(user_session)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">global system</span>
+        <span style="font-weight: bold;">with</span> <span style="font-weight: bold;">self</span>.assertRaises(NotAuthorizedError):
+            system.add_user(user, user_session)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">tearDown(system)</span>
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_add_user_session_invalid</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">global</span> system
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system = setUp()</span>
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_add_user_session_invalid"</span>
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name = <span style="font-style: italic;">"abcdef"</span>, email = <span style="font-style: italic;">"abcdef@gmail.com"</span>, role = Role.get_by_id(2))
+        <span style="font-weight: bold; font-style: italic;">user1</span> = User(name = <span style="font-style: italic;">"asdfg"</span>, email = <span style="font-style: italic;">"asdf@gmail.com"</span>, role = Role.get_by_id(1))
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">admin_session_list = filter(lambda x: x.user.role == Role.admin, system.session_set)</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">admin_session = admin_session_list[0]</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system.add_user(user, admin_session)</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system.login(user)</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">user_session_list = filter(lambda x: x.user.role == Role.user, system.session_set)</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">user_session = user_session_list[0]</span>
+        <span style="font-weight: bold; font-style: italic;">session</span> = Session(user = user1)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">global system</span>
+        <span style="font-weight: bold;">with</span> <span style="font-weight: bold;">self</span>.assertRaises(ConstraintError):
+            system.add_user(user, session)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">tearDown(system)</span>
+</pre>
+</div>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system = None</span>
+</pre>
+</div>
+</div>
+</li></ol>
+</div>
+
+<div id="outline-container-sec-3-6-3-2" class="outline-5">
+<h5 id="sec-3-6-3-2"><span class="section-number-5">3.6.3.2</span> del_user</h5>
+<div class="outline-text-5" id="text-3-6-3-2">
+</div><ol class="org-ol"><li><a id="sec-3-6-3-2-1" name="sec-3-6-3-2-1"></a>Implementation<br  /><div class="outline-text-6" id="text-3-6-3-2-1">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">del_user</span>(<span style="font-weight: bold;">self</span>, user, session):
+        <span style="font-weight: bold;">print</span> session.user.email
+        <span style="font-weight: bold;">if</span> session <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">self</span>.session_set:
+            <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> session.user.role.name == <span style="font-style: italic;">"admin"</span>:
+                <span style="font-weight: bold;">raise</span> NotAuthorizedError(<span style="font-style: italic;">"Only admin can remove users"</span>)
+            <span style="font-weight: bold;">else</span>:
+                <span style="font-weight: bold; font-style: italic;">check</span> = <span style="font-weight: bold; text-decoration: underline;">False</span>
+                <span style="font-weight: bold;">for</span> x <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">self</span>.session_set:
+                    <span style="font-weight: bold;">if</span> x.user.email == user.email:
+                        <span style="font-weight: bold; font-style: italic;">check</span> = <span style="font-weight: bold; text-decoration: underline;">True</span>
+                <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> check:
+                    <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">new_users = filter(lambda x: x.email ==  user.email, self.user_set)</span>
+                    user.delete()
+                    <span style="font-weight: bold;">self</span>.user_set = User.get_all()
+                <span style="font-weight: bold;">else</span>:
+                    <span style="font-weight: bold;">raise</span> ConstraintError(<span style="font-style: italic;">"User is still logged in"</span>)
+        <span style="font-weight: bold;">else</span>:
+            <span style="font-weight: bold;">raise</span> ConstraintError(<span style="font-style: italic;">"Invalid session!!!"</span>)
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="sec-3-6-3-2-2" name="sec-3-6-3-2-2"></a>Test<br  /><div class="outline-text-6" id="text-3-6-3-2-2">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_delete_user_session_admin</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">global</span> system
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system = setUp()</span>
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_delete_user_by_admin"</span>
+        <span style="font-weight: bold; font-style: italic;">old_user_set_length</span> =<span style="font-weight: bold;">len</span>( system.user_set)
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name = <span style="font-style: italic;">"abcdef"</span>, email = <span style="font-style: italic;">"abcdef@gmail.com"</span>, role = Role.get_by_id(2))
+        <span style="font-weight: bold; font-style: italic;">admin_users</span> = <span style="font-weight: bold;">filter</span>(<span style="font-weight: bold;">lambda</span> x: x.role == Role.get_by_id(1), system.user_set)
+        <span style="font-weight: bold; font-style: italic;">admin_user</span> = admin_users[0]
+        <span style="font-weight: bold; font-style: italic;">admin_session</span> = Session(user = admin_user)
+        system.session_set.append(admin_session)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">global system</span>
+        system.add_user(user, admin_session)
+        system.del_user(user, admin_session)
+        <span style="font-weight: bold; font-style: italic;">new_user_set_length</span> = <span style="font-weight: bold;">len</span>(system.user_set)
+        <span style="font-weight: bold;">self</span>.assertEquals( new_user_set_length, old_user_set_length )
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">tearDown(system)</span>
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_delete_user_session_user</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">global</span> system
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system = setUp()</span>
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_add_user_by_user"</span>
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name = <span style="font-style: italic;">"abcdef"</span>, email = <span style="font-style: italic;">"abcdef@gmail.com"</span>, role = Role.get_by_id(2))
+        <span style="font-weight: bold; font-style: italic;">user1</span> = User(name = <span style="font-style: italic;">"asdfg"</span>, email = <span style="font-style: italic;">"asdf@gmail.com"</span>, role = Role.get_by_id(2))
+        <span style="font-weight: bold; font-style: italic;">admin_users</span> = <span style="font-weight: bold;">filter</span>(<span style="font-weight: bold;">lambda</span> x: x.role == Role.get_by_id(1), system.user_set)
+        <span style="font-weight: bold; font-style: italic;">admin_user</span> = admin_users[0]
+        <span style="font-weight: bold; font-style: italic;">admin_session</span> = Session(user = admin_user)
+        system.session_set.append(admin_session)
+        system.add_user(user1, admin_session)
+        system.login(user1)
+        system.add_user(user, admin_session)
+        <span style="font-weight: bold; font-style: italic;">user_list</span> = <span style="font-weight: bold;">filter</span>(<span style="font-weight: bold;">lambda</span> x: x.email == user.email,
+        system.user_set)
+        <span style="font-weight: bold; font-style: italic;">user_check</span> = user_list[0]
+        <span style="font-weight: bold; font-style: italic;">user_session</span> = Session(user = user_check)
+        system.session_set.append(user_session)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">global system</span>
+        <span style="font-weight: bold;">with</span> <span style="font-weight: bold;">self</span>.assertRaises(NotAuthorizedError):
+            system.del_user(user, user_session)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">tearDown(system)</span>
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_delete_user_session_logged_in</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">global</span> system
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system = setUp()</span>
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_delete_user_session_logged_in"</span>
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name = <span style="font-style: italic;">"abcdef"</span>, email = <span style="font-style: italic;">"abcdef@gmail.com"</span>, role = Role.get_by_id(2))
+        <span style="font-weight: bold; font-style: italic;">user1</span> = User(name = <span style="font-style: italic;">"asdfg"</span>, email = <span style="font-style: italic;">"asdf@gmail.com"</span>, role = Role.get_by_id(1))
+        <span style="font-weight: bold; font-style: italic;">admin_users</span> = <span style="font-weight: bold;">filter</span>(<span style="font-weight: bold;">lambda</span> x: x.role == Role.get_by_id(1), system.user_set)
+        <span style="font-weight: bold; font-style: italic;">admin_user</span> = admin_users[0]
+        <span style="font-weight: bold; font-style: italic;">admin_session</span> = Session(user = admin_user)
+        system.session_set.append(admin_session)
+        system.add_user(user, admin_session)
+        system.login(user)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system.add_user(user1, admin_session)</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">user_session_list = filter(lambda x: x.user.role == Role.user, system.session_set)</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">user_session = user_session_list[0]</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">session = Session(user = user1)</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">global system</span>
+        <span style="font-weight: bold;">with</span> <span style="font-weight: bold;">self</span>.assertRaises(ConstraintError):
+            system.del_user(user, admin_session)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">tearDown(system)</span>
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_delete_user_session_invalid</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">global</span> system
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system = setUp()</span>
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_delete_user_session_invalid"</span>
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name = <span style="font-style: italic;">"abcdef"</span>, email = <span style="font-style: italic;">"abcdef@gmail.com"</span>, role = Role.get_by_id(2))
+        <span style="font-weight: bold; font-style: italic;">user1</span> = User(name = <span style="font-style: italic;">"asdfg"</span>, email = <span style="font-style: italic;">"asdf@gmail.com"</span>, role = Role.get_by_id(1))
+        <span style="font-weight: bold; font-style: italic;">admin_users</span> = <span style="font-weight: bold;">filter</span>(<span style="font-weight: bold;">lambda</span> x: x.role == Role.get_by_id(1), system.user_set)
+        <span style="font-weight: bold; font-style: italic;">admin_user</span> = admin_users[0]
+        <span style="font-weight: bold; font-style: italic;">admin_session</span> = Session(user = admin_user)
+        system.session_set.append(admin_session)
+        system.add_user(user, admin_session)
+        system.login(user)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system.add_user(user1, admin_session)</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">user_session_list = filter(lambda x: x.user.role == Role.user, system.session_set)</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">user_session = user_session_list[0]</span>
+        <span style="font-weight: bold; font-style: italic;">session</span> = Session(user = user1)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">global system</span>
+        <span style="font-weight: bold;">with</span> <span style="font-weight: bold;">self</span>.assertRaises(ConstraintError):
+            system.add_user(user, session)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">tearDown(system)</span>
+</pre>
+</div>
+</div>
+</li></ol>
+</div>
+
+<div id="outline-container-sec-3-6-3-3" class="outline-5">
+<h5 id="sec-3-6-3-3"><span class="section-number-5">3.6.3.3</span> show_users</h5>
+<div class="outline-text-5" id="text-3-6-3-3">
+</div><ol class="org-ol"><li><a id="sec-3-6-3-3-1" name="sec-3-6-3-3-1"></a>Implementation<br  /><div class="outline-text-6" id="text-3-6-3-3-1">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">show_users</span>(<span style="font-weight: bold;">self</span>,session):
+        <span style="font-weight: bold;">if</span> session <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">self</span>.session_set:
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span>.user_set
+        <span style="font-weight: bold;">else</span>:
+            <span style="font-weight: bold;">raise</span> ConstraintError(<span style="font-style: italic;">"Not a valid session"</span>)
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="sec-3-6-3-3-2" name="sec-3-6-3-3-2"></a>Test<br  /><div class="outline-text-6" id="text-3-6-3-3-2">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_show_users_valid</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_show_users_valid"</span>
+        <span style="font-weight: bold;">global</span> system
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system = setUp()</span>
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name = <span style="font-style: italic;">"abcdef"</span>, email = <span style="font-style: italic;">"abcdef@gmail.com"</span>, role = Role.get_by_id(2))
+        <span style="font-weight: bold; font-style: italic;">admin_users</span> = <span style="font-weight: bold;">filter</span>(<span style="font-weight: bold;">lambda</span> x: x.role == Role.get_by_id(1), system.user_set)
+        <span style="font-weight: bold; font-style: italic;">admin_user</span> = admin_users[0]
+        <span style="font-weight: bold; font-style: italic;">admin_session</span> = Session(user = admin_user)
+        system.session_set.append(admin_session)
+        system.add_user(user,admin_session)
+        system.login(user)
+        <span style="font-weight: bold; font-style: italic;">current_session</span> = system.session_set[0]
+        
+        <span style="font-weight: bold; font-style: italic;">check_user_set</span> = system.show_users(current_session)
+        <span style="font-weight: bold;">self</span>.assertEquals(check_user_set, system.user_set)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">tearDown(system)</span>
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_show_users_invalid</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_show_users_invalid"</span>
+        <span style="font-weight: bold;">global</span> system
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system = setUp()</span>
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name = <span style="font-style: italic;">"abcdef"</span>, email = <span style="font-style: italic;">"abcdef@gmail.com"</span>, role = Role.get_by_id(2))
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">admin_sessions_list = filter(lambda x: x.user.role == Role.admin, system.session_set)</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">admin_session = admin_sessions_list[0]</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system.add_user(user,admin_session)</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system.login(user)</span>
+        <span style="font-weight: bold; font-style: italic;">current_session</span> = Session(user = user)
+        
+        <span style="font-weight: bold;">with</span> <span style="font-weight: bold;">self</span>.assertRaises(ConstraintError):
+            system.show_users(current_session)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">tearDown(system)</span>
+</pre>
+</div>
+</div>
+</li></ol>
+</div>
+
+<div id="outline-container-sec-3-6-3-4" class="outline-5">
+<h5 id="sec-3-6-3-4"><span class="section-number-5">3.6.3.4</span> get_users_from_database</h5>
+<div class="outline-text-5" id="text-3-6-3-4">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">get_users_from_database</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">self</span>.user_set = User.get_all()
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-3-6-3-5" class="outline-5">
+<h5 id="sec-3-6-3-5"><span class="section-number-5">3.6.3.5</span> get_user_by_email</h5>
+<div class="outline-text-5" id="text-3-6-3-5">
+</div><ol class="org-ol"><li><a id="sec-3-6-3-5-1" name="sec-3-6-3-5-1"></a>Implementation<br  /><div class="outline-text-6" id="text-3-6-3-5-1">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">get_user_by_email</span>(<span style="font-weight: bold;">self</span>, email, session):
+        <span style="font-weight: bold; font-style: italic;">user_check</span> = <span style="font-weight: bold;">filter</span>(<span style="font-weight: bold;">lambda</span> x: x.email == email, <span style="font-weight: bold;">self</span>.user_set)
+        <span style="font-weight: bold;">if</span> session <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">self</span>.session_set:
+            <span style="font-weight: bold;">if</span> user_check:
+                <span style="font-weight: bold;">return</span> user_check[0]
+            <span style="font-weight: bold;">else</span>:
+                <span style="font-weight: bold;">raise</span> ConstraintError(<span style="font-style: italic;">"Invalid session"</span>)
+        <span style="font-weight: bold;">else</span>:
+            <span style="font-weight: bold;">raise</span> ConstraintError(<span style="font-style: italic;">"No user by this email"</span>)
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="sec-3-6-3-5-2" name="sec-3-6-3-5-2"></a>Test<br  /><div class="outline-text-6" id="text-3-6-3-5-2">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_get_user_by_email_existing</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_get_user_by_email_existing"</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system = setUp()</span>
+        <span style="font-weight: bold;">global</span> system
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name = <span style="font-style: italic;">"abcdef"</span>, email = <span style="font-style: italic;">"abcdef@gmail.com"</span>, role = Role.get_by_id(2))
+        <span style="font-weight: bold; font-style: italic;">admin_users</span> = <span style="font-weight: bold;">filter</span>(<span style="font-weight: bold;">lambda</span> x: x.role == Role.get_by_id(1), system.user_set)
+        <span style="font-weight: bold; font-style: italic;">admin_user</span> = admin_users[0]
+        <span style="font-weight: bold; font-style: italic;">admin_session</span> = Session(user = admin_user)
+        system.session_set.append(admin_session)
+        system.add_user(user, admin_session)
+        
+        <span style="font-weight: bold; font-style: italic;">user_check</span> = system.get_user_by_email(<span style="font-style: italic;">"abcdef@gmail.com"</span>,admin_session)
+        <span style="font-weight: bold;">self</span>.assertEquals( user_check , user)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">tearDown(system)</span>
+    
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_get_user_by_email_non_existent</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_get_user_by_email_non_existent"</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system = setUp()</span>
+        <span style="font-weight: bold;">global</span> system
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name = <span style="font-style: italic;">"ancd"</span>, email = <span style="font-style: italic;">"ancd@gmail.com"</span>, role = Role.get_by_id(2))
+        <span style="font-weight: bold; font-style: italic;">admin_users</span> = <span style="font-weight: bold;">filter</span>(<span style="font-weight: bold;">lambda</span> x: x.role == Role.get_by_id(1), system.user_set)
+        <span style="font-weight: bold; font-style: italic;">admin_user</span> = admin_users[0]
+        <span style="font-weight: bold; font-style: italic;">admin_session</span> = Session(user = admin_user)
+        system.session_set.append(admin_session)
+        system.add_user(user, admin_session)
+        system.login(user)
+        <span style="font-weight: bold;">with</span> <span style="font-weight: bold;">self</span>.assertRaises(ConstraintError):
+            <span style="font-weight: bold; font-style: italic;">email_check</span> = system.get_user_by_email(<span style="font-style: italic;">"abcbdbejf@gmail.com"</span>,admin_session)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">tearDown(system)</span>
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_get_user_by_email_invalid_session</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_get_user_by_email_invalid_session"</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system = setUp()</span>
+        <span style="font-weight: bold;">global</span> system
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name = <span style="font-style: italic;">"abcd"</span>, email = <span style="font-style: italic;">"abcd@gmail.com"</span>, role = Role.get_by_id(2))
+        <span style="font-weight: bold; font-style: italic;">admin_users</span> = <span style="font-weight: bold;">filter</span>(<span style="font-weight: bold;">lambda</span> x: x.role == Role.get_by_id(1), system.user_set)
+        <span style="font-weight: bold; font-style: italic;">admin_user</span> = admin_users[0]
+        <span style="font-weight: bold; font-style: italic;">admin_session</span> = Session(user = admin_user)
+        system.session_set.append(admin_session)
+        system.add_user(user, admin_session)
+        <span style="font-weight: bold; font-style: italic;">session</span> = Session(user = user)
+        
+        <span style="font-weight: bold;">with</span> <span style="font-weight: bold;">self</span>.assertRaises(ConstraintError):
+            <span style="font-weight: bold; font-style: italic;">email_check</span> = system.get_user_by_email(<span style="font-style: italic;">"abcdf@gmail.com"</span>,session)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">tearDown(system)</span>
+</pre>
+</div>
+</div>
+</li></ol>
+</div>
+
+<div id="outline-container-sec-3-6-3-6" class="outline-5">
+<h5 id="sec-3-6-3-6"><span class="section-number-5">3.6.3.6</span> make_user</h5>
+<div class="outline-text-5" id="text-3-6-3-6">
+</div><ol class="org-ol"><li><a id="sec-3-6-3-6-1" name="sec-3-6-3-6-1"></a>Implementation<br  /><div class="outline-text-6" id="text-3-6-3-6-1">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">make_user</span>(<span style="font-weight: bold;">self</span>,name,email,role,session):
+        <span style="font-weight: bold;">if</span> session <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">self</span>.session_set:
+            <span style="font-weight: bold;">if</span>(session.user.role==Role.get_by_id(1)):
+                <span style="font-weight: bold; font-style: italic;">user</span>=User(name=name,email=email,role=role)
+                <span style="font-weight: bold;">self</span>.add_user(user,session)  
+            <span style="font-weight: bold;">else</span>:
+                <span style="font-weight: bold;">raise</span> NotAuthorizedError(<span style="font-style: italic;">'only admin can create user'</span>)
+        <span style="font-weight: bold;">else</span>:
+            <span style="font-weight: bold;">raise</span> ConstraintError(<span style="font-style: italic;">"Invalid Session"</span>)
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="sec-3-6-3-6-2" name="sec-3-6-3-6-2"></a>Test<br  /><div class="outline-text-6" id="text-3-6-3-6-2">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_make_user_session_user</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">global</span> system
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system = setUp()</span>
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_make_user_session_user"</span>
+        <span style="font-weight: bold; font-style: italic;">old_users</span>=system.user_set
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name = <span style="font-style: italic;">"abcd"</span>, email = <span style="font-style: italic;">"abcd@gmail.com"</span>, role = Role.get_by_id(2))
+        <span style="font-weight: bold; font-style: italic;">admin_users</span> = <span style="font-weight: bold;">filter</span>(<span style="font-weight: bold;">lambda</span> x: x.role == Role.get_by_id(1), system.user_set)
+        <span style="font-weight: bold; font-style: italic;">admin_user</span> = admin_users[0]
+        <span style="font-weight: bold; font-style: italic;">admin_session</span> = Session(user = admin_user)
+        system.session_set.append(admin_session)
+        system.add_user(user,admin_session)
+        system.login(user)
+        <span style="font-weight: bold; font-style: italic;">user_list</span> = <span style="font-weight: bold;">filter</span>(<span style="font-weight: bold;">lambda</span> x: x.email == user.email,
+        system.user_set)
+        <span style="font-weight: bold; font-style: italic;">user_check</span> = user_list[0]
+        <span style="font-weight: bold; font-style: italic;">user_session</span> = Session(user = user_check)
+        system.session_set.append(user_session)
+        <span style="font-weight: bold;">with</span> <span style="font-weight: bold;">self</span>.assertRaises(NotAuthorizedError):
+            system.make_user(<span style="font-style: italic;">"abc"</span>, <span style="font-style: italic;">"abcd@gmail.com"</span>, user.role, user_session)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">tearDown(system)</span>
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_make_user_session_admin</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">global</span> system
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system = setUp()</span>
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_make_user_session_admin"</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">old_users=system.user_set</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">user = User(name = "abcd", email = "abcd@gmail.com", role = Role.user)</span>
+        <span style="font-weight: bold; font-style: italic;">admin_users</span> = <span style="font-weight: bold;">filter</span>(<span style="font-weight: bold;">lambda</span> x: x.role == Role.get_by_id(1), system.user_set)
+        <span style="font-weight: bold; font-style: italic;">admin_user</span> = admin_users[0]
+        <span style="font-weight: bold; font-style: italic;">admin_session</span> = Session(user = admin_user)
+        system.session_set.append(admin_session)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">session = Session(user = user)</span>
+        <span style="font-weight: bold; font-style: italic;">old_user_set_length</span> = <span style="font-weight: bold;">len</span>(system.user_set)
+        system.make_user(<span style="font-style: italic;">"abc"</span>, <span style="font-style: italic;">"abcd@gmail.com"</span>, admin_session.user.role, admin_session)
+        <span style="font-weight: bold; font-style: italic;">new_user_set_length</span> = <span style="font-weight: bold;">len</span>(system.user_set)
+        <span style="font-weight: bold;">self</span>.assertEquals(old_user_set_length + 1, new_user_set_length)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">tearDown(system)</span>
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_make_user_session_invalid_session</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">global</span> system
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system = setUp()</span>
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_make_user_session_admin"</span>
+        <span style="font-weight: bold; font-style: italic;">old_users</span>=system.user_set
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name = <span style="font-style: italic;">"abcd"</span>, email = <span style="font-style: italic;">"abcd@gmail.com"</span>, role = Role.get_by_id(2))
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">admin_session_list = filter(lambda x: not x.user.role == Role.admin, system.session_set)</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">admin_session = admin_session_list.pop()</span>
+        <span style="font-weight: bold; font-style: italic;">session</span> = Session(user = user)
+        <span style="font-weight: bold;">with</span> <span style="font-weight: bold;">self</span>.assertRaises(ConstraintError):
+            system.make_user(<span style="font-style: italic;">"abc"</span>, <span style="font-style: italic;">"abcd@gmail.com"</span>, Role.get_by_id(1), session)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">tearDown(system)</span>
+</pre>
+</div>
+</div>
+</li></ol>
+</div>
+<div id="outline-container-sec-3-6-3-7" class="outline-5">
+<h5 id="sec-3-6-3-7"><span class="section-number-5">3.6.3.7</span> get_email_of_user</h5>
+<div class="outline-text-5" id="text-3-6-3-7">
+</div><ol class="org-ol"><li><a id="sec-3-6-3-7-1" name="sec-3-6-3-7-1"></a>Implementation<br  /><div class="outline-text-6" id="text-3-6-3-7-1">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">get_email_of_user</span>(<span style="font-weight: bold;">self</span>, user, session):
+        <span style="font-weight: bold;">if</span> session <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">self</span>.session_set:
+            <span style="font-weight: bold;">if</span> user <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">self</span>.user_set:
+                <span style="font-weight: bold;">return</span> user.email  
+            <span style="font-weight: bold;">else</span>:
+                <span style="font-weight: bold;">raise</span> ConstraintError(<span style="font-style: italic;">'User does not exist'</span>)
+        <span style="font-weight: bold;">else</span>:
+            <span style="font-weight: bold;">raise</span> ConstraintError(<span style="font-style: italic;">"Invalid Session"</span>)
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="sec-3-6-3-7-2" name="sec-3-6-3-7-2"></a>Test<br  /><div class="outline-text-6" id="text-3-6-3-7-2">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_get_email_of_user_valid</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system = setUp()</span>
+        <span style="font-weight: bold;">global</span> system
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_get_email_of_user_valid"</span>
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name = <span style="font-style: italic;">"abcdef"</span>, email = <span style="font-style: italic;">"abcdef@gmail.com"</span>, role = Role.get_by_id(2))
+        <span style="font-weight: bold; font-style: italic;">admin_users</span> = <span style="font-weight: bold;">filter</span>(<span style="font-weight: bold;">lambda</span> x: x.role == Role.get_by_id(1), system.user_set)
+        <span style="font-weight: bold; font-style: italic;">admin_user</span> = admin_users[0]
+        <span style="font-weight: bold; font-style: italic;">admin_session</span> = Session(user = admin_user)
+        system.session_set.append(admin_session)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">global system</span>
+        system.add_user(user, admin_session)
+        system.login(user)
+        
+        <span style="font-weight: bold; font-style: italic;">user_check</span> = system.get_email_of_user(user, admin_session)
+        <span style="font-weight: bold;">self</span>.assertEquals( user_check , user.email)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">tearDown(system)</span>
+    
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_get_email_of_user_invalid_user</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system = setUp()</span>
+        <span style="font-weight: bold;">global</span> system
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_get_email_of_user_invalid_user"</span>
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name = <span style="font-style: italic;">"ancd"</span>, email = <span style="font-style: italic;">"ancd@gmail.com"</span>, role = Role.get_by_id(2))
+        <span style="font-weight: bold; font-style: italic;">admin_users</span> = <span style="font-weight: bold;">filter</span>(<span style="font-weight: bold;">lambda</span> x: x.role == Role.get_by_id(1), system.user_set)
+        <span style="font-weight: bold; font-style: italic;">admin_user</span> = admin_users[0]
+        <span style="font-weight: bold; font-style: italic;">admin_session</span> = Session(user = admin_user)
+        system.session_set.append(admin_session)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system.add_user(user, admin_session)</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system.login(user)</span>
+        <span style="font-weight: bold;">with</span> <span style="font-weight: bold;">self</span>.assertRaises(ConstraintError):
+            <span style="font-weight: bold; font-style: italic;">email_check</span> = system.get_email_of_user(user ,admin_session)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">tearDown(system)</span>
+    
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_get_email_of_user_invalid_session</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_get_email_of_user_invalid_session"</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system = setUp()</span>
+        <span style="font-weight: bold;">global</span> system
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name = <span style="font-style: italic;">"abcd"</span>, email = <span style="font-style: italic;">"abcd@gmail.com"</span>, role = Role.get_by_id(2))
+        <span style="font-weight: bold; font-style: italic;">admin_users</span> = <span style="font-weight: bold;">filter</span>(<span style="font-weight: bold;">lambda</span> x: x.role == Role.get_by_id(1), system.user_set)
+        <span style="font-weight: bold; font-style: italic;">admin_user</span> = admin_users[0]
+        <span style="font-weight: bold; font-style: italic;">admin_session</span> = Session(user = admin_user)
+        system.session_set.append(admin_session)
+        system.add_user(user, admin_session)
+        <span style="font-weight: bold; font-style: italic;">session</span> = Session(user = user)
+        
+        <span style="font-weight: bold;">with</span> <span style="font-weight: bold;">self</span>.assertRaises(ConstraintError):
+            <span style="font-weight: bold; font-style: italic;">email_check</span> = system.get_email_of_user(user ,session)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">tearDown(system)</span>
+</pre>
+</div>
+</div>
+</li></ol>
+</div>
+
+<div id="outline-container-sec-3-6-3-8" class="outline-5">
+<h5 id="sec-3-6-3-8"><span class="section-number-5">3.6.3.8</span> get_name_of_user</h5>
+<div class="outline-text-5" id="text-3-6-3-8">
+</div><ol class="org-ol"><li><a id="sec-3-6-3-8-1" name="sec-3-6-3-8-1"></a>Implementation<br  /><div class="outline-text-6" id="text-3-6-3-8-1">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">get_name_of_user</span>(<span style="font-weight: bold;">self</span>, user, session):
+        <span style="font-weight: bold;">if</span> session <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">self</span>.session_set:
+            <span style="font-weight: bold;">if</span> user <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">self</span>.user_set:
+                <span style="font-weight: bold;">return</span> user.name  
+            <span style="font-weight: bold;">else</span>:
+                <span style="font-weight: bold;">raise</span> ConstraintError(<span style="font-style: italic;">'User does not exist'</span>)
+        <span style="font-weight: bold;">else</span>:
+            <span style="font-weight: bold;">raise</span> ConstraintError(<span style="font-style: italic;">"Invalid Session"</span>)
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="sec-3-6-3-8-2" name="sec-3-6-3-8-2"></a>Test<br  /><div class="outline-text-6" id="text-3-6-3-8-2">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_get_name_of_user_valid</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_get_name_of_user_valid"</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system = setUp()</span>
+        <span style="font-weight: bold;">global</span> system
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name = <span style="font-style: italic;">"abcdef"</span>, email = <span style="font-style: italic;">"abcdef@gmail.com"</span>, role = Role.get_by_id(2))
+        <span style="font-weight: bold; font-style: italic;">admin_users</span> = <span style="font-weight: bold;">filter</span>(<span style="font-weight: bold;">lambda</span> x: x.role == Role.get_by_id(1), system.user_set)
+        <span style="font-weight: bold; font-style: italic;">admin_user</span> = admin_users[0]
+        <span style="font-weight: bold; font-style: italic;">admin_session</span> = Session(user = admin_user)
+        system.session_set.append(admin_session)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">global system</span>
+        system.add_user(user, admin_session)
+        system.login(user)
+        
+        <span style="font-weight: bold; font-style: italic;">user_check</span> = system.get_name_of_user(user, admin_session)
+        <span style="font-weight: bold;">self</span>.assertEquals( user_check , user.name)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">tearDown(system)</span>
+    
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_get_name_of_user_invalid_user</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_get_name_of_user_invalid_user"</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system = setUp()</span>
+        <span style="font-weight: bold;">global</span> system
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name = <span style="font-style: italic;">"ancd"</span>, email = <span style="font-style: italic;">"ancd@gmail.com"</span>, role = Role.get_by_id(2))
+        <span style="font-weight: bold; font-style: italic;">admin_users</span> = <span style="font-weight: bold;">filter</span>(<span style="font-weight: bold;">lambda</span> x: x.role == Role.get_by_id(1), system.user_set)
+        <span style="font-weight: bold; font-style: italic;">admin_user</span> = admin_users[0]
+        <span style="font-weight: bold; font-style: italic;">admin_session</span> = Session(user = admin_user)
+        system.session_set.append(admin_session)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system.add_user(user, admin_session)</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system.login(user)</span>
+        <span style="font-weight: bold;">with</span> <span style="font-weight: bold;">self</span>.assertRaises(ConstraintError):
+            <span style="font-weight: bold; font-style: italic;">email_check</span> = system.get_name_of_user(user ,admin_session)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">tearDown(system)</span>
+    
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_get_name_of_user_invalid_session</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_get_name_of_user_invalid_session"</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system = setUp()</span>
+        <span style="font-weight: bold;">global</span> system
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name = <span style="font-style: italic;">"abcd"</span>, email = <span style="font-style: italic;">"abcd@gmail.com"</span>, role = Role.get_by_id(2))
+        <span style="font-weight: bold; font-style: italic;">admin_users</span> = <span style="font-weight: bold;">filter</span>(<span style="font-weight: bold;">lambda</span> x: x.role == Role.get_by_id(1), system.user_set)
+        <span style="font-weight: bold; font-style: italic;">admin_user</span> = admin_users[0]
+        <span style="font-weight: bold; font-style: italic;">admin_session</span> = Session(user = admin_user)
+        system.session_set.append(admin_session)
+        system.add_user(user, admin_session)
+        <span style="font-weight: bold; font-style: italic;">session</span> = Session(user = user)
+        
+        <span style="font-weight: bold;">with</span> <span style="font-weight: bold;">self</span>.assertRaises(ConstraintError):
+            <span style="font-weight: bold; font-style: italic;">email_check</span> = system.get_name_of_user(user ,session)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">tearDown(system)</span>
+</pre>
+</div>
+</div>
+</li></ol>
+</div>
+
+
+<div id="outline-container-sec-3-6-3-9" class="outline-5">
+<h5 id="sec-3-6-3-9"><span class="section-number-5">3.6.3.9</span> set_email_of_user</h5>
+<div class="outline-text-5" id="text-3-6-3-9">
+</div><ol class="org-ol"><li><a id="sec-3-6-3-9-1" name="sec-3-6-3-9-1"></a>Implementation<br  /><div class="outline-text-6" id="text-3-6-3-9-1">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">set_email_of_user</span>(<span style="font-weight: bold;">self</span>, user, email, session):
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">global system</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">print self.session_set</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">for x in self.session_set:</span>
+        <span style="font-weight: bold; font-style: italic;">#    </span><span style="font-weight: bold; font-style: italic;">print x.user.email</span>
+        <span style="font-weight: bold;">if</span> session <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">self</span>.session_set:
+            <span style="font-weight: bold; font-style: italic;">check</span> = <span style="font-weight: bold;">filter</span>(<span style="font-weight: bold;">lambda</span> x: x.email == email, <span style="font-weight: bold;">self</span>.user_set)
+            <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> check:
+                <span style="font-weight: bold;">if</span> user <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">self</span>.user_set:
+                    <span style="font-weight: bold;">if</span> session.user.role.name == <span style="font-style: italic;">"admin"</span>:
+                        user.set_email(email)
+                        user.update()
+                        <span style="font-weight: bold;">self</span>.user_set = User.get_all()
+                    <span style="font-weight: bold;">elif</span> session.user.email == user.email:
+                        user.set_email(email)
+                        user.update()
+                        <span style="font-weight: bold;">self</span>.user_set = User.get_all()
+                    <span style="font-weight: bold;">else</span>:
+                        <span style="font-weight: bold;">raise</span> NotAuthorizedError(<span style="font-style: italic;">"You don't have permission to change the email"</span>)
+                <span style="font-weight: bold;">else</span>:
+                    <span style="font-weight: bold;">raise</span> ConstraintError(<span style="font-style: italic;">'User does not exist'</span>)
+            <span style="font-weight: bold;">else</span>:
+                <span style="font-weight: bold;">raise</span> ConstraintError(<span style="font-style: italic;">"Email already exists"</span>)
+        <span style="font-weight: bold;">else</span>:
+            <span style="font-weight: bold;">raise</span> ConstraintError(<span style="font-style: italic;">"Invalid Session"</span>)
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="sec-3-6-3-9-2" name="sec-3-6-3-9-2"></a>Test<br  /><div class="outline-text-6" id="text-3-6-3-9-2">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_set_email_of_user_valid_admin</span>(<span style="font-weight: bold;">self</span>):
+       
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_set_email_of_user_valid_admin"</span>
+        <span style="font-weight: bold;">global</span> system
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name = <span style="font-style: italic;">"abcdef"</span>, email = <span style="font-style: italic;">"abcdef@gmail.com"</span>, role = Role.get_by_id(2))
+        <span style="font-weight: bold; font-style: italic;">admin_users</span> = <span style="font-weight: bold;">filter</span>(<span style="font-weight: bold;">lambda</span> x: x.role == Role.get_by_id(1), system.user_set)
+        <span style="font-weight: bold; font-style: italic;">admin_user</span> = admin_users[0]
+        <span style="font-weight: bold; font-style: italic;">admin_session</span> = Session(user = admin_user)
+        system.session_set.append(admin_session)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system.login(admin_user)</span>
+        system.add_user(user, admin_session)
+        system.login(user)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">user_session = Session(user = user)</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system.session_set.append(user_session)</span>
+        system.set_email_of_user(user, <span style="font-style: italic;">"abcdef123@gmail.com"</span>, admin_session)
+        <span style="font-weight: bold; font-style: italic;">user_check</span> = system.get_email_of_user(user, admin_session)
+        <span style="font-weight: bold;">self</span>.assertEquals( user_check , user.email)
+    
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_set_email_of_user_valid_user</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">global</span> system
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system = setUp()</span>
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_set_name_of_user_valid_user"</span>
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name = <span style="font-style: italic;">"ancd"</span>, email = <span style="font-style: italic;">"ancd@gmail.com"</span>, role = Role.get_by_id(2))
+        <span style="font-weight: bold; font-style: italic;">admin_users</span> = <span style="font-weight: bold;">filter</span>(<span style="font-weight: bold;">lambda</span> x: x.role == Role.get_by_id(1), system.user_set)
+        <span style="font-weight: bold; font-style: italic;">admin_user</span> = admin_users[0]
+        <span style="font-weight: bold; font-style: italic;">admin_session</span> = Session(user = admin_user)
+        system.session_set.append(admin_session)
+        system.add_user(user, admin_session)
+        system.login(user)
+        <span style="font-weight: bold; font-style: italic;">user_list</span> = <span style="font-weight: bold;">filter</span>(<span style="font-weight: bold;">lambda</span> x: x.email == user.email,
+        system.user_set)
+        <span style="font-weight: bold; font-style: italic;">user_check</span> = user_list[0]
+        <span style="font-weight: bold; font-style: italic;">user_session</span> = Session(user = user_check)
+        system.session_set.append(user_session)
+        system.set_email_of_user(user, <span style="font-style: italic;">"abcdefghi@gmail.com"</span>, user_session)
+        <span style="font-weight: bold; font-style: italic;">user_check</span> = system.get_email_of_user(user, admin_session)
+        <span style="font-weight: bold;">self</span>.assertEquals(user_check, user.email)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">tearDown(system)       </span>
+    
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_set_email_of_user_invalid_session</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_set_email_of_user_invalid_session"</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system = setUp()</span>
+        <span style="font-weight: bold;">global</span> system
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name = <span style="font-style: italic;">"abcd"</span>, email = <span style="font-style: italic;">"abcd@gmail.com"</span>, role = Role.get_by_id(2))
+        <span style="font-weight: bold; font-style: italic;">admin_users</span> = <span style="font-weight: bold;">filter</span>(<span style="font-weight: bold;">lambda</span> x: x.role == Role.get_by_id(1), system.user_set)
+        <span style="font-weight: bold; font-style: italic;">admin_user</span> = admin_users[0]
+        <span style="font-weight: bold; font-style: italic;">admin_session</span> = Session(user = admin_user)
+        system.session_set.append(admin_session)
+        system.add_user(user, admin_session)
+        <span style="font-weight: bold; font-style: italic;">session</span> = Session(user = user)
+        
+        <span style="font-weight: bold;">with</span> <span style="font-weight: bold;">self</span>.assertRaises(ConstraintError):
+            <span style="font-weight: bold; font-style: italic;">email_check</span> = system.set_email_of_user(user, <span style="font-style: italic;">"abcdef@gmail.com"</span>, session)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">tearDown(system)</span>
+    
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_set_email_of_user_invalid_email</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_set_name_of_user_invalid_email"</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system = setUp()</span>
+        <span style="font-weight: bold;">global</span> system
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name = <span style="font-style: italic;">"abcd"</span>, email = <span style="font-style: italic;">"abcd@gmail.com"</span>, role = Role.get_by_id(2))
+        <span style="font-weight: bold; font-style: italic;">admin_users</span> = <span style="font-weight: bold;">filter</span>(<span style="font-weight: bold;">lambda</span> x: x.role == Role.get_by_id(1), system.user_set)
+        <span style="font-weight: bold; font-style: italic;">admin_user</span> = admin_users[0]
+        <span style="font-weight: bold; font-style: italic;">admin_session</span> = Session(user = admin_user)
+        system.session_set.append(admin_session)
+        system.add_user(user, admin_session)
+        <span style="font-weight: bold; font-style: italic;">session</span> = Session(user = user)
+        
+        <span style="font-weight: bold;">with</span> <span style="font-weight: bold;">self</span>.assertRaises(ConstraintError):
+            <span style="font-weight: bold; font-style: italic;">email_check</span> = system.set_email_of_user(user, <span style="font-style: italic;">"abcd@gmail.com"</span>, admin_session)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">tearDown(system)</span>
+</pre>
+</div>
+</div>
+</li></ol>
+</div>
+
+
+<div id="outline-container-sec-3-6-3-10" class="outline-5">
+<h5 id="sec-3-6-3-10"><span class="section-number-5">3.6.3.10</span> set_name_of_user</h5>
+<div class="outline-text-5" id="text-3-6-3-10">
+</div><ol class="org-ol"><li><a id="sec-3-6-3-10-1" name="sec-3-6-3-10-1"></a>Implementation<br  /><div class="outline-text-6" id="text-3-6-3-10-1">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">set_name_of_user</span>(<span style="font-weight: bold;">self</span>, user, name, session):
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">global system</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">print self.session_set</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">for x in self.session_set:</span>
+        <span style="font-weight: bold; font-style: italic;">#    </span><span style="font-weight: bold; font-style: italic;">print x.user.email</span>
+        <span style="font-weight: bold;">if</span> session <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">self</span>.session_set:
+            <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">check = filter(lambda x: x.email == email, self.user_set)</span>
+            <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">if not check:</span>
+            <span style="font-weight: bold;">if</span> user <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">self</span>.user_set:
+                <span style="font-weight: bold;">if</span> session.user.role.name == <span style="font-style: italic;">"admin"</span>:
+                    user.set_name(name)
+                    user.update()
+                    <span style="font-weight: bold;">self</span>.user_set = User.get_all()
+                <span style="font-weight: bold;">elif</span> session.user.email == user.email:
+                    user.set_name(name)
+                    user.update()
+                    <span style="font-weight: bold;">self</span>.user_set = User.get_all()
+                <span style="font-weight: bold;">else</span>:
+                    <span style="font-weight: bold;">raise</span> NotAuthorizedError(<span style="font-style: italic;">"You don't have permission to change the name"</span>)
+            <span style="font-weight: bold;">else</span>:
+                <span style="font-weight: bold;">raise</span> ConstraintError(<span style="font-style: italic;">'User does not exist'</span>)
+        <span style="font-weight: bold;">else</span>:
+            <span style="font-weight: bold;">raise</span> ConstraintError(<span style="font-style: italic;">"Invalid Session"</span>)
+</pre>
+</div>
+</div>
+</li></ol>
+</div>
+
+
+
+<div id="outline-container-sec-3-6-3-11" class="outline-5">
+<h5 id="sec-3-6-3-11"><span class="section-number-5">3.6.3.11</span> get_role_of_user</h5>
+<div class="outline-text-5" id="text-3-6-3-11">
+</div><ol class="org-ol"><li><a id="sec-3-6-3-11-1" name="sec-3-6-3-11-1"></a>Implementation<br  /><div class="outline-text-6" id="text-3-6-3-11-1">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">get_role_of_user</span>(<span style="font-weight: bold;">self</span>, user, session):
+        <span style="font-weight: bold;">if</span> session <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">self</span>.session_set:
+            <span style="font-weight: bold;">if</span> user <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">self</span>.user_set:
+                <span style="font-weight: bold;">return</span> user.role  
+            <span style="font-weight: bold;">else</span>:
+                <span style="font-weight: bold;">raise</span> ConstraintError(<span style="font-style: italic;">'User does not exist'</span>)
+        <span style="font-weight: bold;">else</span>:
+            <span style="font-weight: bold;">raise</span> ConstraintError(<span style="font-style: italic;">"Invalid Session"</span>)
+</pre>
+</div>
+</div>
+</li>
+
+
+<li><a id="sec-3-6-3-11-2" name="sec-3-6-3-11-2"></a>Test<br  /><div class="outline-text-6" id="text-3-6-3-11-2">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_get_role_of_user_valid</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_get_role_of_user_valid"</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system = setUp()</span>
+        <span style="font-weight: bold;">global</span> system
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name = <span style="font-style: italic;">"abcdef"</span>, email = <span style="font-style: italic;">"abcdef@gmail.com"</span>, role = Role.get_by_id(2))
+        <span style="font-weight: bold; font-style: italic;">admin_users</span> = <span style="font-weight: bold;">filter</span>(<span style="font-weight: bold;">lambda</span> x: x.role == Role.get_by_id(1), system.user_set)
+        <span style="font-weight: bold; font-style: italic;">admin_user</span> = admin_users[0]
+        <span style="font-weight: bold; font-style: italic;">admin_session</span> = Session(user = admin_user)
+        system.session_set.append(admin_session)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">global system</span>
+        system.add_user(user, admin_session)
+        system.login(user)
+        
+        <span style="font-weight: bold; font-style: italic;">user_check</span> = system.get_role_of_user(user, admin_session)
+        <span style="font-weight: bold;">self</span>.assertEquals( user_check , user.role)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">tearDown(system)</span>
+    
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_get_role_of_user_invalid_user</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_get_role_of_user_invalid_user"</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system = setUp()</span>
+        <span style="font-weight: bold;">global</span> system
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name = <span style="font-style: italic;">"ancd"</span>, email = <span style="font-style: italic;">"ancd@gmail.com"</span>, role = Role.get_by_id(2))
+        <span style="font-weight: bold; font-style: italic;">admin_users</span> = <span style="font-weight: bold;">filter</span>(<span style="font-weight: bold;">lambda</span> x: x.role == Role.get_by_id(1), system.user_set)
+        <span style="font-weight: bold; font-style: italic;">admin_user</span> = admin_users[0]
+        <span style="font-weight: bold; font-style: italic;">admin_session</span> = Session(user = admin_user)
+        system.session_set.append(admin_session)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system.add_user(user, admin_session)</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system.login(user)</span>
+        <span style="font-weight: bold;">with</span> <span style="font-weight: bold;">self</span>.assertRaises(ConstraintError):
+            <span style="font-weight: bold; font-style: italic;">email_check</span> = system.get_role_of_user(user ,admin_session)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">tearDown(system)</span>
+    
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_get_role_of_user_invalid_session</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_get_role_of_user_invalid_session"</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system = setUp()</span>
+        <span style="font-weight: bold;">global</span> system
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name = <span style="font-style: italic;">"abcd"</span>, email = <span style="font-style: italic;">"abcd@gmail.com"</span>, role = Role.get_by_id(2))
+        <span style="font-weight: bold; font-style: italic;">admin_users</span> = <span style="font-weight: bold;">filter</span>(<span style="font-weight: bold;">lambda</span> x: x.role == Role.get_by_id(1), system.user_set)
+        <span style="font-weight: bold; font-style: italic;">admin_user</span> = admin_users[0]
+        <span style="font-weight: bold; font-style: italic;">admin_session</span> = Session(user = admin_user)
+        system.session_set.append(admin_session)
+        system.add_user(user, admin_session)
+        <span style="font-weight: bold; font-style: italic;">session</span> = Session(user = user)
+        
+        <span style="font-weight: bold;">with</span> <span style="font-weight: bold;">self</span>.assertRaises(ConstraintError):
+            <span style="font-weight: bold; font-style: italic;">email_check</span> = system.get_role_of_user(user ,session)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">tearDown(system)</span>
+</pre>
+</div>
+</div>
+</li></ol>
+</div>
+
+
+
+
+<div id="outline-container-sec-3-6-3-12" class="outline-5">
+<h5 id="sec-3-6-3-12"><span class="section-number-5">3.6.3.12</span> login</h5>
+<div class="outline-text-5" id="text-3-6-3-12">
+</div><ol class="org-ol"><li><a id="sec-3-6-3-12-1" name="sec-3-6-3-12-1"></a>Implementation<br  /><div class="outline-text-6" id="text-3-6-3-12-1">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">login</span>(<span style="font-weight: bold;">self</span>, user):
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> user <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">self</span>.user_set:
+            <span style="font-weight: bold;">raise</span> ConstraintError(<span style="font-style: italic;">"User not in system"</span>)
+        <span style="font-weight: bold;">else</span>:
+            <span style="font-weight: bold;">self</span>.add_session(user)
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="sec-3-6-3-12-2" name="sec-3-6-3-12-2"></a>Test<br  /><div class="outline-text-6" id="text-3-6-3-12-2">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_login_valid</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_login_valid"</span>
+        <span style="font-weight: bold;">global</span> system
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system = setUp()</span>
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name = <span style="font-style: italic;">"abcdefghi"</span>, email = <span style="font-style: italic;">"abcdefghi@gmail.com"</span>, role =
+        Role.get_by_id(2))
+        <span style="font-weight: bold; font-style: italic;">admin_users</span> = <span style="font-weight: bold;">filter</span>(<span style="font-weight: bold;">lambda</span> x: x.role == Role.get_by_id(1), system.user_set)
+        <span style="font-weight: bold; font-style: italic;">admin_user</span> = admin_users[0]
+        <span style="font-weight: bold; font-style: italic;">admin_session</span> = Session(user = admin_user)
+        system.session_set.append(admin_session)
+        system.add_user(user, admin_session)
+        <span style="font-weight: bold; font-style: italic;">old_session_set_length</span> = <span style="font-weight: bold;">len</span>(system.session_set)
+        system.login(user)
+        <span style="font-weight: bold; font-style: italic;">new_session_set_length</span> = <span style="font-weight: bold;">len</span>(system.session_set)
+        <span style="font-weight: bold;">self</span>.assertEquals(old_session_set_length + 1, new_session_set_length)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">tearDown(system)</span>
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_login_invalid</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_login_invalid"</span>
+        <span style="font-weight: bold;">global</span> system
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system = setUp()</span>
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name = <span style="font-style: italic;">"abcdef"</span>, email = <span style="font-style: italic;">"abcdef@gmail.com"</span>, role =
+        Role.get_by_id(2))
+        <span style="font-weight: bold;">with</span> <span style="font-weight: bold;">self</span>.assertRaises(ConstraintError):
+            system.login(user)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">tearDown(system)</span>
+</pre>
+</div>
+</div>
+</li></ol>
+</div>
+
+
+
+
+<div id="outline-container-sec-3-6-3-13" class="outline-5">
+<h5 id="sec-3-6-3-13"><span class="section-number-5">3.6.3.13</span> logout</h5>
+<div class="outline-text-5" id="text-3-6-3-13">
+</div><ol class="org-ol"><li><a id="sec-3-6-3-13-1" name="sec-3-6-3-13-1"></a>Implementation<br  /><div class="outline-text-6" id="text-3-6-3-13-1">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">logout</span>(<span style="font-weight: bold;">self</span>, user, session):
+        <span style="font-weight: bold;">if</span> session <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">self</span>.session_set:
+            <span style="font-weight: bold;">if</span> user <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">self</span>.user_set:
+                <span style="font-weight: bold;">self</span>.del_session(user, session)
+            <span style="font-weight: bold;">else</span>:
+                <span style="font-weight: bold;">raise</span> ConstraintError(<span style="font-style: italic;">"user not in system"</span>)
+
+        <span style="font-weight: bold;">else</span>:
+            <span style="font-weight: bold;">raise</span> ConstraintError(<span style="font-style: italic;">"Invalid session"</span>)
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="sec-3-6-3-13-2" name="sec-3-6-3-13-2"></a>Test<br  /><div class="outline-text-6" id="text-3-6-3-13-2">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_logout_valid</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_logout_valid"</span>
+        <span style="font-weight: bold;">global</span> system
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system = setUp()</span>
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name = <span style="font-style: italic;">"abcdefghi"</span>, email = <span style="font-style: italic;">"abcdefghi@gmail.com"</span>, role =
+        Role.get_by_id(2))
+        <span style="font-weight: bold; font-style: italic;">admin_users</span> = <span style="font-weight: bold;">filter</span>(<span style="font-weight: bold;">lambda</span> x: x.role == Role.get_by_id(1), system.user_set)
+        <span style="font-weight: bold; font-style: italic;">admin_user</span> = admin_users[0]
+        <span style="font-weight: bold; font-style: italic;">admin_session</span> = Session(user = admin_user)
+        system.session_set.append(admin_session)
+        system.add_user(user, admin_session)
+        <span style="font-weight: bold; font-style: italic;">old_session_set_length</span> = <span style="font-weight: bold;">len</span>(system.session_set)
+        system.login(user)
+        <span style="font-weight: bold; font-style: italic;">user_list</span> = <span style="font-weight: bold;">filter</span>(<span style="font-weight: bold;">lambda</span> x: x.email == user.email,
+        system.user_set)
+        <span style="font-weight: bold; font-style: italic;">user_check</span> = user_list[0]
+        <span style="font-weight: bold; font-style: italic;">user_session</span> = Session(user = user_check)
+        system.session_set.append(user_session)
+        system.logout(user, user_session)
+        <span style="font-weight: bold; font-style: italic;">new_session_set_length</span> = <span style="font-weight: bold;">len</span>(system.session_set)
+        <span style="font-weight: bold;">self</span>.assertEquals(old_session_set_length , new_session_set_length)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">tearDown(system)</span>
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_logout_invalid_user</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_logout_invalid_user"</span>
+        <span style="font-weight: bold;">global</span> system
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system = setUp()</span>
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name = <span style="font-style: italic;">"abcdefghi"</span>, email = <span style="font-style: italic;">"abcdefghi@gmail.com"</span>, role =
+        Role.get_by_id(2))
+        <span style="font-weight: bold; font-style: italic;">admin_users</span> = <span style="font-weight: bold;">filter</span>(<span style="font-weight: bold;">lambda</span> x: x.role == Role.get_by_id(1), system.user_set)
+        <span style="font-weight: bold; font-style: italic;">admin_user</span> = admin_users[0]
+        <span style="font-weight: bold; font-style: italic;">admin_session</span> = Session(user = admin_user)
+        system.session_set.append(admin_session)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system.add_user(user, admin_session)</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">old_session_set_length = len(system.session_set)</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system.login(user)</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">user_session_list = filter(lambda x: x.user.email == user.email,</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system.session_set)</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">user_session = user_session_list[0]</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system.logout(user, user_session)</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">new_session_set_length = len(system.session_set)</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">self.assertEquals(old_session_set_length , new_session_set_length)</span>
+        <span style="font-weight: bold;">with</span> <span style="font-weight: bold;">self</span>.assertRaises(ConstraintError):
+            system.logout(user, admin_session)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">tearDown(system)</span>
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_logout_invalid_session</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_logout_invalid_session"</span>
+        <span style="font-weight: bold;">global</span> system
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system = setUp()</span>
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name = <span style="font-style: italic;">"abcdefghi"</span>, email = <span style="font-style: italic;">"abcdefghi@gmail.com"</span>, role =
+        Role.get_by_id(2))
+        <span style="font-weight: bold; font-style: italic;">admin_users</span> = <span style="font-weight: bold;">filter</span>(<span style="font-weight: bold;">lambda</span> x: x.role == Role.get_by_id(1), system.user_set)
+        <span style="font-weight: bold; font-style: italic;">admin_user</span> = admin_users[0]
+        <span style="font-weight: bold; font-style: italic;">admin_session</span> = Session(user = admin_user)
+        system.session_set.append(admin_session)
+        system.add_user(user, admin_session)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">old_session_set_length = len(system.session_set)</span>
+        system.login(user)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">user_session_list = filter(lambda x: x.user.email == user.email,</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system.session_set)</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">user_session = user_session_list[0]</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system.logout(user, user_session)</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">new_session_set_length = len(system.session_set)</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">self.assertEquals(old_session_set_length , new_session_set_length)</span>
+        <span style="font-weight: bold; font-style: italic;">session</span> = Session(user = user)
+        <span style="font-weight: bold;">with</span> <span style="font-weight: bold;">self</span>.assertRaises(ConstraintError):
+            system.logout(user, session)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">tearDown(system)</span>
+</pre>
+</div>
+</div>
+</li></ol>
+</div>
+
+<div id="outline-container-sec-3-6-3-14" class="outline-5">
+<h5 id="sec-3-6-3-14"><span class="section-number-5">3.6.3.14</span> add_session</h5>
+<div class="outline-text-5" id="text-3-6-3-14">
+</div><ol class="org-ol"><li><a id="sec-3-6-3-14-1" name="sec-3-6-3-14-1"></a>Implementation<br  /><div class="outline-text-6" id="text-3-6-3-14-1">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">add_session</span>(<span style="font-weight: bold;">self</span>, user):
+        <span style="font-weight: bold; font-style: italic;">check</span> = <span style="font-weight: bold;">filter</span>(<span style="font-weight: bold;">lambda</span> x: x.email == user.email, <span style="font-weight: bold;">self</span>.user_set)
+        <span style="font-weight: bold;">if</span> check:
+            <span style="font-weight: bold; font-style: italic;">session</span> = Session(user = user)
+            <span style="font-weight: bold;">self</span>.session_set.append(session)
+        <span style="font-weight: bold;">else</span>:
+            <span style="font-weight: bold;">raise</span> ConstraintError(<span style="font-style: italic;">"User is not in the system"</span>)
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="sec-3-6-3-14-2" name="sec-3-6-3-14-2"></a>Test<br  /><div class="outline-text-6" id="text-3-6-3-14-2">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_add_session</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_add_session"</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system = setUp()</span>
+        <span style="font-weight: bold;">global</span> system
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name = <span style="font-style: italic;">"ghtfdh"</span>, email = <span style="font-style: italic;">"ghtfdh@gmail.com"</span>, role = Role.get_by_id(2))
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">ession = Session(user = user)</span>
+        <span style="font-weight: bold; font-style: italic;">admin_users</span> = <span style="font-weight: bold;">filter</span>(<span style="font-weight: bold;">lambda</span> x: x.role == Role.get_by_id(1), system.user_set)
+        <span style="font-weight: bold; font-style: italic;">admin_user</span> = admin_users[0]
+        <span style="font-weight: bold; font-style: italic;">admin_session</span> = Session(user = admin_user)
+        system.session_set.append(admin_session)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">global system</span>
+        system.add_user(user,admin_session)
+        <span style="font-weight: bold; font-style: italic;">old_session_set_length</span> = <span style="font-weight: bold;">len</span>(system.session_set)
+        system.add_session(user)
+        <span style="font-weight: bold; font-style: italic;">new_session_set_length</span> = <span style="font-weight: bold;">len</span>(system.session_set)
+        <span style="font-weight: bold;">self</span>.assertEquals(new_session_set_length, old_session_set_length + 1)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">tearDown(system)</span>
+</pre>
+</div>
+</div>
+</li></ol>
+</div>
+
+<div id="outline-container-sec-3-6-3-15" class="outline-5">
+<h5 id="sec-3-6-3-15"><span class="section-number-5">3.6.3.15</span> del_session</h5>
+<div class="outline-text-5" id="text-3-6-3-15">
+</div><ol class="org-ol"><li><a id="sec-3-6-3-15-1" name="sec-3-6-3-15-1"></a>Implementation<br  /><div class="outline-text-6" id="text-3-6-3-15-1">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">del_session</span>(<span style="font-weight: bold;">self</span>, user, session):
+        <span style="font-weight: bold;">if</span> session <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">self</span>.session_set:
+            <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> user <span style="font-weight: bold;">in</span> <span style="font-weight: bold;">self</span>.user_set:
+                <span style="font-weight: bold;">raise</span> ConstraintError(<span style="font-style: italic;">"User doesn't exist in system"</span>)
+            <span style="font-weight: bold;">else</span>:
+                <span style="font-weight: bold; font-style: italic;">sessions_list</span> = <span style="font-weight: bold;">self</span>.session_set
+                <span style="font-weight: bold; font-style: italic;">new_sessions</span> = <span style="font-weight: bold;">filter</span>(<span style="font-weight: bold;">lambda</span> x: x.user.email == user.email,
+                sessions_list)
+                <span style="font-weight: bold; font-style: italic;">sessions_list</span> = new_sessions
+                <span style="font-weight: bold;">self</span>.session_set = sessions_list
+        <span style="font-weight: bold;">else</span>:
+            <span style="font-weight: bold;">raise</span> ConstraintError(<span style="font-style: italic;">"Invalid session"</span>)
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="sec-3-6-3-15-2" name="sec-3-6-3-15-2"></a>Test<br  /><div class="outline-text-6" id="text-3-6-3-15-2">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_del_session_valid</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_delete_session_valid"</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system = setUp()</span>
+        <span style="font-weight: bold;">global</span> system
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name = <span style="font-style: italic;">"ghtfdh"</span>, email = <span style="font-style: italic;">"ghtfdh@gmail.com"</span>, role = Role.get_by_id(2))
+        <span style="font-weight: bold; font-style: italic;">session</span> = Session(user = user)
+        <span style="font-weight: bold; font-style: italic;">admin_users</span> = <span style="font-weight: bold;">filter</span>(<span style="font-weight: bold;">lambda</span> x: x.role == Role.get_by_id(1), system.user_set)
+        <span style="font-weight: bold; font-style: italic;">admin_user</span> = admin_users[0]
+        <span style="font-weight: bold; font-style: italic;">admin_session</span> = Session(user = admin_user)
+        system.session_set.append(admin_session)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">global system</span>
+        system.add_user(user,admin_session)
+        system.login(user)
+        <span style="font-weight: bold; font-style: italic;">old_session_set_length</span> = <span style="font-weight: bold;">len</span>(system.session_set)
+        system.add_session(user)
+        system.del_session(user,admin_session)
+        <span style="font-weight: bold; font-style: italic;">new_session_set_length</span> = <span style="font-weight: bold;">len</span>(system.session_set)
+        <span style="font-weight: bold;">self</span>.assertEquals(new_session_set_length, old_session_set_length-1)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">tearDown(system)</span>
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_del_session_invalid_user</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_delete_session_invalid_user"</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system = setUp()</span>
+        <span style="font-weight: bold;">global</span> system
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name = <span style="font-style: italic;">"asddghj"</span>, email = <span style="font-style: italic;">"asljfbd@gmail.com"</span>, role = Role.get_by_id(2))
+        <span style="font-weight: bold; font-style: italic;">session</span> = Session(user = user)
+        <span style="font-weight: bold; font-style: italic;">admin_users</span> = <span style="font-weight: bold;">filter</span>(<span style="font-weight: bold;">lambda</span> x: x.role == Role.get_by_id(1), system.user_set)
+        <span style="font-weight: bold; font-style: italic;">admin_user</span> = admin_users[0]
+        <span style="font-weight: bold; font-style: italic;">admin_session</span> = Session(user = admin_user)
+        system.session_set.append(admin_session)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">global system</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system.add_user(user,admin_session)</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">old_session_set_length = len(system.session_set)</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system.add_session(user)</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system.del_session(user)</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">new_session_set_length = len(system.session_set)</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">self.assertEquals(new_session_set_length, old_session_set_length)</span>
+        <span style="font-weight: bold;">with</span> <span style="font-weight: bold;">self</span>.assertRaises(ConstraintError):
+            system.del_session(user, admin_session)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">tearDown(system)</span>
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_del_session_invalid_session</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_delete_session_invalid_session"</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system = setUp()</span>
+        <span style="font-weight: bold;">global</span> system
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name = <span style="font-style: italic;">"asddghj"</span>, email = <span style="font-style: italic;">"asljfbd@gmail.com"</span>, role = Role.get_by_id(2))
+        <span style="font-weight: bold; font-style: italic;">session</span> = Session(user = user)
+        <span style="font-weight: bold; font-style: italic;">admin_users</span> = <span style="font-weight: bold;">filter</span>(<span style="font-weight: bold;">lambda</span> x: x.role == Role.get_by_id(1), system.user_set)
+        <span style="font-weight: bold; font-style: italic;">admin_user</span> = admin_users[0]
+        <span style="font-weight: bold; font-style: italic;">admin_session</span> = Session(user = admin_user)
+        system.session_set.append(admin_session)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">global system</span>
+        system.add_user(user,admin_session)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">old_session_set_length = len(system.session_set)</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system.add_session(user)</span>
+        <span style="font-weight: bold; font-style: italic;">session</span> = Session(user = user)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system.del_session(user)</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">new_session_set_length = len(system.session_set)</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">self.assertEquals(new_session_set_length, old_session_set_length)</span>
+        <span style="font-weight: bold;">with</span> <span style="font-weight: bold;">self</span>.assertRaises(ConstraintError):
+            system.del_session(user, session)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">tearDown(system)</span>
+</pre>
+</div>
+</div>
+</li></ol>
+</div>
+<div id="outline-container-sec-3-6-3-16" class="outline-5">
+<h5 id="sec-3-6-3-16"><span class="section-number-5">3.6.3.16</span> show_sessions</h5>
+<div class="outline-text-5" id="text-3-6-3-16">
+</div><ol class="org-ol"><li><a id="sec-3-6-3-16-1" name="sec-3-6-3-16-1"></a>Implementation<br  /><div class="outline-text-6" id="text-3-6-3-16-1">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">show_sessions</span>(<span style="font-weight: bold;">self</span>, session):
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> session.user.role == Role.get_by_id(1):
+            <span style="font-weight: bold;">raise</span> NotAuthorizedError(<span style="font-style: italic;">"Only admin can view sessions"</span>)
+        <span style="font-weight: bold;">else</span>:
+            <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span>.session_set
+</pre>
+</div>
+</div>
+</li>
+
+
+<li><a id="sec-3-6-3-16-2" name="sec-3-6-3-16-2"></a>Test<br  /><div class="outline-text-6" id="text-3-6-3-16-2">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_show_sessions_admin</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_show_sessions_admin"</span>
+        <span style="font-weight: bold;">global</span> system
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system = setUp()</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">check_user_set = system.user_set</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">self.assertEquals(check_user_set, system.show_users())</span>
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name = <span style="font-style: italic;">"ghtfdh"</span>, email = <span style="font-style: italic;">"ghtfdh@gmail.com"</span>, role = Role.get_by_id(2))
+        <span style="font-weight: bold; font-style: italic;">session</span> = Session(user = user)
+        <span style="font-weight: bold; font-style: italic;">admin_users</span> = <span style="font-weight: bold;">filter</span>(<span style="font-weight: bold;">lambda</span> x: x.role == Role.get_by_id(1), system.user_set)
+        <span style="font-weight: bold; font-style: italic;">admin_user</span> = admin_users[0]
+        <span style="font-weight: bold; font-style: italic;">admin_session</span> = Session(user = admin_user)
+        system.session_set.append(admin_session)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">global system</span>
+        system.add_user(user,admin_session)
+        system.add_session(user)
+        <span style="font-weight: bold; font-style: italic;">check_session_set</span>= system.show_sessions(admin_session)
+        <span style="font-weight: bold;">self</span>.assertEquals(check_session_set, system.session_set)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">tearDown(system)</span>
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_show_sessions_user</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_show_sessions_user"</span>
+        <span style="font-weight: bold;">global</span> system
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">system = setUp()</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">check_user_set = system.user_set</span>
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">self.assertEquals(check_user_set, system.show_users())</span>
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name = <span style="font-style: italic;">"ghtfdh"</span>, email = <span style="font-style: italic;">"ghtfdh@gmail.com"</span>, role = Role.get_by_id(2))
+        <span style="font-weight: bold; font-style: italic;">session</span> = Session(user = user)
+        <span style="font-weight: bold; font-style: italic;">admin_users</span> = <span style="font-weight: bold;">filter</span>(<span style="font-weight: bold;">lambda</span> x: x.role == Role.get_by_id(1), system.user_set)
+        <span style="font-weight: bold; font-style: italic;">admin_user</span> = admin_users[0]
+        <span style="font-weight: bold; font-style: italic;">admin_session</span> = Session(user = admin_user)
+        system.session_set.append(admin_session)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">global system</span>
+        system.add_user(user,admin_session)
+        system.add_session(user)
+        <span style="font-weight: bold;">with</span> <span style="font-weight: bold;">self</span>.assertRaises(NotAuthorizedError):
+            <span style="font-weight: bold; font-style: italic;">check</span> = system.show_sessions(session)
+        <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">tearDown(system)</span>
+</pre>
+</div>
+</div>
+</li></ol>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4"><span class="section-number-2">4</span> Run Test Cases</h2>
+<div class="outline-text-2" id="text-4">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold;">if</span> <span style="font-weight: bold;">__name__</span> == <span style="font-style: italic;">'__main__'</span>:
+    unittest.main()
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Date: <span class="timestamp-wrapper"><span class="timestamp">[2016-05-11 Wed]</span></span></p>
+<p class="author">Author: VLEAD</p>
+<p class="date">Created: 2016-06-02 Thu 17:26</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.4.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

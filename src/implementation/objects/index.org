@@ -61,7 +61,6 @@ print "tests package"
 
 ** Custom Exceptions
    These are some of the custom exceptions used in the application.
-
 *** AttributeRequired
 
 #+BEGIN_SRC python :tangle ../../src/op_exceptions.py :eval no
@@ -76,8 +75,28 @@ class AttributeRequired(Exception):
 
 #+END_SRC
 
+*** ConstraintError
+#+BEGIN_SRC python :tangle ../../src/op_exceptions.py :eval no
+class ConstraintError(Exception):
+    str = None
+    
+    def __init__(self, str):
+        self.str = str
 
+    def __str__(self):
+        return repr(self.str)
+#+END_SRC
+*** ConstraintError
+#+BEGIN_SRC python :tangle ../../src/op_exceptions.py :eval no
+class NotAuthorizedError(Exception):
+    str = None
+    
+    def __init__(self, str):
+        self.str = str
 
+    def __str__(self):
+        return repr(self.str)
+#+END_SRC
 
 ** Utility Functions
 
@@ -739,6 +758,7 @@ if __name__ == '__main__':
     system = System()
     unittest.main()
 #+END_SRC
+
 
 
 

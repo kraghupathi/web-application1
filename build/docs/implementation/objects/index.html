@@ -1,0 +1,1480 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Object  Implementation of Mini Version of User Directory Application</title>
+<!-- 2016-06-02 Thu 17:26 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="VLEAD" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Object  Implementation of Mini Version of User Directory Application</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1. Initialization</a>
+<ul>
+<li><a href="#sec-1-1">1.1. Imports for Python API</a></li>
+<li><a href="#sec-1-2">1.2. Imports and Initialization of testcases for Python API</a></li>
+<li><a href="#sec-1-3">1.3. Imports for utility functions</a></li>
+<li><a href="#sec-1-4">1.4. Init Files</a></li>
+</ul>
+</li>
+<li><a href="#sec-2">2. Object Model</a>
+<ul>
+<li><a href="#sec-2-1">2.1. Custom Exceptions</a>
+<ul>
+<li><a href="#sec-2-1-1">2.1.1. AttributeRequired</a></li>
+<li><a href="#sec-2-1-2">2.1.2. ConstraintError</a></li>
+<li><a href="#sec-2-1-3">2.1.3. ConstraintError</a></li>
+</ul>
+</li>
+<li><a href="#sec-2-2">2.2. Utility Functions</a>
+<ul>
+<li><a href="#sec-2-2-1">2.2.1. is_alphabetic_string(value)</a></li>
+<li><a href="#sec-2-2-2">2.2.2. is_email(value)</a></li>
+</ul>
+</li>
+<li><a href="#sec-2-3">2.3. Name</a>
+<ul>
+<li><a href="#sec-2-3-1">2.3.1. Construction</a></li>
+<li><a href="#sec-2-3-2">2.3.2. Test the Construction</a></li>
+</ul>
+</li>
+<li><a href="#sec-2-4">2.4. Email</a>
+<ul>
+<li><a href="#sec-2-4-1">2.4.1. Construction</a></li>
+<li><a href="#sec-2-4-2">2.4.2. Test the Construction</a></li>
+</ul>
+</li>
+<li><a href="#sec-2-5">2.5. Role</a>
+<ul>
+<li><a href="#sec-2-5-1">2.5.1. Introduction</a></li>
+<li><a href="#sec-2-5-2">2.5.2. Mutable Data</a></li>
+<li><a href="#sec-2-5-3">2.5.3. Definition</a></li>
+<li><a href="#sec-2-5-4">2.5.4. Constructor</a></li>
+<li><a href="#sec-2-5-5">2.5.5. Test Constructor</a></li>
+<li><a href="#sec-2-5-6">2.5.6. Set role variables</a></li>
+</ul>
+</li>
+<li><a href="#sec-2-6">2.6. User</a>
+<ul>
+<li><a href="#sec-2-6-1">2.6.1. Mutable Data</a></li>
+<li><a href="#sec-2-6-2">2.6.2. Definition</a></li>
+<li><a href="#sec-2-6-3">2.6.3. Constructor</a>
+<ul>
+<li><a href="#sec-2-6-3-1">2.6.3.1. Implementation</a></li>
+<li><a href="#sec-2-6-3-2">2.6.3.2. Test the constructor</a></li>
+</ul>
+</li>
+<li><a href="#sec-2-6-4">2.6.4. Functions</a>
+<ul>
+<li><a href="#sec-2-6-4-1">2.6.4.1. setEmail</a></li>
+<li><a href="#sec-2-6-4-2">2.6.4.2. setName</a></li>
+<li><a href="#sec-2-6-4-3">2.6.4.3. setRole</a></li>
+<li><a href="#sec-2-6-4-4">2.6.4.4. getRole</a></li>
+<li><a href="#sec-2-6-4-5">2.6.4.5. getEmail</a></li>
+<li><a href="#sec-2-6-4-6">2.6.4.6. getName</a></li>
+<li><a href="#sec-2-6-4-7">2.6.4.7. getAll: Nil &#x2013;&gt; set[User]</a></li>
+<li><a href="#sec-2-6-4-8">2.6.4.8. toClient</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#sec-2-7">2.7. Session</a>
+<ul>
+<li><a href="#sec-2-7-1">2.7.1. Mutable Data</a></li>
+<li><a href="#sec-2-7-2">2.7.2. Definition</a></li>
+<li><a href="#sec-2-7-3">2.7.3. Constructor</a>
+<ul>
+<li><a href="#sec-2-7-3-1">2.7.3.1. Implementation</a></li>
+<li><a href="#sec-2-7-3-2">2.7.3.2. Test the constructor</a></li>
+</ul>
+</li>
+<li><a href="#sec-2-7-4">2.7.4. Functions</a>
+<ul>
+<li><a href="#sec-2-7-4-1">2.7.4.1. _set_user_session</a></li>
+<li><a href="#sec-2-7-4-2">2.7.4.2. get_user_session</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#sec-2-8">2.8. System</a>
+<ul>
+<li><a href="#sec-2-8-1">2.8.1. Mutable Data</a></li>
+<li><a href="#sec-2-8-2">2.8.2. Definition</a></li>
+<li><a href="#sec-2-8-3">2.8.3. Constructor</a>
+<ul>
+<li><a href="#sec-2-8-3-1">2.8.3.1. Implementation</a></li>
+<li><a href="#sec-2-8-3-2">2.8.3.2. Test the constructor</a></li>
+</ul>
+</li>
+<li><a href="#sec-2-8-4">2.8.4. Functions</a>
+<ul>
+<li><a href="#sec-2-8-4-1">2.8.4.1. make_user</a></li>
+<li><a href="#sec-2-8-4-2">2.8.4.2. add_user</a></li>
+<li><a href="#sec-2-8-4-3">2.8.4.3. del_user</a></li>
+<li><a href="#sec-2-8-4-4">2.8.4.4. show_users</a></li>
+<li><a href="#sec-2-8-4-5">2.8.4.5. get_user_by_email</a></li>
+<li><a href="#sec-2-8-4-6">2.8.4.6. login</a></li>
+<li><a href="#sec-2-8-4-7">2.8.4.7. del_session</a></li>
+<li><a href="#sec-2-8-4-8">2.8.4.8. show_sessions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#sec-3">3. Run Test Cases</a></li>
+</ul>
+</div>
+</div>
+
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> Initialization</h2>
+<div class="outline-text-2" id="text-1">
+</div><div id="outline-container-sec-1-1" class="outline-3">
+<h3 id="sec-1-1"><span class="section-number-3">1.1</span> Imports for Python API</h3>
+<div class="outline-text-3" id="text-1-1">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">-*- coding: utf-8 -*-</span>
+<span style="font-weight: bold;">from</span> op_exceptions <span style="font-weight: bold;">import</span> AttributeRequired
+<span style="font-weight: bold;">from</span> utils <span style="font-weight: bold;">import</span> *
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-1-2" class="outline-3">
+<h3 id="sec-1-2"><span class="section-number-3">1.2</span> Imports and Initialization of testcases for Python API</h3>
+<div class="outline-text-3" id="text-1-2">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">-*- coding: utf-8 -*-</span>
+<span style="font-weight: bold;">import</span> unittest
+<span style="font-weight: bold;">from</span> unittest <span style="font-weight: bold;">import</span> TestCase
+<span style="font-weight: bold;">from</span> datetime <span style="font-weight: bold;">import</span> datetime
+
+<span style="font-weight: bold;">from</span> src.obj <span style="font-weight: bold;">import</span> *
+<span style="font-weight: bold;">from</span> src.op_exceptions <span style="font-weight: bold;">import</span> AttributeRequired
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-1-3" class="outline-3">
+<h3 id="sec-1-3"><span class="section-number-3">1.3</span> Imports for utility functions</h3>
+<div class="outline-text-3" id="text-1-3">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">module to hold all utilities/helper functions</span>
+
+<span style="font-weight: bold;">import</span> json
+
+<span style="font-weight: bold;">import</span> re
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-1-4" class="outline-3">
+<h3 id="sec-1-4"><span class="section-number-3">1.4</span> Init Files</h3>
+<div class="outline-text-3" id="text-1-4">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold;">import</span> obj
+</pre>
+</div>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold;">print</span> <span style="font-style: italic;">"tests package"</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> Object Model</h2>
+<div class="outline-text-2" id="text-2">
+</div><div id="outline-container-sec-2-1" class="outline-3">
+<h3 id="sec-2-1"><span class="section-number-3">2.1</span> Custom Exceptions</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+These are some of the custom exceptions used in the application.
+</p>
+</div>
+<div id="outline-container-sec-2-1-1" class="outline-4">
+<h4 id="sec-2-1-1"><span class="section-number-4">2.1.1</span> AttributeRequired</h4>
+<div class="outline-text-4" id="text-2-1-1">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">AttributeRequired</span>(<span style="font-weight: bold; text-decoration: underline;">Exception</span>):
+    <span style="font-weight: bold;">str</span> = <span style="font-weight: bold; text-decoration: underline;">None</span>
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__init__</span>(<span style="font-weight: bold;">self</span>, <span style="font-weight: bold;">str</span>):
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold;">str</span> = <span style="font-weight: bold;">str</span>
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__str__</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">repr</span>(<span style="font-weight: bold;">self</span>.<span style="font-weight: bold;">str</span>)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2-1-2" class="outline-4">
+<h4 id="sec-2-1-2"><span class="section-number-4">2.1.2</span> ConstraintError</h4>
+<div class="outline-text-4" id="text-2-1-2">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">ConstraintError</span>(<span style="font-weight: bold; text-decoration: underline;">Exception</span>):
+    <span style="font-weight: bold;">str</span> = <span style="font-weight: bold; text-decoration: underline;">None</span>
+    
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__init__</span>(<span style="font-weight: bold;">self</span>, <span style="font-weight: bold;">str</span>):
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold;">str</span> = <span style="font-weight: bold;">str</span>
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__str__</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">repr</span>(<span style="font-weight: bold;">self</span>.<span style="font-weight: bold;">str</span>)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-2-1-3" class="outline-4">
+<h4 id="sec-2-1-3"><span class="section-number-4">2.1.3</span> ConstraintError</h4>
+<div class="outline-text-4" id="text-2-1-3">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">NotAuthorizedError</span>(<span style="font-weight: bold; text-decoration: underline;">Exception</span>):
+    <span style="font-weight: bold;">str</span> = <span style="font-weight: bold; text-decoration: underline;">None</span>
+    
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__init__</span>(<span style="font-weight: bold;">self</span>, <span style="font-weight: bold;">str</span>):
+        <span style="font-weight: bold;">self</span>.<span style="font-weight: bold;">str</span> = <span style="font-weight: bold;">str</span>
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__str__</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">repr</span>(<span style="font-weight: bold;">self</span>.<span style="font-weight: bold;">str</span>)
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2-2" class="outline-3">
+<h3 id="sec-2-2"><span class="section-number-3">2.2</span> Utility Functions</h3>
+<div class="outline-text-3" id="text-2-2">
+</div><div id="outline-container-sec-2-2-1" class="outline-4">
+<h4 id="sec-2-2-1"><span class="section-number-4">2.2.1</span> is_alphabetic_string(value)</h4>
+<div class="outline-text-4" id="text-2-2-1">
+<p>
+This function take an argument and checks whether the argument contains
+only alphabets.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold;">def</span> <span style="font-weight: bold;">is_alphabetic_string</span>(value):
+    <span style="font-weight: bold;">if</span> re.search(<span style="font-style: italic;">'[^a-zA-Z. ]+'</span>, value):
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">False</span>
+    <span style="font-weight: bold;">else</span>:
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">True</span>
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-2-2-2" class="outline-4">
+<h4 id="sec-2-2-2"><span class="section-number-4">2.2.2</span> is_email(value)</h4>
+<div class="outline-text-4" id="text-2-2-2">
+<p>
+Email is a type as defined in RFC <a href="https://tools.ietf.org/html/rfc5321">5321</a>, <a href="https://tools.ietf.org/html/rfc5322">5322</a> and <a href="https://tools.ietf.org/html/rfc6531">6531</a>.
+Following is the constructor for this class.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold;">def</span> <span style="font-weight: bold;">is_email</span>(value):
+    <span style="font-weight: bold;">if</span> re.search(<span style="font-style: italic;">'[^@]+@[^@]+\.[^@]+'</span>, value):
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">True</span>
+    <span style="font-weight: bold;">else</span>:
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">False</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+
+<div id="outline-container-sec-2-3" class="outline-3">
+<h3 id="sec-2-3"><span class="section-number-3">2.3</span> Name</h3>
+<div class="outline-text-3" id="text-2-3">
+</div><div id="outline-container-sec-2-3-1" class="outline-4">
+<h4 id="sec-2-3-1"><span class="section-number-4">2.3.1</span> Construction</h4>
+<div class="outline-text-4" id="text-2-3-1">
+<p>
+Name is an alphabetical string.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Name</span>(<span style="font-weight: bold;">object</span>):
+    <span style="font-weight: bold; font-style: italic;">value</span> = <span style="font-weight: bold; text-decoration: underline;">None</span>
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__init__</span>(<span style="font-weight: bold;">self</span>, value):
+        <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">value: String </span>
+        <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">if the string contains any non-alphabet and non-space character,</span>
+        <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">raise a type error</span>
+        <span style="font-weight: bold;">if</span> is_alphabetic_string(value):
+            <span style="font-weight: bold;">self</span>.value = value
+        <span style="font-weight: bold;">else</span>:
+            <span style="font-weight: bold;">raise</span> <span style="font-weight: bold; text-decoration: underline;">TypeError</span>(<span style="font-style: italic;">'%s is not a Name!'</span> % value)
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__str__</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span>.value
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-2-3-2" class="outline-4">
+<h4 id="sec-2-3-2"><span class="section-number-4">2.3.2</span> Test the Construction</h4>
+<div class="outline-text-4" id="text-2-3-2">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">TestName</span>(TestCase):
+    <span style="font-weight: bold; font-style: italic;">TESTING</span> = <span style="font-weight: bold; text-decoration: underline;">True</span>
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_name_type</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_name_type"</span>
+        <span style="font-weight: bold; font-style: italic;">new_name</span> = Name(<span style="font-style: italic;">"raghu"</span>)
+        <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">correct name</span>
+        <span style="font-weight: bold;">self</span>.assertEqual(new_name.value, <span style="font-style: italic;">"raghu"</span>)
+        <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">incorrect name</span>
+        <span style="font-weight: bold;">self</span>.assertRaises(<span style="font-weight: bold; text-decoration: underline;">TypeError</span>, Name, <span style="font-style: italic;">"123dasd"</span>)
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-2-4" class="outline-3">
+<h3 id="sec-2-4"><span class="section-number-3">2.4</span> Email</h3>
+<div class="outline-text-3" id="text-2-4">
+</div><div id="outline-container-sec-2-4-1" class="outline-4">
+<h4 id="sec-2-4-1"><span class="section-number-4">2.4.1</span> Construction</h4>
+<div class="outline-text-4" id="text-2-4-1">
+<p>
+Email is a type as defined in RFC <a href="https://tools.ietf.org/html/rfc5321">5321</a>, <a href="https://tools.ietf.org/html/rfc5322">5322</a> and <a href="https://tools.ietf.org/html/rfc6531">6531</a>.
+Following is the constructor for this class.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Email</span>(<span style="font-weight: bold;">object</span>):
+    <span style="font-weight: bold; font-style: italic;">value</span> = <span style="font-weight: bold; text-decoration: underline;">None</span>
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__init__</span>(<span style="font-weight: bold;">self</span>, value):
+        <span style="font-weight: bold;">if</span> is_email(value):
+            <span style="font-weight: bold;">self</span>.value = value
+        <span style="font-weight: bold;">else</span>:
+            <span style="font-weight: bold;">raise</span> <span style="font-weight: bold; text-decoration: underline;">TypeError</span>(<span style="font-style: italic;">'%s is not a Email!'</span> % value)
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__str__</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span>.value
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2-4-2" class="outline-4">
+<h4 id="sec-2-4-2"><span class="section-number-4">2.4.2</span> Test the Construction</h4>
+<div class="outline-text-4" id="text-2-4-2">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">TestEmail</span>(TestCase):
+    <span style="font-weight: bold; font-style: italic;">TESTING</span> = <span style="font-weight: bold; text-decoration: underline;">True</span>
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_email_type</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_email_type"</span>
+        <span style="font-weight: bold; font-style: italic;">new_email</span> = Email(<span style="font-style: italic;">"raghu@vlabs.ac.in"</span>)
+        <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">correct email</span>
+        <span style="font-weight: bold;">self</span>.assertEqual(new_email.value, <span style="font-style: italic;">"raghu@vlabs.ac.in"</span>)
+        <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">incorrect email</span>
+        <span style="font-weight: bold;">self</span>.assertRaises(<span style="font-weight: bold; text-decoration: underline;">TypeError</span>, Email, <span style="font-style: italic;">"123"</span>)
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2-5" class="outline-3">
+<h3 id="sec-2-5"><span class="section-number-3">2.5</span> Role</h3>
+<div class="outline-text-3" id="text-2-5">
+</div><div id="outline-container-sec-2-5-1" class="outline-4">
+<h4 id="sec-2-5-1"><span class="section-number-4">2.5.1</span> Introduction</h4>
+<div class="outline-text-4" id="text-2-5-1">
+<p>
+A Role has got certain privileges.  In this current application, the
+privileges are understood 
+</p>
+
+<p>
+Different types of roles are:
+</p>
+<dl class="org-dl">
+<dt> Admin </dt><dd>An admin is an user who can add, modify and delete other users
+except himself.
+</dd>
+<dt> User </dt><dd>A User is a user who can view all other users and can modify himself.
+</dd>
+</dl>
+</div>
+</div>
+
+
+<div id="outline-container-sec-2-5-2" class="outline-4">
+<h4 id="sec-2-5-2"><span class="section-number-4">2.5.2</span> Mutable Data</h4>
+<div class="outline-text-4" id="text-2-5-2">
+<p>
+These are the data associated with Role type, which are mutable
+</p>
+
+<ul class="org-ul">
+<li>Name
+</li>
+</ul>
+</div>
+</div>
+
+
+<div id="outline-container-sec-2-5-3" class="outline-4">
+<h4 id="sec-2-5-3"><span class="section-number-4">2.5.3</span> Definition</h4>
+<div class="outline-text-4" id="text-2-5-3">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Role</span>(<span style="font-weight: bold;">object</span>):
+    <span style="font-weight: bold; font-style: italic;">name</span> = <span style="font-weight: bold; text-decoration: underline;">None</span>
+    <span style="font-weight: bold; font-style: italic;">admin</span> = <span style="font-weight: bold; text-decoration: underline;">None</span>
+    <span style="font-weight: bold; font-style: italic;">user</span> = <span style="font-weight: bold; text-decoration: underline;">None</span>
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-2-5-4" class="outline-4">
+<h4 id="sec-2-5-4"><span class="section-number-4">2.5.4</span> Constructor</h4>
+<div class="outline-text-4" id="text-2-5-4">
+<p>
+The signature of Role is defined as follows
+</p>
+<pre class="example">
+role = Role(name=&lt;Object of Name&gt;)
+</pre>
+
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__init__</span>(<span style="font-weight: bold;">self</span>, name):
+        <span style="font-weight: bold;">self</span>.name = name
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2-5-5" class="outline-4">
+<h4 id="sec-2-5-5"><span class="section-number-4">2.5.5</span> Test Constructor</h4>
+<div class="outline-text-4" id="text-2-5-5">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">TestRole</span>(TestCase):
+    <span style="font-weight: bold; font-style: italic;">TESTING</span> = <span style="font-weight: bold; text-decoration: underline;">True</span>
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_role_admin</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_role_admin"</span>
+        <span style="font-weight: bold;">self</span>.assertEqual(Role.admin.name, <span style="font-style: italic;">'admin'</span>)
+    
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_role_user</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_role_user"</span>
+        <span style="font-weight: bold;">self</span>.assertEqual(Role.user.name, <span style="font-style: italic;">"user"</span>)
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-2-5-6" class="outline-4">
+<h4 id="sec-2-5-6"><span class="section-number-4">2.5.6</span> Set role variables</h4>
+<div class="outline-text-4" id="text-2-5-6">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold; font-style: italic;">Role.admin</span> = Role(<span style="font-style: italic;">"admin"</span>)
+<span style="font-weight: bold; font-style: italic;">Role.user</span> = Role(<span style="font-style: italic;">"user"</span>)
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-2-6" class="outline-3">
+<h3 id="sec-2-6"><span class="section-number-3">2.6</span> User</h3>
+<div class="outline-text-3" id="text-2-6">
+</div><div id="outline-container-sec-2-6-1" class="outline-4">
+<h4 id="sec-2-6-1"><span class="section-number-4">2.6.1</span> Mutable Data</h4>
+<div class="outline-text-4" id="text-2-6-1">
+<p>
+These are the data associated with User type, which are mutable
+</p>
+
+<ul class="org-ul">
+<li>Name
+</li>
+<li>Email
+</li>
+<li>Role
+</li>
+</ul>
+</div>
+</div>
+
+
+<div id="outline-container-sec-2-6-2" class="outline-4">
+<h4 id="sec-2-6-2"><span class="section-number-4">2.6.2</span> Definition</h4>
+<div class="outline-text-4" id="text-2-6-2">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">User</span>(<span style="font-weight: bold;">object</span>):
+    <span style="font-weight: bold; font-style: italic;">name</span> = <span style="font-weight: bold; text-decoration: underline;">None</span>
+    <span style="font-weight: bold; font-style: italic;">email</span> = <span style="font-weight: bold; text-decoration: underline;">None</span>
+    <span style="font-weight: bold; font-style: italic;">role</span> = <span style="font-weight: bold; text-decoration: underline;">None</span>
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-2-6-3" class="outline-4">
+<h4 id="sec-2-6-3"><span class="section-number-4">2.6.3</span> Constructor</h4>
+<div class="outline-text-4" id="text-2-6-3">
+</div><div id="outline-container-sec-2-6-3-1" class="outline-5">
+<h5 id="sec-2-6-3-1"><span class="section-number-5">2.6.3.1</span> Implementation</h5>
+<div class="outline-text-5" id="text-2-6-3-1">
+<p>
+Signature of the constructor of <code>User</code> is as follows:
+</p>
+
+<pre class="example">
+usr = User(name=&lt;object of Name&gt;, email=&lt;object of Email&gt;, 
+          role=[&lt;object of Role&gt;, &lt;object of Role&gt; ...])
+</pre>
+
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__init__</span>(<span style="font-weight: bold;">self</span>, **kwargs):
+        <span style="font-weight: bold;">if</span> <span style="font-style: italic;">'name'</span> <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">in</span> kwargs:
+            <span style="font-weight: bold;">raise</span> AttributeRequired(<span style="font-style: italic;">"mandatory attribute `name` is missing"</span>)
+        <span style="font-weight: bold;">self</span>.set_name(kwargs[<span style="font-style: italic;">'name'</span>])
+
+        <span style="font-weight: bold;">if</span> <span style="font-style: italic;">'email'</span> <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">in</span> kwargs:
+            <span style="font-weight: bold;">raise</span> AttributeRequired(<span style="font-style: italic;">"mandatory attribute `email` is missing"</span>)
+        <span style="font-weight: bold;">self</span>.set_email(kwargs[<span style="font-style: italic;">'email'</span>])
+
+        <span style="font-weight: bold;">if</span> <span style="font-style: italic;">'role'</span> <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">in</span> kwargs:
+            <span style="font-weight: bold;">raise</span> AttributeRequired(<span style="font-style: italic;">"mandatory attribute `role` is missing"</span>)
+        <span style="font-weight: bold;">self</span>.set_role(kwargs[<span style="font-style: italic;">'role'</span>])
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-2-6-3-2" class="outline-5">
+<h5 id="sec-2-6-3-2"><span class="section-number-5">2.6.3.2</span> Test the constructor</h5>
+<div class="outline-text-5" id="text-2-6-3-2">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">TestUser</span>(TestCase):
+    <span style="font-weight: bold; font-style: italic;">TESTING</span> = <span style="font-weight: bold; text-decoration: underline;">True</span>
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_user_creation</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_user_creation"</span>
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name=Name(<span style="font-style: italic;">'raghu'</span>), email=Email(<span style="font-style: italic;">'raghupathi@vlabs.ac.in'</span>), role=Role.admin)
+        <span style="font-weight: bold;">self</span>.assertEqual(<span style="font-weight: bold;">isinstance</span>(user, User), <span style="font-weight: bold; text-decoration: underline;">True</span>)
+        <span style="font-weight: bold;">self</span>.assertEqual(user.name, <span style="font-style: italic;">'raghu'</span>)
+        <span style="font-weight: bold;">self</span>.assertEqual(user.email, <span style="font-style: italic;">'raghupathi@vlabs.ac.in'</span>)
+        <span style="font-weight: bold;">self</span>.assertEqual(user.role, <span style="font-style: italic;">'admin'</span>)
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-2-6-4" class="outline-4">
+<h4 id="sec-2-6-4"><span class="section-number-4">2.6.4</span> Functions</h4>
+<div class="outline-text-4" id="text-2-6-4">
+</div><div id="outline-container-sec-2-6-4-1" class="outline-5">
+<h5 id="sec-2-6-4-1"><span class="section-number-5">2.6.4.1</span> setEmail</h5>
+<div class="outline-text-5" id="text-2-6-4-1">
+</div><ol class="org-ol"><li><a id="sec-2-6-4-1-1" name="sec-2-6-4-1-1"></a>Implementaion<br  /><div class="outline-text-6" id="text-2-6-4-1-1">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">set_email</span>(<span style="font-weight: bold;">self</span>, email):
+        <span style="font-weight: bold;">self</span>.email = email.value
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="sec-2-6-4-1-2" name="sec-2-6-4-1-2"></a>Test<br  /><div class="outline-text-6" id="text-2-6-4-1-2">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_user_set_email</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_user_set_email"</span>
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name=Name(<span style="font-style: italic;">'raghu'</span>), email=Email(<span style="font-style: italic;">'raghupathi@vlabs.ac.in'</span>), role=Role.admin)
+        <span style="font-weight: bold; font-style: italic;">new_email</span> = Email(<span style="font-style: italic;">'newemail@vlabs.ac.in'</span>)
+        user.set_email(new_email)
+        <span style="font-weight: bold;">self</span>.assertEqual(user.email, new_email.value)
+</pre>
+</div>
+</div>
+</li></ol>
+</div>
+<div id="outline-container-sec-2-6-4-2" class="outline-5">
+<h5 id="sec-2-6-4-2"><span class="section-number-5">2.6.4.2</span> setName</h5>
+<div class="outline-text-5" id="text-2-6-4-2">
+</div><ol class="org-ol"><li><a id="sec-2-6-4-2-1" name="sec-2-6-4-2-1"></a>Implementation<br  /><div class="outline-text-6" id="text-2-6-4-2-1">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">set_name</span>(<span style="font-weight: bold;">self</span>, name):
+        <span style="font-weight: bold;">self</span>.name = name.value
+</pre>
+</div>
+</div>
+</li>
+<li><a id="sec-2-6-4-2-2" name="sec-2-6-4-2-2"></a>Test<br  /><div class="outline-text-6" id="text-2-6-4-2-2">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_user_set_name</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_user_set_name"</span>
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name=Name(<span style="font-style: italic;">'raghu'</span>), email=Email(<span style="font-style: italic;">'raghupathi@vlabs.ac.in'</span>), role=Role.admin)
+        <span style="font-weight: bold; font-style: italic;">new_name</span> = Name(<span style="font-style: italic;">'newname'</span>)
+        user.set_name(new_name)
+        <span style="font-weight: bold;">self</span>.assertEqual(user.name, new_name.value)
+</pre>
+</div>
+</div>
+</li></ol>
+</div>
+<div id="outline-container-sec-2-6-4-3" class="outline-5">
+<h5 id="sec-2-6-4-3"><span class="section-number-5">2.6.4.3</span> setRole</h5>
+<div class="outline-text-5" id="text-2-6-4-3">
+</div><ol class="org-ol"><li><a id="sec-2-6-4-3-1" name="sec-2-6-4-3-1"></a>Implementation<br  /><div class="outline-text-6" id="text-2-6-4-3-1">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">set_role</span>(<span style="font-weight: bold;">self</span>, role):
+        <span style="font-weight: bold;">self</span>.role = role.name
+</pre>
+</div>
+</div>
+</li>
+<li><a id="sec-2-6-4-3-2" name="sec-2-6-4-3-2"></a>Test<br  /><div class="outline-text-6" id="text-2-6-4-3-2">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_user_set_role</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_user_set_role"</span>
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name=Name(<span style="font-style: italic;">'raghu'</span>), email=Email(<span style="font-style: italic;">'raghupathi@vlabs.ac.in'</span>), role=Role.admin)
+        <span style="font-weight: bold; font-style: italic;">new_role</span> = Role.user
+        user.set_role(new_role)
+        <span style="font-weight: bold;">self</span>.assertEqual(user.role, new_role.name)
+</pre>
+</div>
+</div>
+</li></ol>
+</div>
+<div id="outline-container-sec-2-6-4-4" class="outline-5">
+<h5 id="sec-2-6-4-4"><span class="section-number-5">2.6.4.4</span> getRole</h5>
+<div class="outline-text-5" id="text-2-6-4-4">
+</div><ol class="org-ol"><li><a id="sec-2-6-4-4-1" name="sec-2-6-4-4-1"></a>Implementation<br  /><div class="outline-text-6" id="text-2-6-4-4-1">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">get_role</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span>.role
+</pre>
+</div>
+</div>
+</li>
+<li><a id="sec-2-6-4-4-2" name="sec-2-6-4-4-2"></a>Test<br  /><div class="outline-text-6" id="text-2-6-4-4-2">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_user_get_role</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_user_get_role"</span>
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name=Name(<span style="font-style: italic;">'raghu'</span>), email=Email(<span style="font-style: italic;">'raghu@vlabs.ac.in'</span>), role=Role.admin)
+        <span style="font-weight: bold;">self</span>.assertEqual(user.get_role(), <span style="font-style: italic;">'admin'</span>)
+</pre>
+</div>
+</div>
+</li></ol>
+</div>
+
+<div id="outline-container-sec-2-6-4-5" class="outline-5">
+<h5 id="sec-2-6-4-5"><span class="section-number-5">2.6.4.5</span> getEmail</h5>
+<div class="outline-text-5" id="text-2-6-4-5">
+</div><ol class="org-ol"><li><a id="sec-2-6-4-5-1" name="sec-2-6-4-5-1"></a>Implementation<br  /><div class="outline-text-6" id="text-2-6-4-5-1">
+<div class="org-src-container">
+
+<pre class="src src-python">   <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">get_email</span>(<span style="font-weight: bold;">self</span>):
+       <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span>.email
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="sec-2-6-4-5-2" name="sec-2-6-4-5-2"></a>Test<br  /><div class="outline-text-6" id="text-2-6-4-5-2">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_user_get_email</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_user_get_email"</span>
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name=Name(<span style="font-style: italic;">'raghu'</span>), email=Email(<span style="font-style: italic;">'raghupathi@vlabs.ac.in'</span>), role=Role.admin)
+        <span style="font-weight: bold;">self</span>.assertEqual(user.get_email(), <span style="font-style: italic;">'raghupathi@vlabs.ac.in'</span>)
+</pre>
+</div>
+</div>
+</li></ol>
+</div>
+
+<div id="outline-container-sec-2-6-4-6" class="outline-5">
+<h5 id="sec-2-6-4-6"><span class="section-number-5">2.6.4.6</span> getName</h5>
+<div class="outline-text-5" id="text-2-6-4-6">
+</div><ol class="org-ol"><li><a id="sec-2-6-4-6-1" name="sec-2-6-4-6-1"></a>Implementation<br  /><div class="outline-text-6" id="text-2-6-4-6-1">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">get_name</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span>.name
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="sec-2-6-4-6-2" name="sec-2-6-4-6-2"></a>Test<br  /><div class="outline-text-6" id="text-2-6-4-6-2">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_user_get_name</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_user_get_name"</span>
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name=Name(<span style="font-style: italic;">'raghu'</span>), email=Email(<span style="font-style: italic;">'raghu@vlabs.ac.in'</span>), role=Role.admin)
+        <span style="font-weight: bold;">self</span>.assertEqual(user.get_name(), <span style="font-style: italic;">'raghu'</span>)
+</pre>
+</div>
+</div>
+</li></ol>
+</div>
+
+<div id="outline-container-sec-2-6-4-7" class="outline-5">
+<h5 id="sec-2-6-4-7"><span class="section-number-5">2.6.4.7</span> getAll: Nil &#x2013;&gt; set[User]</h5>
+<div class="outline-text-5" id="text-2-6-4-7">
+</div><ol class="org-ol"><li><a id="sec-2-6-4-7-1" name="sec-2-6-4-7-1"></a>Implementation<br  /><div class="outline-text-6" id="text-2-6-4-7-1">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold; font-style: italic;">#    </span><span style="font-weight: bold; font-style: italic;">@staticmethod</span>
+<span style="font-weight: bold; font-style: italic;">#    </span><span style="font-weight: bold; font-style: italic;">def get_all():</span>
+<span style="font-weight: bold; font-style: italic;">#        </span><span style="font-weight: bold; font-style: italic;">return users</span>
+</pre>
+</div>
+</div>
+</li>
+
+
+<li><a id="sec-2-6-4-7-2" name="sec-2-6-4-7-2"></a>Test getAll<br  /><div class="outline-text-6" id="text-2-6-4-7-2">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_user_get_all</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_user_get_all"</span>
+</pre>
+</div>
+</div>
+</li></ol>
+</div>
+
+<div id="outline-container-sec-2-6-4-8" class="outline-5">
+<h5 id="sec-2-6-4-8"><span class="section-number-5">2.6.4.8</span> toClient</h5>
+<div class="outline-text-5" id="text-2-6-4-8">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">to_client</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">return</span> {
+            <span style="font-style: italic;">'name'</span>: <span style="font-weight: bold;">self</span>.name,
+            <span style="font-style: italic;">'email'</span>: <span style="font-weight: bold;">self</span>.email,
+            <span style="font-style: italic;">'role'</span>: <span style="font-weight: bold;">self</span>.role.to_client()
+        }
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2-7" class="outline-3">
+<h3 id="sec-2-7"><span class="section-number-3">2.7</span> Session</h3>
+<div class="outline-text-3" id="text-2-7">
+<p>
+Session holds a user
+</p>
+</div>
+
+<div id="outline-container-sec-2-7-1" class="outline-4">
+<h4 id="sec-2-7-1"><span class="section-number-4">2.7.1</span> Mutable Data</h4>
+<div class="outline-text-4" id="text-2-7-1">
+<p>
+Mutable attribute is
+</p>
+<ul class="org-ul">
+<li>user
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-2-7-2" class="outline-4">
+<h4 id="sec-2-7-2"><span class="section-number-4">2.7.2</span> Definition</h4>
+<div class="outline-text-4" id="text-2-7-2">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Session</span>(<span style="font-weight: bold;">object</span>):
+    <span style="font-weight: bold; font-style: italic;">user</span> = <span style="font-weight: bold; text-decoration: underline;">None</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2-7-3" class="outline-4">
+<h4 id="sec-2-7-3"><span class="section-number-4">2.7.3</span> Constructor</h4>
+<div class="outline-text-4" id="text-2-7-3">
+</div><div id="outline-container-sec-2-7-3-1" class="outline-5">
+<h5 id="sec-2-7-3-1"><span class="section-number-5">2.7.3.1</span> Implementation</h5>
+<div class="outline-text-5" id="text-2-7-3-1">
+<p>
+Signature of the constructor of <code>Session</code> is as follows:
+</p>
+
+<pre class="example">
+session = Session(user=&lt;object of User&gt;)
+</pre>
+
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__init__</span>(<span style="font-weight: bold;">self</span>, **kwargs):
+        <span style="font-weight: bold;">if</span> <span style="font-style: italic;">'user'</span> <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">in</span> kwargs:
+            <span style="font-weight: bold;">raise</span> AttributeRequired(<span style="font-style: italic;">'mandatory variable `user` is missing!'</span>)
+        <span style="font-weight: bold;">self</span>._set_user_session(kwargs[<span style="font-style: italic;">'user'</span>])
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2-7-3-2" class="outline-5">
+<h5 id="sec-2-7-3-2"><span class="section-number-5">2.7.3.2</span> Test the constructor</h5>
+<div class="outline-text-5" id="text-2-7-3-2">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">TestSession</span>(TestCase):
+    <span style="font-weight: bold; font-style: italic;">TESTING</span> = <span style="font-weight: bold; text-decoration: underline;">True</span>
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_session_creation</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_session_creation"</span>
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name=Name(<span style="font-style: italic;">'raghu'</span>), email=Email(<span style="font-style: italic;">'raghupathi@vlabs.ac.in'</span>), role=Role.admin)
+        <span style="font-weight: bold; font-style: italic;">session</span> = Session(user=user)
+        <span style="font-weight: bold;">self</span>.assertEqual(<span style="font-weight: bold;">isinstance</span>(session, Session), <span style="font-weight: bold; text-decoration: underline;">True</span>)
+        <span style="font-weight: bold;">self</span>.assertEqual(session.user, user)
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2-7-4" class="outline-4">
+<h4 id="sec-2-7-4"><span class="section-number-4">2.7.4</span> Functions</h4>
+<div class="outline-text-4" id="text-2-7-4">
+</div><div id="outline-container-sec-2-7-4-1" class="outline-5">
+<h5 id="sec-2-7-4-1"><span class="section-number-5">2.7.4.1</span> _set_user_session</h5>
+<div class="outline-text-5" id="text-2-7-4-1">
+</div><ol class="org-ol"><li><a id="sec-2-7-4-1-1" name="sec-2-7-4-1-1"></a>Implementation<br  /><div class="outline-text-6" id="text-2-7-4-1-1">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">_set_user_session</span>(<span style="font-weight: bold;">self</span>, user):
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">isinstance</span>(user, User):
+            <span style="font-weight: bold;">raise</span> <span style="font-weight: bold; text-decoration: underline;">TypeError</span>(<span style="font-style: italic;">'`user` argument should be of type user'</span>)
+        <span style="font-weight: bold;">else</span>:
+            <span style="font-weight: bold;">self</span>.user = user
+</pre>
+</div>
+</div>
+</li>
+<li><a id="sec-2-7-4-1-2" name="sec-2-7-4-1-2"></a>Test<br  /><div class="outline-text-6" id="text-2-7-4-1-2">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_set_user_session</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_set_user_session"</span>
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name=Name(<span style="font-style: italic;">'raghu'</span>), email=Email(<span style="font-style: italic;">'raghupathi@vlabs.ac.in'</span>), role=Role.admin)
+        <span style="font-weight: bold; font-style: italic;">session</span> = Session(user=user)
+        <span style="font-weight: bold; font-style: italic;">new_user</span> = User(name=Name(<span style="font-style: italic;">'newuser'</span>), email=Email(<span style="font-style: italic;">'newuser@vlabs.ac.in'</span>), role=Role.user)
+        session._set_user_session(new_user)
+        <span style="font-weight: bold;">self</span>.assertEqual(session.user, new_user)
+</pre>
+</div>
+</div>
+</li></ol>
+</div>
+<div id="outline-container-sec-2-7-4-2" class="outline-5">
+<h5 id="sec-2-7-4-2"><span class="section-number-5">2.7.4.2</span> get_user_session</h5>
+<div class="outline-text-5" id="text-2-7-4-2">
+</div><ol class="org-ol"><li><a id="sec-2-7-4-2-1" name="sec-2-7-4-2-1"></a>Implementation<br  /><div class="outline-text-6" id="text-2-7-4-2-1">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">get_user_session</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span>.user
+</pre>
+</div>
+</div>
+</li>
+<li><a id="sec-2-7-4-2-2" name="sec-2-7-4-2-2"></a>Test<br  /><div class="outline-text-6" id="text-2-7-4-2-2">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_get_user_session</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_get_user_session"</span>
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name=Name(<span style="font-style: italic;">'user'</span>), email=Email(<span style="font-style: italic;">'user@vlabs.ac.in'</span>), role=Role.user)
+        <span style="font-weight: bold; font-style: italic;">session</span> = Session(user=user)
+        <span style="font-weight: bold;">self</span>.assertEqual(session.get_user_session(), user)
+</pre>
+</div>
+</div>
+</li></ol>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-2-8" class="outline-3">
+<h3 id="sec-2-8"><span class="section-number-3">2.8</span> System</h3>
+<div class="outline-text-3" id="text-2-8">
+<p>
+System holds the system state variables.
+</p>
+<dl class="org-dl">
+<dt> user_set </dt><dd>this holds the all the users created.
+</dd>
+<dt> session_set </dt><dd>this holds all the sessions created.
+</dd>
+</dl>
+</div>
+<div id="outline-container-sec-2-8-1" class="outline-4">
+<h4 id="sec-2-8-1"><span class="section-number-4">2.8.1</span> Mutable Data</h4>
+<div class="outline-text-4" id="text-2-8-1">
+<p>
+Following variables are mutable:
+</p>
+<ul class="org-ul">
+<li>user_set
+</li>
+<li>session_set
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-sec-2-8-2" class="outline-4">
+<h4 id="sec-2-8-2"><span class="section-number-4">2.8.2</span> Definition</h4>
+<div class="outline-text-4" id="text-2-8-2">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">System</span>():
+    <span style="font-weight: bold; font-style: italic;">user_set</span> = []
+    <span style="font-weight: bold; font-style: italic;">session_set</span> = []
+    <span style="font-weight: bold; font-style: italic;">already_initialized</span> = <span style="font-weight: bold; text-decoration: underline;">False</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-2-8-3" class="outline-4">
+<h4 id="sec-2-8-3"><span class="section-number-4">2.8.3</span> Constructor</h4>
+<div class="outline-text-4" id="text-2-8-3">
+</div><div id="outline-container-sec-2-8-3-1" class="outline-5">
+<h5 id="sec-2-8-3-1"><span class="section-number-5">2.8.3.1</span> Implementation</h5>
+<div class="outline-text-5" id="text-2-8-3-1">
+<p>
+Signature of the constructor of <code>System</code> is as follows:
+</p>
+
+<pre class="example">
+system = System()
+</pre>
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__init__</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> System.already_initialized:
+            <span style="font-weight: bold; font-style: italic;">admin_user</span> = User(name=Name(<span style="font-style: italic;">'admin'</span>), email=Email(<span style="font-style: italic;">'admin@vlabs.ac.in'</span>), role=Role.admin)
+            System.user_set.append(admin_user)
+            <span style="font-weight: bold; font-style: italic;">System.already_initialized</span> = <span style="font-weight: bold; text-decoration: underline;">True</span>
+        <span style="font-weight: bold;">else</span>:
+            <span style="font-weight: bold;">raise</span> ConstraintError(<span style="font-style: italic;">'System is already initialized!'</span>)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-2-8-3-2" class="outline-5">
+<h5 id="sec-2-8-3-2"><span class="section-number-5">2.8.3.2</span> Test the constructor</h5>
+<div class="outline-text-5" id="text-2-8-3-2">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">TestSystem</span>(TestCase):
+    <span style="font-weight: bold; font-style: italic;">TESTING</span> = <span style="font-weight: bold; text-decoration: underline;">True</span>
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">setUp</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">pass</span>
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">tearDown</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">len</span>(system.user_set) &gt; 1:
+            <span style="font-weight: bold;">del</span> system.user_set[-1]
+        <span style="font-weight: bold; font-style: italic;">system.already_initialized</span> = <span style="font-weight: bold; text-decoration: underline;">False</span>
+
+    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_system_constructor</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_system_constructor"</span>
+        <span style="font-weight: bold; font-style: italic;">user</span> = system.user_set[0]
+        <span style="font-weight: bold;">self</span>.assertEqual(<span style="font-weight: bold;">isinstance</span>(user, User), <span style="font-weight: bold; text-decoration: underline;">True</span>)
+        <span style="font-weight: bold;">self</span>.assertEqual(user.name, <span style="font-style: italic;">'admin'</span>)
+        <span style="font-weight: bold;">self</span>.assertEqual(user.email, <span style="font-style: italic;">'admin@vlabs.ac.in'</span>)
+        <span style="font-weight: bold;">self</span>.assertEqual(user.role, <span style="font-style: italic;">'admin'</span>)
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-2-8-4" class="outline-4">
+<h4 id="sec-2-8-4"><span class="section-number-4">2.8.4</span> Functions</h4>
+<div class="outline-text-4" id="text-2-8-4">
+</div><div id="outline-container-sec-2-8-4-1" class="outline-5">
+<h5 id="sec-2-8-4-1"><span class="section-number-5">2.8.4.1</span> make_user</h5>
+<div class="outline-text-5" id="text-2-8-4-1">
+</div><ol class="org-ol"><li><a id="sec-2-8-4-1-1" name="sec-2-8-4-1-1"></a>Implementation<br  /><div class="outline-text-6" id="text-2-8-4-1-1">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">make_user</span>(<span style="font-weight: bold;">self</span>, name, email, role):
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">isinstance</span>(name, Name):
+            <span style="font-weight: bold;">raise</span> ConstraintError(<span style="font-style: italic;">'`name` should be of type Name'</span>)
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">isinstance</span>(email, Email):
+            <span style="font-weight: bold;">raise</span> ConstraintError(<span style="font-style: italic;">'`email` should be of type Email'</span>)
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">isinstance</span>(role, Role):
+            <span style="font-weight: bold;">raise</span> ConstraintError(<span style="font-style: italic;">'`role` should be of type Role'</span>)
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name=name, email=email, role=role)
+        <span style="font-weight: bold;">return</span> user
+</pre>
+</div>
+</div>
+</li>
+<li><a id="sec-2-8-4-1-2" name="sec-2-8-4-1-2"></a>Test<br  /><div class="outline-text-6" id="text-2-8-4-1-2">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_make_user</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_make_user"</span>
+        <span style="font-weight: bold; font-style: italic;">name</span> = Name(<span style="font-style: italic;">'yogesh'</span>)
+        <span style="font-weight: bold; font-style: italic;">email</span> = Email(<span style="font-style: italic;">'yogesh@vlabs.ac.in'</span>)
+        <span style="font-weight: bold; font-style: italic;">role</span> = Role.admin
+        <span style="font-weight: bold; font-style: italic;">user</span> = system.make_user(name=name, email=email, role=role)
+        <span style="font-weight: bold;">self</span>.assertEqual(<span style="font-weight: bold;">isinstance</span>(user, User), <span style="font-weight: bold; text-decoration: underline;">True</span>)
+        <span style="font-weight: bold;">self</span>.assertEqual(user.name, name.value)
+</pre>
+</div>
+</div>
+</li></ol>
+</div>
+<div id="outline-container-sec-2-8-4-2" class="outline-5">
+<h5 id="sec-2-8-4-2"><span class="section-number-5">2.8.4.2</span> add_user</h5>
+<div class="outline-text-5" id="text-2-8-4-2">
+</div><ol class="org-ol"><li><a id="sec-2-8-4-2-1" name="sec-2-8-4-2-1"></a>Implementation<br  /><div class="outline-text-6" id="text-2-8-4-2-1">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">add_user</span>(<span style="font-weight: bold;">self</span>, user):
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">isinstance</span>(user, User):
+            <span style="font-weight: bold;">raise</span> <span style="font-weight: bold; text-decoration: underline;">TypeError</span>(<span style="font-style: italic;">'user should be of type `User`'</span>) 
+        <span style="font-weight: bold;">if</span> user <span style="font-weight: bold;">in</span> System.user_set:
+            <span style="font-weight: bold;">return</span>
+        <span style="font-weight: bold;">else</span>:
+            <span style="font-weight: bold; font-style: italic;">duplicate</span> = <span style="font-weight: bold; text-decoration: underline;">False</span>
+            <span style="font-weight: bold;">for</span> element <span style="font-weight: bold;">in</span> System.user_set:
+                <span style="font-weight: bold;">if</span> element.email == user.email:
+                    <span style="font-weight: bold; font-style: italic;">duplicate</span> = <span style="font-weight: bold; text-decoration: underline;">True</span>
+                    <span style="font-weight: bold;">break</span>
+            <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> duplicate:
+                System.user_set.append(user)
+        <span style="font-weight: bold;">return</span>
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="sec-2-8-4-2-2" name="sec-2-8-4-2-2"></a>Test<br  /><div class="outline-text-6" id="text-2-8-4-2-2">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_add_user</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_add_user"</span>
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name=Name(<span style="font-style: italic;">'a'</span>), email=Email(<span style="font-style: italic;">'a@a.com'</span>), role=Role.user)
+        system.add_user(user)
+        <span style="font-weight: bold; font-style: italic;">userFromSystem</span> = system.user_set[-1]
+        <span style="font-weight: bold;">self</span>.assertEqual(userFromSystem, user)
+</pre>
+</div>
+</div>
+</li></ol>
+</div>
+<div id="outline-container-sec-2-8-4-3" class="outline-5">
+<h5 id="sec-2-8-4-3"><span class="section-number-5">2.8.4.3</span> del_user</h5>
+<div class="outline-text-5" id="text-2-8-4-3">
+</div><ol class="org-ol"><li><a id="sec-2-8-4-3-1" name="sec-2-8-4-3-1"></a>Implementation<br  /><div class="outline-text-6" id="text-2-8-4-3-1">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">del_user</span>(<span style="font-weight: bold;">self</span>, user):
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">isinstance</span>(user, User):
+            <span style="font-weight: bold;">raise</span> <span style="font-weight: bold; text-decoration: underline;">TypeError</span>(<span style="font-style: italic;">'user should be of type `User`'</span>) 
+        <span style="font-weight: bold;">if</span> user <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">in</span> System.user_set:
+            <span style="font-weight: bold;">return</span>
+        System.user_set.remove(user)
+        <span style="font-weight: bold;">del</span> user
+</pre>
+</div>
+</div>
+</li>
+<li><a id="sec-2-8-4-3-2" name="sec-2-8-4-3-2"></a>Test<br  /><div class="outline-text-6" id="text-2-8-4-3-2">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_del_user</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_del_user"</span>
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name=Name(<span style="font-style: italic;">'a'</span>), email=Email(<span style="font-style: italic;">'a@a.com'</span>), role=Role.admin)
+        system.user_set.append(user)
+        system.del_user(user)
+        <span style="font-weight: bold; font-style: italic;">is_present</span> = <span style="font-weight: bold; text-decoration: underline;">True</span>
+        <span style="font-weight: bold;">if</span> user <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">in</span> system.user_set:
+            <span style="font-weight: bold; font-style: italic;">is_present</span> = <span style="font-weight: bold; text-decoration: underline;">False</span>
+        <span style="font-weight: bold;">self</span>.assertEqual(is_present, <span style="font-weight: bold; text-decoration: underline;">False</span>)
+</pre>
+</div>
+</div>
+</li></ol>
+</div>
+<div id="outline-container-sec-2-8-4-4" class="outline-5">
+<h5 id="sec-2-8-4-4"><span class="section-number-5">2.8.4.4</span> show_users</h5>
+<div class="outline-text-5" id="text-2-8-4-4">
+</div><ol class="org-ol"><li><a id="sec-2-8-4-4-1" name="sec-2-8-4-4-1"></a>Implementation<br  /><div class="outline-text-6" id="text-2-8-4-4-1">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">show_users</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">return</span> System.user_set
+</pre>
+</div>
+</div>
+</li>
+<li><a id="sec-2-8-4-4-2" name="sec-2-8-4-4-2"></a>Test<br  /><div class="outline-text-6" id="text-2-8-4-4-2">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_show_users</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_show_users"</span>
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name=Name(<span style="font-style: italic;">'a'</span>), email=Email(<span style="font-style: italic;">'a@a.com'</span>), role=Role.admin)
+        system.user_set.append(user)
+        <span style="font-weight: bold; font-style: italic;">userList</span> = system.show_users()
+        <span style="font-weight: bold; font-style: italic;">present</span> = <span style="font-weight: bold; text-decoration: underline;">False</span>
+        <span style="font-weight: bold;">if</span> user <span style="font-weight: bold;">in</span> userList:
+            <span style="font-weight: bold; font-style: italic;">present</span> = <span style="font-weight: bold; text-decoration: underline;">True</span>
+        <span style="font-weight: bold;">self</span>.assertEqual(present, <span style="font-weight: bold; text-decoration: underline;">True</span>)
+</pre>
+</div>
+</div>
+</li></ol>
+</div>
+
+<div id="outline-container-sec-2-8-4-5" class="outline-5">
+<h5 id="sec-2-8-4-5"><span class="section-number-5">2.8.4.5</span> get_user_by_email</h5>
+<div class="outline-text-5" id="text-2-8-4-5">
+</div><ol class="org-ol"><li><a id="sec-2-8-4-5-1" name="sec-2-8-4-5-1"></a>Implementation<br  /><div class="outline-text-6" id="text-2-8-4-5-1">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">get_user_by_email</span>(<span style="font-weight: bold;">self</span>, email):
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">isinstance</span>(email, Email):
+            <span style="font-weight: bold;">raise</span> <span style="font-weight: bold; text-decoration: underline;">TypeError</span>(<span style="font-style: italic;">'email should be of type `Email`'</span>) 
+        <span style="font-weight: bold;">for</span> element <span style="font-weight: bold;">in</span> System.user_set:
+            <span style="font-weight: bold;">if</span> element.email == email.value:
+                <span style="font-weight: bold;">return</span> element
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="sec-2-8-4-5-2" name="sec-2-8-4-5-2"></a>Test<br  /><div class="outline-text-6" id="text-2-8-4-5-2">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_get_user_by_email</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_get_user_by_email"</span>
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name=Name(<span style="font-style: italic;">'a'</span>), email=Email(<span style="font-style: italic;">'a@a.com'</span>), role=Role.admin)
+        <span style="font-weight: bold; font-style: italic;">email</span> = Email(<span style="font-style: italic;">'a@a.com'</span>)
+        system.user_set.append(user)
+        <span style="font-weight: bold; font-style: italic;">returnedUser</span> = system.get_user_by_email(email)
+        <span style="font-weight: bold;">self</span>.assertEqual(user, returnedUser)
+        system.user_set.remove(user)
+        <span style="font-weight: bold;">del</span> user
+</pre>
+</div>
+</div>
+</li></ol>
+</div>
+<div id="outline-container-sec-2-8-4-6" class="outline-5">
+<h5 id="sec-2-8-4-6"><span class="section-number-5">2.8.4.6</span> login</h5>
+<div class="outline-text-5" id="text-2-8-4-6">
+</div><ol class="org-ol"><li><a id="sec-2-8-4-6-1" name="sec-2-8-4-6-1"></a>Implementation<br  /><div class="outline-text-6" id="text-2-8-4-6-1">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">login</span>(<span style="font-weight: bold;">self</span>, user):
+        <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">isinstance</span>(user, User):
+            <span style="font-weight: bold;">raise</span> <span style="font-weight: bold; text-decoration: underline;">TypeError</span>(<span style="font-style: italic;">'user should be of type `User`'</span>)
+        <span style="font-weight: bold; font-style: italic;">registered</span> = <span style="font-weight: bold; text-decoration: underline;">False</span>
+        <span style="font-weight: bold;">for</span> element <span style="font-weight: bold;">in</span> System.user_set:
+            <span style="font-weight: bold;">if</span> element.email == user.email:
+                <span style="font-weight: bold; font-style: italic;">registered</span> = <span style="font-weight: bold; text-decoration: underline;">True</span>
+        <span style="font-weight: bold;">if</span> registered:
+            <span style="font-weight: bold;">for</span> element <span style="font-weight: bold;">in</span> System.session_set:
+                 <span style="font-weight: bold;">if</span> element.email == user.email:
+                     <span style="font-weight: bold;">return</span>
+            System.session_set.append(user)
+        <span style="font-weight: bold;">return</span>
+</pre>
+</div>
+</div>
+</li>
+<li><a id="sec-2-8-4-6-2" name="sec-2-8-4-6-2"></a>Test<br  /><div class="outline-text-6" id="text-2-8-4-6-2">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_login</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_login"</span>
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name=Name(<span style="font-style: italic;">'a'</span>), email=Email(<span style="font-style: italic;">'a@a.com'</span>), role=Role.admin)
+        system.user_set.append(user)
+        system.login(user)
+        <span style="font-weight: bold; font-style: italic;">logedin</span> = <span style="font-weight: bold; text-decoration: underline;">False</span>
+        <span style="font-weight: bold;">if</span> user <span style="font-weight: bold;">in</span> system.session_set:
+            <span style="font-weight: bold; font-style: italic;">logedin</span> = <span style="font-weight: bold; text-decoration: underline;">True</span>
+        <span style="font-weight: bold;">self</span>.assertEqual(logedin, <span style="font-weight: bold; text-decoration: underline;">True</span>)
+</pre>
+</div>
+</div>
+</li></ol>
+</div>
+<div id="outline-container-sec-2-8-4-7" class="outline-5">
+<h5 id="sec-2-8-4-7"><span class="section-number-5">2.8.4.7</span> del_session</h5>
+<div class="outline-text-5" id="text-2-8-4-7">
+</div><ol class="org-ol"><li><a id="sec-2-8-4-7-1" name="sec-2-8-4-7-1"></a>Implementation<br  /><div class="outline-text-6" id="text-2-8-4-7-1">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">del_session</span>(<span style="font-weight: bold;">self</span>, user):
+        System.session_set.remove(user)
+        <span style="font-weight: bold;">return</span>
+</pre>
+</div>
+</div>
+</li>
+<li><a id="sec-2-8-4-7-2" name="sec-2-8-4-7-2"></a>Test<br  /><div class="outline-text-6" id="text-2-8-4-7-2">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_del_session</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_del_session"</span>
+        <span style="font-weight: bold; font-style: italic;">user</span> = system.user_set[0]
+        system.session_set.append(user)
+        system.del_session(user)
+        <span style="font-weight: bold; font-style: italic;">deleted</span> = <span style="font-weight: bold; text-decoration: underline;">False</span>
+        <span style="font-weight: bold;">if</span> user <span style="font-weight: bold;">not</span> <span style="font-weight: bold;">in</span> system.session_set:
+            <span style="font-weight: bold; font-style: italic;">deleted</span> = <span style="font-weight: bold; text-decoration: underline;">True</span>
+        <span style="font-weight: bold;">self</span>.assertEqual(deleted, <span style="font-weight: bold; text-decoration: underline;">True</span>)
+</pre>
+</div>
+</div>
+</li></ol>
+</div>
+
+<div id="outline-container-sec-2-8-4-8" class="outline-5">
+<h5 id="sec-2-8-4-8"><span class="section-number-5">2.8.4.8</span> show_sessions</h5>
+<div class="outline-text-5" id="text-2-8-4-8">
+</div><ol class="org-ol"><li><a id="sec-2-8-4-8-1" name="sec-2-8-4-8-1"></a>Implementation<br  /><div class="outline-text-6" id="text-2-8-4-8-1">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">show_sessions</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">return</span> System.session_set
+</pre>
+</div>
+</div>
+</li>
+<li><a id="sec-2-8-4-8-2" name="sec-2-8-4-8-2"></a>Test<br  /><div class="outline-text-6" id="text-2-8-4-8-2">
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">test_show_sessions</span>(<span style="font-weight: bold;">self</span>):
+        <span style="font-weight: bold;">print</span> <span style="font-style: italic;">"test_show_sessions"</span>
+        <span style="font-weight: bold; font-style: italic;">user</span> = User(name=Name(<span style="font-style: italic;">'a'</span>), email=Email(<span style="font-style: italic;">'a@a.com'</span>), role=Role.admin)
+        system.user_set.append(user)
+        system.session_set.append(user)
+        <span style="font-weight: bold; font-style: italic;">sessionList</span> = system.show_sessions()
+        <span style="font-weight: bold; font-style: italic;">present</span> = <span style="font-weight: bold; text-decoration: underline;">False</span>
+        <span style="font-weight: bold;">if</span> user <span style="font-weight: bold;">in</span> sessionList:
+            <span style="font-weight: bold; font-style: italic;">present</span> = <span style="font-weight: bold; text-decoration: underline;">True</span>
+        <span style="font-weight: bold;">self</span>.assertEqual(present, <span style="font-weight: bold; text-decoration: underline;">True</span>)
+</pre>
+</div>
+</div>
+</li></ol>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> Run Test Cases</h2>
+<div class="outline-text-2" id="text-3">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold;">if</span> <span style="font-weight: bold;">__name__</span> == <span style="font-style: italic;">'__main__'</span>:
+    <span style="font-weight: bold; font-style: italic;">system</span> = System()
+    unittest.main()
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Date: <span class="timestamp-wrapper"><span class="timestamp">[2016-05-11 Wed]</span></span></p>
+<p class="author">Author: VLEAD</p>
+<p class="date">Created: 2016-06-02 Thu 17:26</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.4.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

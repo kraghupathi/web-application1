@@ -1,0 +1,864 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Data Model for the Mini Version User Directory Application</title>
+<!-- 2016-06-02 Thu 17:26 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="VLEAD" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="../style/css/worg-style.css" />
+<link rel="stylesheet" type="text/css" href="../style/css/override.css" />
+<link rel="icon" type="image/png" href="../style/img/favicon/popl.png" />
+<script type="text/javascript" src="../style/js/org-info.js">
+/**
+ *
+ * @source: ../style/js/org-info.js
+ *
+ * @licstart  The following is the entire license notice for the
+ *  JavaScript code in ../style/js/org-info.js.
+ *
+ * Copyright (C) 2012-2013 Free Software Foundation, Inc.
+ *
+ *
+ * The JavaScript code in this tag is free software: you can
+ * redistribute it and/or modify it under the terms of the GNU
+ * General Public License (GNU GPL) as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option)
+ * any later version.  The code is distributed WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+ *
+ * As additional permission under GNU GPL version 3 section 7, you
+ * may distribute non-source (e.g., minimized or compacted) forms of
+ * that code without the copy of the GNU GPL normally required by
+ * section 4, provided you include this license notice and a URL
+ * through which recipients can access the Corresponding Source.
+ *
+ * @licend  The above is the entire license notice
+ * for the JavaScript code in ../style/js/org-info.js.
+ *
+ */
+</script>
+
+<script type="text/javascript">
+
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+
+<!--/*--><![CDATA[/*><!--*/
+org_html_manager.set("TOC_DEPTH", "1");
+org_html_manager.set("LINK_HOME", "../index.html");
+org_html_manager.set("LINK_UP", "index.html");
+org_html_manager.set("LOCAL_TOC", "1");
+org_html_manager.set("VIEW_BUTTONS", "0");
+org_html_manager.set("MOUSE_HINT", "underline");
+org_html_manager.set("FIXED_TOC", "0");
+org_html_manager.set("TOC", "1");
+org_html_manager.set("VIEW", "info");
+org_html_manager.setup();  // activate after the parameters are set
+/*]]>*///-->
+</script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="index.html"> UP </a>
+ |
+ <a accesskey="H" href="../index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">Data Model for the Mini Version User Directory Application</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1. Notation</a>
+<ul>
+<li><a href="#sec-1-1">1.1. Sets, cardinality and relations</a></li>
+<li><a href="#sec-1-2">1.2. Relations and their cardinality type</a></li>
+<li><a href="#sec-1-3">1.3. Example of Entity Relationship notation</a></li>
+</ul>
+</li>
+<li><a href="#sec-2">2. Abstract Entity Types</a></li>
+<li><a href="#sec-3">3. Relations and cardinality constraints over entity types</a>
+<ul>
+<li><a href="#sec-3-1">3.1. Keys</a></li>
+</ul>
+</li>
+<li><a href="#sec-4">4. System state</a>
+<ul>
+<li><a href="#sec-4-1">4.1. Primary Entity sets</a>
+<ul>
+<li><a href="#sec-4-1-1">4.1.1. Applying relations to sets</a></li>
+</ul>
+</li>
+<li><a href="#sec-4-2">4.2. Derived Entity sets</a></li>
+<li><a href="#sec-4-3">4.3. Referential Integrity Constraints over entity-sets</a>
+<ul>
+<li><a href="#sec-4-3-1">4.3.1. <code>user-set</code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#sec-5">5. Operations</a>
+<ul>
+<li><a href="#sec-5-1">5.1. Actor</a></li>
+<li><a href="#sec-5-2">5.2. Remarks</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> Notation</h2>
+<div class="outline-text-2" id="text-1">
+</div><div id="outline-container-sec-1-1" class="outline-3">
+<h3 id="sec-1-1"><span class="section-number-3">1.1</span> Sets, cardinality and relations</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+If <code>A</code> is a set, then
+</p>
+<ol class="org-ol">
+<li><code>A!</code> denotes exactly one element of <code>A</code>.
+</li>
+<li><code>A?</code> denotes at most one element of <code>A</code>.
+</li>
+<li><code>A+</code> denotes  one or more elements of <code>A</code>
+</li>
+<li><code>A*</code>  denotes at zero or more elements of <code>A</code>.  Often
+abbreviated as <code>A</code>.
+</li>
+
+<li><code>A &gt; B</code> denotes a relation <i>from</i> <code>A</code> <i>to</i> <code>B</code>.
+</li>
+</ol>
+</div>
+</div>
+
+
+<div id="outline-container-sec-1-2" class="outline-3">
+<h3 id="sec-1-2"><span class="section-number-3">1.2</span> Relations and their cardinality type</h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+A relation <code>r:A &gt; B</code> could relate each element of <code>A</code> to
+zero, one or more elements of <code>B</code>.
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="left">Cardinality of B</th>
+<th scope="col" class="left">Notation</th>
+<th scope="col" class="left">&#xa0;</th>
+<th scope="col" class="left">&#xa0;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="left">at least zero elements of <code>B</code>.</td>
+<td class="left">r: A &gt; B</td>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="left">at most one element of <code>B</code></td>
+<td class="left">r: A &gt; B?</td>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="left">at least one element of <code>B</code></td>
+<td class="left">r: A &gt; B+</td>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="left">exactly one element of <code>B</code></td>
+<td class="left">r: A &gt; B!</td>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div id="outline-container-sec-1-3" class="outline-3">
+<h3 id="sec-1-3"><span class="section-number-3">1.3</span> Example of Entity Relationship notation</h3>
+<div class="outline-text-3" id="text-1-3">
+<pre class="example">
+ [email, user] : User? &gt; Email!
+</pre>
+
+<p>
+Encodes the following items of information:
+</p>
+
+<ul class="org-ul">
+<li><code>email</code> is a relation <i>from</i> the set <code>User</code> <i>to</i> the set
+<code>Email</code>.
+</li>
+
+<li><code>User</code> is called the <i>domain</i> of the relation <code>email</code>.
+</li>
+
+<li><code>Email</code> is called the <i>codomain</i> of the relation <code>email</code>.
+</li>
+
+<li>The relation <code>email</code> relates each element of <code>User</code> to
+<i>exactly one</i> element of <code>Email</code>.  This is written as 
+</li>
+</ul>
+
+<pre class="example">
+email: User &gt; Email!
+</pre>
+
+<ul class="org-ul">
+<li><code>user</code> is a relation <i>from</i> the set <code>Email</code> <i>to</i> the set
+<code>User</code>.
+</li>
+
+<li><code>Email</code> is called the <i>domain</i> of the relation <code>user</code>.
+</li>
+
+<li><code>User</code> is called the <i>codomain</i> of the relation <code>user</code>.
+</li>
+
+<li>The relation <code>user</code> relates each element of <code>Email</code> to
+<i>at most one</i> element of <code>User</code>.  This is written as 
+</li>
+</ul>
+
+<pre class="example">
+user: Email &gt; User?
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> Abstract Entity Types</h2>
+<div class="outline-text-2" id="text-2">
+<div class="org-src-container">
+
+<pre class="src src-spec">;;; Entity Types
+TYPE User
+TYPE Email
+TYPE Name
+TYPE Role = {admin, user}
+TYPE Session
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> Relations and cardinality constraints over entity types</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+For each relation, we define its inverse next to it.
+</p>
+<div class="org-src-container">
+
+<pre class="src src-spec">;;; Relations with cardinality constraints
+
+[email, user]  :  User?    &gt; Email!
+[name, user]   :  User     &gt; Name!
+[role, user]   :  User     &gt; Role!
+[user, session]:  Session  &gt; User!
+</pre>
+</div>
+</div>
+
+<div id="outline-container-sec-3-1" class="outline-3">
+<h3 id="sec-3-1"><span class="section-number-3">3.1</span> Keys</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+An entity <code>K</code> is called a <i>key for</i> an entity <code>A</code> if there
+is a relation <code>r: A? &gt; K!</code>.
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+
+<col  class="left" />
+
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="left">Entity</th>
+<th scope="col" class="left">Key</th>
+<th scope="col" class="left">&#xa0;</th>
+<th scope="col" class="left">&#xa0;</th>
+<th scope="col" class="left">&#xa0;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="left">User</td>
+<td class="left">Email</td>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4"><span class="section-number-2">4</span> System state</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+The system's state is captured by a set of <i>state
+variables</i>.  
+</p>
+</div>
+<div id="outline-container-sec-4-1" class="outline-3">
+<h3 id="sec-4-1"><span class="section-number-3">4.1</span> Primary Entity sets</h3>
+<div class="outline-text-3" id="text-4-1">
+<p>
+For the purpose of <i>the application</i>, we maintain two primary
+state variables.  
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-spec">;;; Primary state variables
+ user-set    : set[User]    ; set of users in the system
+ session-set : set[Session] ; set of sessions in the system
+</pre>
+</div>
+
+<p>
+and five relations
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-spec">;;; Relations
+ email:      User &gt; Email!
+ name :      User &gt; Name!
+ role:       User &gt; Role!
+ user:       Session &gt; User!
+</pre>
+</div>
+</div>
+
+<div id="outline-container-sec-4-1-1" class="outline-4">
+<h4 id="sec-4-1-1"><span class="section-number-4">4.1.1</span> Applying relations to sets</h4>
+<div class="outline-text-4" id="text-4-1-1">
+<pre class="example">
+1.role = admin
+2.role = user
+5.role = user
+{1,2,5}.role = {admin, user,user} = {admin, user}
+
+{1,2,5}.succ = {2,3,6}
+{1,2,6}.factors = {{1}, {1,2}, {1,2,3,6}}
+{1,2,6}.factors.union = {{1}, {1,2}, {1,2,3,6}}.union = {1,2,3,6}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-4-2" class="outline-3">
+<h3 id="sec-4-2"><span class="section-number-3">4.2</span> Derived Entity sets</h3>
+<div class="outline-text-3" id="text-4-2">
+<div class="org-src-container">
+
+<pre class="src src-spec">;;; Derived Entity sets
+ email-set   : set[Email]   = user-set.email        ; set of emails in the system
+ name-set    : set[Name]    = user-set.name         ; set of names in the system
+ role-set    : set[Role]    = user-set.role         ; set of all roles of all users
+ logged-in-user-set : set[User]   = session-set.user   
+ logged-in-role-set :  set[Role]  = session-set.user.role
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-4-3" class="outline-3">
+<h3 id="sec-4-3"><span class="section-number-3">4.3</span> Referential Integrity Constraints over entity-sets</h3>
+<div class="outline-text-3" id="text-4-3">
+</div><div id="outline-container-sec-4-3-1" class="outline-4">
+<h4 id="sec-4-3-1"><span class="section-number-4">4.3.1</span> <code>user-set</code></h4>
+<div class="outline-text-4" id="text-4-3-1">
+<p>
+There is exactly one user (called <code>admin-user</code>) whose role is <code>admin</code>.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-spec">;;; The admin-user
+
+admin-user: user-set ; there is a user called admin-user in user-set
+
+admin-user.role = admin ; that user's role is admin.
+
+FORALL u:user-set  u.role=admin IMPLIES u = admin-user   ; there is only
+                                                         ; one user with
+                                                         ; role admin.
+</pre>
+</div>
+
+<p>
+These specifications also capture referential integrity.
+</p>
+<div class="org-src-container">
+
+<pre class="src src-spec">;;; Relation variables with Referential Integrity
+[email, user]    :  user-set!    &gt; email-set!
+[name, users]    :  user-set+    &gt; name-set!    
+[role, users]    :  user-set+    &gt; role-set!   
+[role, session]  :  session-set  &gt;  role-set!
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5"><span class="section-number-2">5</span> Operations</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+CRUD operations.  
+</p>
+
+<p>
+Each operation is performed on an entity instance or an
+entity-set.   The operation may take additional parameters.
+It also takes as a  parameter of the credentials of the
+actor performing the operation.
+</p>
+
+<ul class="org-ul">
+<li>C  create a user      
+</li>
+<li>R  read from a user   
+</li>
+<li>U  update a user      
+</li>
+<li>D  delete a user      
+</li>
+</ul>
+</div>
+
+<div id="outline-container-sec-5-1" class="outline-3">
+<h3 id="sec-5-1"><span class="section-number-3">5.1</span> Actor</h3>
+<div class="outline-text-3" id="text-5-1">
+<p>
+Operations are performed by Actors.  Our application has two
+types of actors:  <code>system</code> and <code>session</code>. 
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="left">Operation</th>
+<th scope="col" class="left">Actor</th>
+<th scope="col" class="left">Ref.</th>
+<th scope="col" class="left">Result</th>
+</tr>
+
+<tr>
+<th scope="col" class="left">&#xa0;</th>
+<th scope="col" class="left">Credentials</th>
+<th scope="col" class="left">Integrity</th>
+<th scope="col" class="left">&#xa0;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="left">addUser(u:User, s:Session)</td>
+<td class="left">s.user.role=admin</td>
+<td class="left">u:~user-set</td>
+<td class="left">Succ or</td>
+</tr>
+
+<tr>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+<td class="left">s:session-set</td>
+<td class="left">Failure</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="left">showUsers(s:Session)</td>
+<td class="left">&#xa0;</td>
+<td class="left">s:session-set</td>
+<td class="left">&#xa0;</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="left">delUser(u:User, s:Session)</td>
+<td class="left">s.user.role=admin AND</td>
+<td class="left">u:user-set</td>
+<td class="left">Succ or Fail</td>
+</tr>
+
+<tr>
+<td class="left">&#xa0;</td>
+<td class="left">u.role != admin</td>
+<td class="left">s:session-set</td>
+<td class="left">&#xa0;</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="left">getUserByEmail(e: Email, s:Session)</td>
+<td class="left">&#xa0;</td>
+<td class="left">s:session-set</td>
+<td class="left">return user</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="left">makeUser(e: Email, n:Name, s: Session)</td>
+<td class="left">s.user.role = admin</td>
+<td class="left">e:~email-set</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+<td class="left">s:session-set</td>
+<td class="left">&#xa0;</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="left">getEmail(u: User, s:Session)</td>
+<td class="left">&#xa0;</td>
+<td class="left">u:user-set</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+<td class="left">s:session-set</td>
+<td class="left">&#xa0;</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="left">getName(u: User,  s:Session)</td>
+<td class="left">&#xa0;</td>
+<td class="left">u:user-set</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+<td class="left">s:session-set</td>
+<td class="left">&#xa0;</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="left">getRole(u: User, s:Session)</td>
+<td class="left">&#xa0;</td>
+<td class="left">u:user-set</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+<td class="left">s:session-set</td>
+<td class="left">&#xa0;</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="left">setEmail(u: User, e:Email, s:Session)</td>
+<td class="left">s.user.role = admin OR</td>
+<td class="left">u:user-set</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">&#xa0;</td>
+<td class="left">s.user = u</td>
+<td class="left">s:session-set</td>
+<td class="left">&#xa0;</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="left">setName(u: User, n:Name, s:Session)</td>
+<td class="left">s.user.role =admin OR</td>
+<td class="left">u:user-set</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">&#xa0;</td>
+<td class="left">s.user = u</td>
+<td class="left">s:session-set</td>
+<td class="left">&#xa0;</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="left">login(u: User, s:System)</td>
+<td class="left">&#xa0;</td>
+<td class="left">u:user-set</td>
+<td class="left">creates a session</td>
+</tr>
+
+<tr>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+<td class="left">and adds it to</td>
+</tr>
+
+<tr>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+<td class="left"><code>session-set</code></td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="left">delSession(es:Session, s:System)</td>
+<td class="left">&#xa0;</td>
+<td class="left">es:session-set</td>
+<td class="left">&#xa0;</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="left">showSessions(s:Session)</td>
+<td class="left">s.user.role=admin</td>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+<div id="outline-container-sec-5-2" class="outline-3">
+<h3 id="sec-5-2"><span class="section-number-3">5.2</span> Remarks</h3>
+<div class="outline-text-3" id="text-5-2">
+<dl class="org-dl">
+<dt> <code>makeUser(e: Email, n:Name, s: Session)</code> </dt><dd>WHen a user is created by an
+admin, that user is assigned the role <code>user</code>. 
+</dd>
+
+<dt> <code>delUser(u:User, s: Session)</code> </dt><dd>Only <code>admin-user</code> can delete another user.
+The <code>admin-user</code> may not delete him/herself.
+</dd>
+</dl>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Date: <span class="timestamp-wrapper"><span class="timestamp">[2016-05-11 Wed]</span></span></p>
+<p class="author">Author: VLEAD</p>
+<p class="date">Created: 2016-06-02 Thu 17:26</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.4.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
