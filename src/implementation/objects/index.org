@@ -1,0 +1,407 @@
+#+title:  Object  Implementation of Mini Version of User Directory Application
+#+AUTHOR: VLEAD
+#+DATE: [2016-05-11 Wed]
+#+PROPERTY: results output
+#+PROPERTY: exports code
+#+SETUPFILE: ../../../org-templates/level-0.org
+#+options: ^:nil
+#+LATEX: Literal LaTeX code for export
+
+
+* Initialization
+
+** Imports for Python API
+#+BEGIN_SRC python :tangle ../../src/obj.py :eval no
+# -*- coding: utf-8 -*-
+from op_exceptions import AttributeRequired
+from utils import *
+#+END_SRC
+
+
+** Imports and Initialization of testcases for Python API
+
+#+BEGIN_SRC python :tangle ../../tests/test_obj.py :eval no
+# -*- coding: utf-8 -*-
+import unittest
+from unittest import TestCase
+from datetime import datetime
+
+from src.obj import *
+from src.op_exceptions import AttributeRequired
+
+#+END_SRC
+
+
+** Init Files
+#+BEGIN_SRC python :tangle ../../src/__init__.py :eval no
+import obj
+import db
+#+END_SRC
+
+#+BEGIN_SRC python :tangle ../../tests/__init__.py :eval no
+print "tests package"
+#+END_SRC
+
+
+
+* Object Model
+
+** Custom Exceptions
+   These are some of the custom exceptions used in the application.
+
+*** AttributeRequired
+
+#+BEGIN_SRC python :tangle ../../src/op_exceptions.py :eval no
+class AttributeRequired(Exception):
+    str = None
+
+    def __init__(self, str):
+        self.str = str
+
+    def __str__(self):
+        return repr(self.str)
+
+#+END_SRC
+
+
+
+
+** Name
+
+*** Construction
+
+     Name is an alphabetical string.
+
+#+BEGIN_SRC python :tangle ../../src/obj.py :eval no
+class Name(object):
+    value = None
+    def __init__(self, value):
+        # value: String 
+        # if the string contains any non-alphabet and non-space character,
+        # raise a type error
+        if is_alphabetic_string(value):
+            self.value = value
+        else:
+            raise TypeError('%s is not a Name!' % value)
+
+    def __str__(self):
+        return self.value
+#+END_SRC
+
+
+*** Test the Construction
+#+BEGIN_SRC python :tangle ../../tests/test_obj.py :eval no
+class TestName(TestCase):
+    TESTING = True
+    def test_name_type(self):
+        print "test_name_type"
+        new_name = Name("John")
+        # correct name
+        self.assertEqual(new_name.value, "John")
+        # incorrect name
+        self.assertRaises(TypeError, Name, "123dasd")
+#+END_SRC
+
+
+** Email
+
+*** Construction
+
+     Email is a type as defined in RFC [[https://tools.ietf.org/html/rfc5321][5321]], [[https://tools.ietf.org/html/rfc5322][5322]] and [[https://tools.ietf.org/html/rfc6531][6531]].
+     Following is the constructor for this class.
+
+#+BEGIN_SRC python :tangle ../../src/obj.py :eval no
+class Email(object):
+    value = None
+    def __init__(self, value):
+        print "fill"
+    def __str__(self):
+        print "fill"
+        
+#+END_SRC
+
+*** Test the Construction
+#+BEGIN_SRC python :tangle ../../tests/test_obj.py :eval no
+class TestEmail(TestCase):
+    TESTING = True
+    def test_email_type(self):
+        print "test_email_type"
+#+END_SRC
+
+** User
+
+*** Mutable Data
+
+     These are the data associated with User type, which are mutable
+
+     + Name
+     + Email
+     + Role
+
+
+*** Definition
+#+BEGIN_SRC python :tangle ../../src/obj.py :eval no
+class User():
+    
+#+END_SRC
+
+
+*** Constructor
+
+**** Implementation
+
+    Signature of the constructor of =User= is as follows:
+
+    #+BEGIN_EXAMPLE
+    usr = User(name=<object of Name>, email=<object of Email>, 
+              role=[<object of Role>, <object of Role> ...])
+    #+END_EXAMPLE
+
+#+BEGIN_SRC python :tangle ../../src/obj.py :eval no
+    def __init__(self, **kwargs):
+        print "fill"
+#+END_SRC
+
+
+**** Test the constructor
+ #+BEGIN_SRC python :tangle ../../tests/test_obj.py :eval no
+class TestUser(TestCase):
+    TESTING = True
+
+    def test_user_creation_without_role(self):
+        print "test_user_creation_without_role"
+
+    def test_user_creation_with_role(self):
+        print "test_user_creation_with_role"
+ #+END_SRC
+
+
+*** Functions
+
+**** setEmail
+***** Implementaion
+#+BEGIN_SRC python :tangle ../../src/obj.py :eval no
+    def set_email(self, email):
+        print "fill"
+#+END_SRC
+
+***** Test
+
+**** setName
+***** Implementation
+#+BEGIN_SRC python :tangle ../../src/obj.py :eval no
+    def set_name(self, name):
+        print "fill"
+#+END_SRC
+***** Test
+
+**** setRole
+***** Implementation
+#+BEGIN_SRC python :tangle ../../src/obj.py :eval no
+    def set_role(self, role):
+        print "fill"
+#+END_SRC
+***** Test
+
+**** getRole
+***** Implementation
+#+BEGIN_SRC python :tangle ../../src/obj.py :eval no
+    def get_role(self):
+        print "fill"
+#+END_SRC
+***** Test
+
+
+**** getEmail
+ #+BEGIN_SRC python :tangle ../../src/obj.py :eval no
+    def get_email(self):
+        print "fill"
+ #+END_SRC
+
+
+**** getName
+#+BEGIN_SRC python :tangle ../../src/obj.py :eval no
+    def get_name(self):
+        print "fill"
+#+END_SRC
+
+
+**** getAll: Nil --> set[User]
+
+***** Implementation
+#+BEGIN_SRC python :tangle ../../src/obj.py :eval no
+    @staticmethod
+    def get_all():
+        print "fill"
+#+END_SRC
+
+
+***** Test getAll
+#+BEGIN_SRC python :tangle ../../tests/test_obj.py :eval no
+    def test_user_get_all(self):
+        print "test_user_get_all"
+
+#+END_SRC
+
+
+**** toClient
+#+BEGIN_SRC python :tangle ../../src/obj.py :eval no
+    def to_client(self):
+        pass
+#        return {
+#            'name': self.name,
+#            'email': self.email,
+#            'role': self.role.to_client()
+#        }
+#+END_SRC
+
+
+** Role
+
+   There are two types of roles in the application:
+   - Admin 
+   - User 
+
+*** Definition
+#+NAME: class_Role
+#+BEGIN_SRC python
+class Role():
+    name = None
+    admin = None
+    user = None
+
+    def __init__(self, name):
+        self.name = name
+
+    def __str__(self):
+        return self.name
+
+    def to_client(self):
+        return {
+            'role': self.name
+        }
+Role.admin = Role("admin")
+Role.user  = Role("user")
+#+END_SRC
+
+
+** Session
+    A session holds a user.
+#+NAME: class_Session
+#+BEGIN_SRC python
+class Session():
+    user = None
+#+END_SRC
+
+*** Constructor
+    The signature of the Session constructor is:
+    #+BEGIN_EXAMPLE
+    session = Session(user=<Object of User>)
+    #+END_EXAMPLE
+
+#+NAME: init_Session
+#+BEGIN_SRC python
+    def __init__(self, **kwargs):
+        if 'user' not in kwargs:
+            raise AttributeRequired("user is mandatory")
+
+        self._set_user(kwargs['user'])
+#+END_SRC
+
+
+**** Test Constructor
+#+NAME: class_TestSession
+#+BEGIN_SRC python
+class TestSession(TestCase):
+    TESTING = True
+
+    def setUp(self):
+        setup()
+
+    def tearDown(self):
+        tearDown()
+
+    def test_session_creation(self):
+        print "test_session_creation"
+        user = User(name=Name("Robin Smith"), 
+                    email=Email("smith@gmail.com"),
+                    role=Role.user)
+        session = Session(user=user)
+        self.assertEqual(session.user.role.name, "user")
+#+END_SRC
+
+*** Setters and Getters
+**** =get_user=
+#+NAME: session_get_user
+#+BEGIN_SRC python
+    def get_user(self):
+        return self.user
+#+END_SRC
+
+**** =_set_user=
+Note that =_set_user= is used internally by the 
+=Session= constructor.
+
+#+NAME: session_set_user
+#+BEGIN_SRC python
+    def _set_user(self, user):
+        if not isinstance(user, User):
+            raise TypeError('`user` argument should be of type User.')
+        else:
+            self.user = user
+#+END_SRC
+
+**** =to_client=
+#+NAME: session_to_client
+#+BEGIN_SRC python
+    def to_client(self):
+        return {
+            'session': self.user.to_client()
+        }
+#+END_SRC
+
+
+* System
+
+The =system= singleton object maintains the system
+variables: =user_set= and =session_set=.
+
+#+NAME: class_system
+#+begin_src python
+from sets import Set
+class System ():
+    user_set  = Set()
+    session_set = Set()
+
+    def __init__(self):
+        admin_user = User(name=Name("admin"), 
+                          email=Email("app-admin@vlabs.ac.in"), 
+                          role=Role.admin)
+        self.user_set.add(admin_user)
+#+end_src
+
+** Operations on =System= 
+*** =add_user=
+*** =del_user=
+*** =show_users=
+
+*** =get_user_by_email=
+*** =make_user=
+*** =get_email_of_user=
+*** =get_name_of_user=
+*** =get_role_of_user=
+*** =login=
+*** =del_session=
+*** =show_sessions=
+
+
+
+* Run Test Cases
+ 
+#+BEGIN_SRC python :tangle ../../tests/test_obj.py :eval no
+if __name__ == '__main__':
+    unittest.main()
+#+END_SRC
+
+
+

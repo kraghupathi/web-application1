@@ -1,0 +1,257 @@
+#+TITLE: Data Model for the Mini Version User Directory Application
+#+AUTHOR: VLEAD
+#+DATE: [2016-05-11 Wed]
+#+PROPERTY: results output
+#+PROPERTY: exports code
+#+SETUPFILE: ../org-templates/level-1.org
+#+options: ^:nil
+#+LATEX: Literal LaTeX code for export
+* Notation
+** Sets, cardinality and relations
+
+If =A= is a set, then
+    1. =A!= denotes exactly one element of =A=.
+    2. =A?= denotes at most one element of =A=.
+    3. =A+= denotes  one or more elements of =A=
+    4. =A*=  denotes at zero or more elements of =A=.  Often
+       abbreviated as =A=.
+
+    5. =A > B= denotes a relation /from/ =A= /to/ =B=.
+
+
+** Relations and their cardinality type
+
+A relation =r:A > B= could relate each element of =A= to
+zero, one or more elements of =B=.
+
+|--------------------------------+-----------+---+---|
+| Cardinality of B               | Notation  |   |   |
+|--------------------------------+-----------+---+---|
+| at least zero elements of =B=. | r: A > B  |   |   |
+|--------------------------------+-----------+---+---|
+| at most one element of =B=     | r: A > B? |   |   |
+|--------------------------------+-----------+---+---|
+| at least one element of =B=    | r: A > B+ |   |   |
+|--------------------------------+-----------+---+---|
+| exactly one element of =B=     | r: A > B! |   |   |
+|--------------------------------+-----------+---+---|
+   
+** Example of Entity Relationship notation
+    
+#+begin_example
+ [email, user] : User? > Email!
+#+end_example
+
+Encodes the following items of information:
+
+ - =email= is a relation /from/ the set =User= /to/ the set
+   =Email=.
+
+ - =User= is called the /domain/ of the relation =email=.
+
+ - =Email= is called the /codomain/ of the relation =email=.
+
+ - The relation =email= relates each element of =User= to
+   /exactly one/ element of =Email=.  This is written as 
+
+ #+begin_example
+ email: User > Email!
+ #+end_example
+
+ - =user= is a relation /from/ the set =Email= /to/ the set
+   =User=.
+
+ - =Email= is called the /domain/ of the relation =user=.
+
+ - =User= is called the /codomain/ of the relation =user=.
+
+ - The relation =user= relates each element of =Email= to
+   /at most one/ element of =User=.  This is written as 
+
+ #+begin_example
+ user: Email > User?
+ #+end_example
+
+
+* Abstract Entity Types
+#+BEGIN_SRC spec :tangle spec.txt
+
+;;; Entity Types
+TYPE User
+TYPE Email
+TYPE Name
+TYPE Role = {admin, user}
+TYPE Session
+#+END_SRC
+
+* Relations and cardinality constraints over entity types 
+For each relation, we define its inverse next to it.
+#+BEGIN_SRC spec :tangle spec.txt
+
+;;; Relations with cardinality constraints
+
+[email, user]  :  User?    > Email!
+[name, user]   :  User     > Name!
+[role, user]   :  User     > Role!
+[user, session]:  Session  > User!
+#+END_SRC
+
+** Keys
+
+An entity =K= is called a /key for/ an entity =A= if there
+is a relation =r: A? > K!=.
+
+|---------+-------+---+---+---|
+| Entity  | Key   |   |   |   |
+|---------+-------+---+---+---|
+| User    | Email |   |   |   |
+|---------+-------+---+---+---|
+
+
+
+* System state
+  The system's state is captured by a set of /state
+  variables/.  
+** Primary Entity sets
+
+For the purpose of /the application/, we maintain two primary
+state variables.  
+
+ #+BEGIN_SRC spec
+
+;;; Primary state variables
+ user-set    : set[User]    ; set of users in the system
+ session-set : set[Session] ; set of sessions in the system
+ #+END_SRC
+
+and five relations
+
+ #+BEGIN_SRC spec
+
+;;; Relations
+ email:      User > Email!
+ name :      User > Name!
+ role:       User > Role!
+ user:       Session > User!
+ #+END_SRC
+
+*** Applying relations to sets
+#+begin_example
+1.role = admin
+2.role = user
+5.role = user
+{1,2,5}.role = {admin, user,user} = {admin, user}
+
+{1,2,5}.succ = {2,3,6}
+{1,2,6}.factors = {{1}, {1,2}, {1,2,3,6}}
+{1,2,6}.factors.union = {{1}, {1,2}, {1,2,3,6}}.union = {1,2,3,6}
+#+end_example
+
+** Derived Entity sets
+ #+BEGIN_SRC spec :tangle spec.txt
+
+;;; Derived Entity sets
+ email-set   : set[Email]   = user-set.email        ; set of emails in the system
+ name-set    : set[Name]    = user-set.name         ; set of names in the system
+ role-set    : set[Role]    = user-set.role         ; set of all roles of all users
+ logged-in-user-set : set[User]   = session-set.user   
+ logged-in-role-set :  set[Role]  = session-set.user.role
+ #+END_SRC
+
+** Referential Integrity Constraints over entity-sets
+
+*** =user-set=
+
+There is exactly one user (called =admin-user=) whose role is =admin=.
+
+    #+BEGIN_SRC spec :tangle spec.txt
+
+    ;;; The admin-user
+
+    admin-user: user-set ; there is a user called admin-user in user-set
+
+    admin-user.role = admin ; that user's role is admin.
+
+    FORALL u:user-set  u.role=admin IMPLIES u = admin-user   ; there is only
+                                                             ; one user with
+                                                             ; role admin.
+    #+END_SRC
+
+These specifications also capture referential integrity.
+#+BEGIN_SRC spec :tangle spec.txt
+
+;;; Relation variables with Referential Integrity
+[email, user]    :  user-set!    > email-set!
+[name, users]    :  user-set+    > name-set!    
+[role, users]    :  user-set+    > role-set!   
+[role, session]  :  session-set  >  role-set!
+#+END_SRC
+
+* Operations 
+CRUD operations.  
+
+Each operation is performed on an entity instance or an
+entity-set.   The operation may take additional parameters.
+It also takes as a  parameter of the credentials of the
+actor performing the operation.
+
+ - C  create a user      
+ - R  read from a user   
+ - U  update a user      
+ - D  delete a user      
+
+** Actor
+Operations are performed by Actors.  Our application has two
+types of actors:  =system= and =session=. 
+
+|----------------------------------------+------------------------+----------------+-------------------|
+| Operation                              | Actor                  | Ref.           | Result            |
+|                                        | Credentials            | Integrity      |                   |
+|----------------------------------------+------------------------+----------------+-------------------|
+| addUser(u:User, s:Session)             | s.user.role=admin      | u:~user-set    | Succ or           |
+|                                        |                        | s:session-set  | Failure           |
+|----------------------------------------+------------------------+----------------+-------------------|
+| showUsers(s:Session)                   |                        | s:session-set  |                   |
+|----------------------------------------+------------------------+----------------+-------------------|
+| delUser(u:User, s:Session)             | s.user.role=admin AND  | u:user-set     | Succ or Fail      |
+|                                        | u.role != admin        | s:session-set  |                   |
+|----------------------------------------+------------------------+----------------+-------------------|
+| getUserByEmail(e: Email, s:Session)    |                        | s:session-set  | return user       |
+|----------------------------------------+------------------------+----------------+-------------------|
+| makeUser(e: Email, n:Name, s: Session) | s.user.role = admin    | e:~email-set   |                   |
+|                                        |                        | s:session-set  |                   |
+|----------------------------------------+------------------------+----------------+-------------------|
+| getEmail(u: User, s:Session)           |                        | u:user-set     |                   |
+|                                        |                        | s:session-set  |                   |
+|----------------------------------------+------------------------+----------------+-------------------|
+| getName(u: User,  s:Session)           |                        | u:user-set     |                   |
+|                                        |                        | s:session-set  |                   |
+|----------------------------------------+------------------------+----------------+-------------------|
+| getRole(u: User, s:Session)            |                        | u:user-set     |                   |
+|                                        |                        | s:session-set  |                   |
+|----------------------------------------+------------------------+----------------+-------------------|
+| setEmail(u: User, e:Email, s:Session)  | s.user.role = admin OR | u:user-set     |                   |
+|                                        | s.user = u             | s:session-set  |                   |
+|----------------------------------------+------------------------+----------------+-------------------|
+| setName(u: User, n:Name, s:Session)    | s.user.role =admin OR  | u:user-set     |                   |
+|                                        | s.user = u             | s:session-set  |                   |
+|----------------------------------------+------------------------+----------------+-------------------|
+| login(u: User, s:System)               |                        | u:user-set     | creates a session |
+|                                        |                        |                | and adds it to    |
+|                                        |                        |                | =session-set=     |
+|----------------------------------------+------------------------+----------------+-------------------|
+| delSession(es:Session, s:System)       |                        | es:session-set |                   |
+|----------------------------------------+------------------------+----------------+-------------------|
+| showSessions(s:Session)                | s.user.role=admin      |                |                   |
+|----------------------------------------+------------------------+----------------+-------------------|
+
+
+** Remarks
+
+- =makeUser(e: Email, n:Name, s: Session)= :: WHen a user is created by an
+     admin, that user is assigned the role =user=. 
+
+- =delUser(u:User, s: Session)= ::  Only =admin-user= can delete another user.
+     The =admin-user= may not delete him/herself.
+
+

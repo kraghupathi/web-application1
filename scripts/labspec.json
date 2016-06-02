@@ -1,0 +1,120 @@
+{
+  "lab": {
+    "description": {
+      "name": "Web APP Short Course",
+      "id": "data",
+      "status": "Work in Progres",
+      "discipline": [],
+      "type": "",
+      "server-side": true,
+      "integration_level": 6,
+      "developer": [
+        {
+          "name": "Thirumal Ravula",
+          "title": "",
+          "role": "Software Engineer",
+          "organization": "VLEAD",
+          "institute": "IIIT Hyderabad",
+          "web": "",
+          "department": "Software Engg Research Lab (SERL)",
+          "contact": {
+            "email": "travula@vlabs.ac.in",
+            "alternate_email": "",
+            "mobile_number": "",
+            "office_number": ""
+          }
+        },
+	{
+          "name": "Sripathi",
+          "title": "",
+          "role": "Software Engineer",
+          "organization": "VLEAD",
+          "institute": "IIIT Hyderabad",
+          "web": "",
+          "department": "Software Engg Research Lab (SERL)",
+          "contact": {
+            "email": "sripathi@vlabs.ac.in",
+            "alternate_email": "",
+            "mobile_number": "",
+            "office_number": ""
+          }
+        },
+        {
+          "name": "Madhavi Puliraju",
+          "title": "",
+          "role": "Software Engineer",
+          "organization": "VLEAD",
+          "institute": "IIIT Hyderabad",
+          "web": "",
+          "department": "Software Engg Research Lab (SERL)",
+          "contact": {
+            "email": "madhavi@vlabs.ac.in",
+	    "alternate_email": "",
+            "mobile_number": "",
+            "office_number": ""
+          }
+        }
+      ]
+     },
+    "build_requirements": {
+      "platform": {
+        "os": "ubuntu",
+        "osVersion": "12",
+        "arch": "x64",
+        "service_pack": "",
+        "installer": [
+        ],
+        "build_steps": {
+          "configure": [],
+          "pre_build": [],
+          "build": [
+            "cd ../;make build"
+          ],
+          "post_build": [
+            "cp -R ../build/code/* /var/www/",
+            "chmod -R 755 /var/www",
+            "mkdir /var/www/logs",
+            "chmod -R 777 /var/www/logs"
+          ],
+          "status": []
+        }
+      }
+    },
+    "runtime_requirements": {
+      "platform": {
+        "os": "ubuntu",
+        "osVersion": "12",
+        "arch": "x64",
+        "servicepack": "",
+        "hosting": "dedicated",
+        "memory": {
+          "max_required": "4gb",
+          "min_required": "2gb"
+        },
+        "storage": {
+          "min_required": "10gb"
+        },
+        "installer": [
+          "bash /var/www/setup.sh",
+          "python /var/www/setup.py install",
+          "bash /var/www/configure.sh",
+          "python /var/www/db_setup.py"
+        ],
+        "lab_actions": {
+          "init"    : [],
+          "shutdown": [],
+          "pause"   : [],
+          "resume"  : [],
+          "start"   : ["./start"],
+          "stop"    : ["./stop"],
+          "backup"  : ["./backup"],
+          "restore" : ["./restore"],
+          "clean"   : [],
+          "stats"   : [],
+          "publish" : []
+        }
+      }
+    }
+  },
+  "template": "1.0"
+}

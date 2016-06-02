@@ -1,0 +1,130 @@
+#+TITLE: Web interface to User Directory Application
+#+AUTHOR: VLEAD
+#+DATE: [2016-05-11 Wed]
+#+PROPERTY: results output
+#+PROPERTY: exports code
+#+SETUPFILE: ../org-templates/level-1.org
+#+options: ^:nil
+#+LATEX: Literal LaTeX code for export
+
+* Introduction
+This document discribes how to implement a simple web application
+using AngularJS MVC framework.
+* What we have so far ????
+   - Requirements
+   - Data Model
+   - Object implementation of the data model
+   - Persistence via ORM (Database)
+   - REST API url interface (a specification of urls for each operation)
+   - Web interface to system ???
+* What is MVC framework
+
+  + The Model-View-Controller (MVC) is an architectural pattern that
+    separates an application into three main logical components
+   - The model
+   - The view and
+   - The controller. 
+
+  + Each of these components are built to handle specific development
+    aspects of an application.
+
+  + MVC is one of the most frequently used industry-standard web
+    development framework to create scalable and extensible projects.
+
+  + Diagrame
+    #+CAPTION:  Git local VCS
+    #+LABEL:  Git local VCS
+  [[./mvc.jpg]]
+
+** Model
+The Model is the part of the application that handles the logic for
+the application data.  Often model objects retrieve data (and store
+data) from a database.
+** View
+The View is the parts of the application that handles the display of
+the data.  Most often the views are created from the model data.
+** Controller
+The Controller is the part of the application that handles user interaction.
+Typically controllers read data from a view, control user input, and send input data to the model.
+** Advantages
+- The MVC separation helps you manage complex applications, because
+  you can focus on one aspect a time. For example, you can focus on
+  the view without depending on the business logic. It also makes it
+  easier to test an application.
+
+- The MVC separation also simplifies group development. Different
+developers can work on the view, the controller logic, and the
+business logic in parallel.
+
+* Why MVC ??
+* How to implement ??
+** Source Code
+*** Initiating Angular application on html page
+#+BEGIN_SRC 
+<div ng-app="directoryApp">
+  <div ng-view>
+  </div>
+</div>
+#+END_SRC
+*** Router 
+- =app.js=
+
+#+BEGIN_SRC javascript :tangle ../../src/static/js/app.js :eval no
+var app = angular.module('directoryApp',['ngRoute','directoryApp.controllers']);
+app.config(function($routeProvider){
+  $routeProvider
+    .when('/', {
+      templateUrl : '/static/partials/users.html',
+      controller  : 'users'
+    });
+});
+
+#+END_SRC
+*** Controller
+- =controller.py=
+#+BEGIN_SRC javascript :tangle ../../src/static/js/controllers.js :eval no
+var app = angular.module('directoryApp.controllers',[]);
+app.controller("users", function($scope,  $http, $routeParams, $route,$window){
+    $scope.role_name = $window.role_name;
+    $http.get("http://localhost:5000/users").success(function(response){
+	$scope.users = response;
+    });
+
+});
+#+END_SRC
+*** View
+- =users.html=
+#+BEGIN_SRC javascript :tangle ../../src/static/partials/users.html :eval no
+<div class="row">
+  <div class="col-md-9"><h2>Users</h2></div>
+  <div class="col-md-2" ng-if="role_name == 'admin'">
+    <a href="#/add-user" class="btn btn-primary">Add User</a>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="table-responsive">
+      <table class="table table-stripped">
+	<thead>
+	  <tr>
+	    <th>S.NO</th>
+            <th>Name</th>
+	    <th>Role</th>
+	    <th>Action</th>
+	  </tr>
+        </thead>
+	<tbody>
+	  <tr ng-repeat="user in users">
+	    <td>{{ $index+1 }}</td>
+            <td>{{ user.name }}</td>
+	    <td>{{ user.role['name'] }}</td>
+            <td><a href="#/view-user/{{user.id}}" class="btn btn-primary">View</a></td>
+	  </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+#+END_SRC
+

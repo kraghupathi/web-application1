@@ -1,0 +1,94 @@
+#+TITLE: Building a Web Application:  Ground up to the Cloud
+#+AUTHOR: Venkatesh Choppella,  Thirumal Ravula and Sripathi Kammari @ VLEAD, IIIT Hyderabad
+#+DATE: [2016-05-11 Wed]
+#+PROPERTY: results output
+#+PROPERTY: exports code
+#+SETUPFILE: ./org-templates/level-0.org
+#+options: ^:nil
+#+LATEX: Literal LaTeX code for export
+
+* Version/Branch History
+
+- =mini= :: Version with only Users and Sessions as the main
+     Entities.  No  Roles. 
+
+* Goal
+
+The Goal of this course is to walk you through an end-to-end
+requirements specification, design, development and
+deployment of a small web application.  In the process, you
+will learn to use various technologies and will be
+introduced to well-established processes and good software
+development practices that we use here at VLEAD.
+
+* Components of a web application
+A /web application/ consists of a collection of continuously
+running programs possibly running on different machines,
+connected, and geographically distant from each other.
+(Such programs are called services.)  On the user's
+machine's end is a program running inside the /web browser/
+which displays the output of the application as well as
+functions as an interface for the user to send information
+to the application.
+
+The server side of the application runs as a thread inside a
+/web server/.  The job of the web server is to listen for
+inputs, get the server side web application thread to
+compute an output and then serve that output back to the
+user's browser.
+ 
+The web application usually has a third component, which is
+a /database/.  The database stores data needed by the
+application.  The database allows the data to survive even
+if the application stops.
+
+The data items in the database are related to one another.
+The types of the data and the relations between them and the
+operations permitted on the data items are expressed using a
+/data model/.
+
+The web application allows access to its underlying data via
+/URL addresses/ (sometime along with form fields).  The
+specification of the mapping of the urls to operations on
+the data is called a /REST API/. 
+
+* Software Development Life Cycle  (SDLC)
+
+A systematic development of the application requires that we
+break down the entire realization of the application into
+multiple, intertwined phases.  In this short course, our
+application life cycle will include the following phases:
+
+|-----+-------------------------+-----------------------+---------------------------+---|
+| No. | Phase                   | Resultant artefact    | Format                    |   |
+|-----+-------------------------+-----------------------+---------------------------+---|
+|  1. | Requirements definition | Requirements document | English (text)            |   |
+|-----+-------------------------+-----------------------+---------------------------+---|
+|  2. | Data model              | Formal specification  | Specification language    |   |
+|     | (Design)                |                       | and diagrams              |   |
+|-----+-------------------------+-----------------------+---------------------------+---|
+|  3. | Object implementation   | Code                  | Python                    |   |
+|-----+-------------------------+-----------------------+---------------------------+---|
+|  4. | Object Relational Model | Code                  | Python, SQL-Alchemy       |   |
+|-----+-------------------------+-----------------------+---------------------------+---|
+|  5. | Rest API                | Spec + Code           | Python Flask Library      |   |
+|-----+-------------------------+-----------------------+---------------------------+---|
+|  6. | Front End               | Spec + Code           | JS, Angular.js            |   |
+|-----+-------------------------+-----------------------+---------------------------+---|
+|  7. | Deployment              | Code, Deployment spec | JSON, makefiles           |   |
+|-----+-------------------------+-----------------------+---------------------------+---|
+|  8. | Unit Testing            | Code                  | Flask/Python unit testing |   |
+|-----+-------------------------+-----------------------+---------------------------+---|
+|  9. | Documentation           | Literate Program      | Org-mode/HTML             |   |
+|-----+-------------------------+-----------------------+---------------------------+---|
+| 10. | Planning and tracking   | Issues on Githhub     | Text                      |   |
+|-----+-------------------------+-----------------------+---------------------------+---|
+| 11. | Versioning              | Git                   | GitHub Repositories       |   |
+|-----+-------------------------+-----------------------+---------------------------+---|
+| 12. | Release Management      | GitHub Tags and       |                           |   |
+|     |                         | branches              |                           |   |
+|-----+-------------------------+-----------------------+---------------------------+---|
+| 13. | Continuous Integration  | GitHub hooks          |                           |   |
+|-----+-------------------------+-----------------------+---------------------------+---|
+
+

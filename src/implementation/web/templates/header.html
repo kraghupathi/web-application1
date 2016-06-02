@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>VLEAD</title>
+    <!-- Bootstrap -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/index.css">
+  </head>
+  <body>
+    <div class="navbar navbar-default navbar-custom">
+      <div class="container">
+        <div class="navbar-header">
+          <a href="#" onclick="dashboard()"><img src="/static/img/logo.png" class="logo-img"></a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-form navbar-right">
+            {% if session.email %}
+            <li>
+              <span> Welcome <b>{{ session.email }}</b></span> &emsp;<button class="btn btn-primary btn-signin" onclick="location.href='/auth/logout';">Log out</button>            </li>
+            {% else %}
+            {% endif %}
+            <div>
+              {% if session.role_name %}
+              <span>Role : <b>{{ session.role_name }} </b></span>
+              {% else %}
+              {% endif %}
+            </div>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <script src="/static/js/angular.min.js"></script>
+    <script type="text/javascript" src="/static/js/controllers.js"></script>
+    <script src="/static/js/angular-route.js"></script>
+    <script type="text/javascript" src="/static/js/app.js"></script>
+    <script src="/static/js/jquery.min.js"></script>
+    <script type="text/javascript">
+      {% if session.email %}
+      var user_id  = '{{ session.user_id }}';
+      var role_name = '{{ session.role_name }}';
+      {% else %}
+      {% endif %}
+    </script>
+  </body>
+</html>
+{% block content %}
+{% endblock %}
+   

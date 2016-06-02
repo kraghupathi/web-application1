@@ -1,0 +1,30 @@
+{% extends "header.html" %}
+{% block content %}
+<div class="col-md-12">
+  <div class="col-md-5"></div>
+  <div class="col-md-4">
+    <font color="red">{{ message }}</font>
+  </div>
+</div>
+<form action="/auth/login" method="POST">
+  <br><br><br>
+  <div class="col-md-4">
+  </div>
+  <div class="col-md-4">
+    <div class="col-md-2">
+      Email
+    </div>
+    <div class="col-md-10">
+      <input type="text" class="form-control" name="email" required> <br><br>
+    </div>
+    <div class="col-md-12">
+      <div class="col-md-4"></div>
+      <div class="col-md-4">
+	<input type="submit" value="Login" class="btn btn-primary">
+      </div>
+    </div>
+        
+  </div>
+</form>
+
+{% endblock %}
